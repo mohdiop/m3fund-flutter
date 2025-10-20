@@ -1,0 +1,81 @@
+import 'package:m3fund_flutter/models/enums/enums.dart';
+import 'package:m3fund_flutter/models/requests/create_localization_request.dart';
+
+class CreateContributorRequest {
+  final String firstName;
+  final String lastName;
+  final CreateLocalizationRequest localization;
+  final List<ProjectDomain> projectDomainPrefs;
+  final List<CampaignType> campaignTypePrefs;
+  final String email;
+  final String phone;
+  final String password;
+
+  CreateContributorRequest({
+    required this.firstName,
+    required this.lastName,
+    required this.localization,
+    required this.projectDomainPrefs,
+    required this.campaignTypePrefs,
+    required this.email,
+    required this.phone,
+    required this.password,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'localization': localization.toMap(),
+      'projectDomainPrefs': projectDomainPrefs
+          .map((domain) => _mapProjectDomainToBackend(domain))
+          .toList(),
+      'campaignTypePrefs': campaignTypePrefs
+          .map((campaign) => _mapCampaignTypeToBackend(campaign))
+          .toList(),
+      'email': email,
+      'phone': phone,
+      'password': password,
+    };
+  }
+
+  // 🌾 Mapper pour ProjectDomain → backend (enum Java)
+  static String _mapProjectDomainToBackend(ProjectDomain domain) {
+    switch (domain) {
+      case ProjectDomain.agriculture:
+        return 'AGRICULTURE';
+      case ProjectDomain.breeding:
+        return 'BREEDING';
+      case ProjectDomain.education:
+        return 'EDUCATION';
+      case ProjectDomain.health:
+        return 'HEALTH';
+      case ProjectDomain.mine:
+        return 'MINE';
+      case ProjectDomain.culture:
+        return 'CULTURE';
+      case ProjectDomain.environment:
+        return 'ENVIRONMENT';
+      case ProjectDomain.computerScience:
+        return 'COMPUTER_SCIENCE';
+      case ProjectDomain.solidarity:
+        return 'SOLIDARITY';
+      case ProjectDomain.shopping:
+        return 'SHOPPING';
+      case ProjectDomain.social:
+        return 'SOCIAL';
+    }
+  }
+
+  // 🎯 Mapper pour CampaignType → backend (enum Java)
+  static String _mapCampaignTypeToBackend(CampaignType campaign) {
+    switch (campaign) {
+      case CampaignType.investment:
+        return 'INVESTMENT';
+      case CampaignType.volunteering:
+        return 'VOLUNTEERING';
+      case CampaignType.donation:
+        return 'DONATION';
+    }
+  }
+}
