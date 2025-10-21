@@ -58,7 +58,7 @@ class AuthenticationService {
 
     final response = await http.post(
       url,
-      headers: _headers,
+      headers: headers,
       body: jsonEncode(createContributorRequest.toMap()),
     );
 
@@ -76,7 +76,7 @@ class AuthenticationService {
 
     final response = await http.post(
       url,
-      headers: _headers,
+      headers: headers,
       body: jsonEncode(authenticationRequest.toMap()),
     );
 
@@ -101,7 +101,7 @@ class AuthenticationService {
 
     final response = await http.post(
       url,
-      headers: _headers,
+      headers: headers,
       body: jsonEncode({"refreshToken": refreshToken}),
     );
 
@@ -137,5 +137,10 @@ class AuthenticationService {
     await _storage.delete(key: 'access_token');
   }
 
-  Map<String, String> get _headers => {'Content-Type': 'application/json'};
+  Map<String, String> get headers => {'Content-Type': 'application/json'};
+
+  Map<String, String> tokenHeaders({required String token}) => {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
 }

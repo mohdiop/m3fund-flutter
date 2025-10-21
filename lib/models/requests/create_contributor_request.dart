@@ -39,7 +39,6 @@ class CreateContributorRequest {
     };
   }
 
-  // 🌾 Mapper pour ProjectDomain → backend (enum Java)
   static String _mapProjectDomainToBackend(ProjectDomain domain) {
     switch (domain) {
       case ProjectDomain.agriculture:
@@ -67,7 +66,6 @@ class CreateContributorRequest {
     }
   }
 
-  // 🎯 Mapper pour CampaignType → backend (enum Java)
   static String _mapCampaignTypeToBackend(CampaignType campaign) {
     switch (campaign) {
       case CampaignType.investment:

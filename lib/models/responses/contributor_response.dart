@@ -31,7 +31,7 @@ class ContributorResponse {
       id: jsonBody['id'] as int,
       firstName: jsonBody['firstName'] ?? '',
       lastName: jsonBody['lastName'] ?? '',
-      localization: LocalizationResponse.fromJson(jsonBody['localization']),
+      localization: LocalizationResponse.fromJson(jsonBody['localization'] as Map<String, dynamic>),
       projectDomainPrefs: (jsonBody['projectDomainPrefs'] as List)
           .map((domain) => _projectDomainFromString(domain))
           .toList(),
