@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:m3fund_flutter/screens/onboarding_screen.dart';
-import 'package:m3fund_flutter/screens/test_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
