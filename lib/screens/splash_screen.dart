@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:m3fund_flutter/screens/connexion_screen.dart';
 import 'package:m3fund_flutter/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final bool isFirstTime;
+
+  const SplashScreen({super.key, required this.isFirstTime});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -15,11 +18,22 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    Future.delayed(Duration(seconds: 5), () {
+    _navigate();
+  }
+
+  Future<void> _navigate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    if (!mounted) return;
+
+    if (widget.isFirstTime) {
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const OnboardingScreen()));
-    });
+      ).pushReplacement(MaterialPageRoute(builder: (_) => OnboardingScreen()));
+    } else {
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => ConnexionScreen()));
+    }
   }
 
   @override
