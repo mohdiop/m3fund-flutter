@@ -5,6 +5,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -86,6 +87,8 @@ class AuthenticationService {
         refreshToken: tokenPair['refreshToken'],
         accessToken: tokenPair['accessToken'],
       );
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool("isAuthenticated", true);
     } else {
       throw Exception(response.body);
     }
@@ -136,7 +139,11 @@ class AuthenticationService {
     }
   }
 
-  Future<void> logout() async => _deleteTokens();
+  Future<void> logout() async {
+    _deleteTokens();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isAuthenticated", false);
+  }
 
   Future<void> _saveTokens({
     required String refreshToken,

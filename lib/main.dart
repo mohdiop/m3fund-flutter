@@ -6,6 +6,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final isFirstTime = prefs.getBool("isFirstTime") ?? true;
+  final isAuthenticated = prefs.getBool("isAuthenticated");
+  if (isAuthenticated == null) {
+    await prefs.setBool("isAuthenticated", false);
+  }
   runApp(
     MaterialApp(
       theme: ThemeData(
@@ -15,7 +19,7 @@ Future<void> main() async {
           selectionHandleColor: Color(0xFF06A664),
         ),
       ),
-      home: SplashScreen(isFirstTime: isFirstTime),
+      home: SplashScreen(isFirstTime: isFirstTime, isAuthenticated: isAuthenticated ?? false,),
       debugShowCheckedModeBanner: false,
     ),
   );
