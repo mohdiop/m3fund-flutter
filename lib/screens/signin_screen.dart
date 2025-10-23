@@ -275,22 +275,6 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                     child: Text("Continuer", style: TextStyle(fontSize: 24)),
                     onPressed: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => UserPrefsScreen(
-                            contributorRequest: CreateContributorRequest(
-                              firstName: _firstNameController.text.trim(),
-                              lastName: _lastNameController.text.trim(),
-                              localization: null,
-                              projectDomainPrefs: List.empty(),
-                              campaignTypePrefs: List.empty(),
-                              email: _emailController.text.trim(),
-                              phone: _phoneNumberController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            ),
-                          ),
-                        ),
-                      );
                       if (_areBlankFileds()) {
                         setState(() {
                           _currentError =
@@ -328,7 +312,29 @@ class _SigninScreenState extends State<SigninScreen> {
                                 email: _emailController.text.trim(),
                                 phone:
                                     "$_choosenCountryCode${_phoneNumberController.text.trim()}",
-                              );
+                              )
+                              .then((_) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => UserPrefsScreen(
+                                      contributorRequest: CreateContributorRequest(
+                                        firstName: _firstNameController.text
+                                            .trim(),
+                                        lastName: _lastNameController.text
+                                            .trim(),
+                                        localization: null,
+                                        projectDomainPrefs: [],
+                                        campaignTypePrefs: [],
+                                        email: _emailController.text.trim(),
+                                        phone:
+                                            "$_choosenCountryCode${_phoneNumberController.text.trim()}",
+                                        password: _passwordController.text
+                                            .trim(),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
                         } catch (e) {
                           setState(() {
                             ExceptionResponse exception =

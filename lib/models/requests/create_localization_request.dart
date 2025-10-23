@@ -1,11 +1,13 @@
 class CreateLocalizationRequest {
   String region;
+  String country;
   String town;
   String street;
   double longitude;
   double latitude;
 
   CreateLocalizationRequest({
+    required this.country,
     required this.region,
     required this.town,
     required this.street,
@@ -15,6 +17,7 @@ class CreateLocalizationRequest {
 
   Map<String, dynamic> toMap() {
     return {
+      'country': country,
       'region': region,
       'town': town,
       'street': street,

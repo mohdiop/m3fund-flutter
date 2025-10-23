@@ -198,11 +198,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: _passwordController.text,
                             ),
                           );
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                          );
+                          if (context.mounted) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => const HomeScreen(),
+                              ),
+                              (Route<dynamic> route) =>
+                                  false, // ✅ supprime toutes les routes précédentes
+                            );
+                          }
                         } catch (e) {
                           setState(() {
                             ExceptionResponse exception =

@@ -4,6 +4,8 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/screens/customs/custom_pref_chooser.dart';
+import 'package:m3fund_flutter/screens/localization_screen.dart';
+import 'package:m3fund_flutter/tools/user_prefs_manager.dart';
 import 'package:remixicon/remixicon.dart';
 
 class UserPrefsScreen extends StatefulWidget {
@@ -15,6 +17,14 @@ class UserPrefsScreen extends StatefulWidget {
 }
 
 class _UserPrefsScreenState extends State<UserPrefsScreen> {
+  final UserPrefsManager _userPrefsManager = UserPrefsManager();
+
+  @override
+  void dispose() {
+    _userPrefsManager.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +138,7 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
                       CustomPrefChooser(
                         icon: RemixIcons.leaf_line,
                         text: "Environnement",
-                        prefType: ProjectDomain.agriculture,
+                        prefType: ProjectDomain.environment,
                       ),
                       CustomPrefChooser(
                         icon: RemixIcons.service_line,
@@ -166,7 +176,15 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
                           ),
                         ),
                         child: Text("Passer", style: TextStyle(fontSize: 24)),
-                        onPressed: () async {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => LocalizationScreen(
+                                contributorRequest: widget.contributorRequest,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -181,7 +199,34 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
                           "Continuer",
                           style: TextStyle(fontSize: 24),
                         ),
-                        onPressed: () async {},
+                        onPressed: () {
+                          if (_userPrefsManager.campaignPrefs.isEmpty &&
+                              _userPrefsManager.domainPrefs.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Pour continuer, choisissez au moins une préférence.",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: primaryColor,
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          } else {
+                            widget.contributorRequest.campaignTypePrefs?.addAll(
+                              _userPrefsManager.campaignPrefs,
+                            );
+                            widget.contributorRequest.projectDomainPrefs
+                                ?.addAll(_userPrefsManager.domainPrefs);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => LocalizationScreen(
+                                  contributorRequest: widget.contributorRequest,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
