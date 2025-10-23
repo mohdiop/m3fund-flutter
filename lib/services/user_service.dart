@@ -11,7 +11,10 @@ class UserService {
   Future<dynamic> me() async {
     final url = Uri.parse("$baseUrl/users/me");
     final response = await _authenticationService.sendAuthorizedRequest(
-      (token) => http.get(url, headers: _authenticationService.tokenHeaders(token: token)),
+      (token) => http.get(
+        url,
+        headers: _authenticationService.tokenHeaders(token: token),
+      ),
     );
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

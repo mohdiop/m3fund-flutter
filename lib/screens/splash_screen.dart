@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:m3fund_flutter/screens/connexion_screen.dart';
+import 'package:m3fund_flutter/screens/login_screen.dart';
 import 'package:m3fund_flutter/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
     } else {
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => ConnexionScreen()));
+      ).pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
     }
   }
 

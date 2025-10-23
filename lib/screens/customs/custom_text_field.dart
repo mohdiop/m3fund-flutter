@@ -6,12 +6,14 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final bool isPassword;
   final TextEditingController controller;
+  final double width;
   const CustomTextField({
     super.key,
     required this.icon,
     required this.hintText,
     required this.isPassword,
     required this.controller,
+    required this.width,
   });
 
   @override
@@ -25,7 +27,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 62,
-      width: 300,
+      width: widget.width,
       child: TextField(
         controller: widget.controller,
         style: const TextStyle(fontSize: 12),
@@ -33,13 +35,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-          prefixIconConstraints: BoxConstraints(minHeight: 50, minWidth: 50),
+          prefixIconConstraints: BoxConstraints(
+            minHeight: widget.icon != null ? 50 : 0,
+            minWidth: widget.icon != null ? 50 : 0,
+          ),
           prefixIcon: widget.icon != null
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: widget.icon,
                 )
-              : null,
+              : SizedBox(width: 10),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: Color(0xFF2D2D2D), width: 2),

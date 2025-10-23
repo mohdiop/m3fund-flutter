@@ -6,24 +6,25 @@ import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
 import 'package:m3fund_flutter/screens/home_screen.dart';
+import 'package:m3fund_flutter/screens/signin_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
 
-class ConnexionScreen extends StatefulWidget {
-  const ConnexionScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<ConnexionScreen> createState() => _ConnexionScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _ConnexionScreenState extends State<ConnexionScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final AuthenticationService _authenticationService = AuthenticationService();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _showError = false;
   String _currentError = "";
 
-  bool isBlankFields() {
+  bool areBlankFields() {
     return (_usernameController.text.trim().isEmpty &&
         _passwordController.text.trim().isEmpty);
   }
@@ -128,6 +129,7 @@ class _ConnexionScreenState extends State<ConnexionScreen> {
                     ),
                     isPassword: false,
                     controller: _usernameController,
+                    width: 300,
                   ),
                   SizedBox(height: 10),
                   CustomTextField(
@@ -139,6 +141,7 @@ class _ConnexionScreenState extends State<ConnexionScreen> {
                     hintText: "Mot de passe",
                     isPassword: true,
                     controller: _passwordController,
+                    width: 300,
                   ),
                   SizedBox(height: 8),
                   if (_showError)
@@ -179,7 +182,7 @@ class _ConnexionScreenState extends State<ConnexionScreen> {
                     ),
                     child: Text("Se connecter", style: TextStyle(fontSize: 24)),
                     onPressed: () async {
-                      if (isBlankFields()) {
+                      if (areBlankFields()) {
                         setState(() {
                           _currentError = "Veuillez remplir tous les champs";
                           _showError = true;
@@ -235,7 +238,11 @@ class _ConnexionScreenState extends State<ConnexionScreen> {
                       ),
                     ),
                     child: Text("S'inscrire", style: TextStyle(fontSize: 24)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SigninScreen()),
+                      );
+                    },
                   ),
                   SizedBox(height: 20),
                 ],

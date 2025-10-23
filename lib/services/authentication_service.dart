@@ -91,6 +91,25 @@ class AuthenticationService {
     }
   }
 
+  Future<dynamic> checkForEmailAndPhoneValidity({
+    required String email,
+    required String phone,
+  }) async {
+    final url = Uri.parse("$baseUrl/public/valid-email-and-phone");
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(
+        email.isEmpty ? {"phone": phone} : {"email": email, "phone": phone},
+      ),
+    );
+    if (response.statusCode == 204) {
+      return;
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
   Future<void> refreshTokens() async {
     final url = Uri.parse("$baseUrl/auth/refresh");
     final refreshToken = await getRefreshToken();

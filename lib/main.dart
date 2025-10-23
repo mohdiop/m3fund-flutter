@@ -8,6 +8,13 @@ Future<void> main() async {
   final isFirstTime = prefs.getBool("isFirstTime") ?? true;
   runApp(
     MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionColor: Color(0xFF06A664),
+          cursorColor: Colors.white,
+          selectionHandleColor: Color(0xFF06A664),
+        ),
+      ),
       home: SplashScreen(isFirstTime: isFirstTime),
       debugShowCheckedModeBanner: false,
     ),

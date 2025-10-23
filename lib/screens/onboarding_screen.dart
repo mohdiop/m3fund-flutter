@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/screens/connexion_screen.dart';
+import 'package:m3fund_flutter/screens/login_screen.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -72,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Icon(
                           RemixIcons.global_line,
                           color: Colors.white,
-                          size: 20,
+                          size: 24,
                         ),
                         const Text(
                           "fr",
@@ -85,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Icon(
                           RemixIcons.arrow_down_s_line,
                           color: Colors.white,
-                          size: 20,
+                          size: 24,
                         ),
                       ] else ...[
                         // Return to previous page button
@@ -528,7 +528,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         await prefs.setBool("isFirstTime", false);
                         if (!context.mounted) return;
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => ConnexionScreen()),
+                          MaterialPageRoute(builder: (_) => LoginScreen()),
                         );
                       }
                     },
