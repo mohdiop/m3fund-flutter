@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
+import 'package:m3fund_flutter/screens/user_prefs_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -204,7 +206,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   ),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 23,
+                                  vertical: 24,
                                   horizontal: 0,
                                 ),
                               ),
@@ -273,6 +275,22 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                     child: Text("Continuer", style: TextStyle(fontSize: 24)),
                     onPressed: () async {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => UserPrefsScreen(
+                            contributorRequest: CreateContributorRequest(
+                              firstName: _firstNameController.text.trim(),
+                              lastName: _lastNameController.text.trim(),
+                              localization: null,
+                              projectDomainPrefs: List.empty(),
+                              campaignTypePrefs: List.empty(),
+                              email: _emailController.text.trim(),
+                              phone: _phoneNumberController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            ),
+                          ),
+                        ),
+                      );
                       if (_areBlankFileds()) {
                         setState(() {
                           _currentError =

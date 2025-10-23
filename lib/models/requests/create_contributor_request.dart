@@ -4,7 +4,7 @@ import 'package:m3fund_flutter/models/requests/create_localization_request.dart'
 class CreateContributorRequest {
   final String firstName;
   final String lastName;
-  final CreateLocalizationRequest localization;
+  final CreateLocalizationRequest? localization;
   final List<ProjectDomain> projectDomainPrefs;
   final List<CampaignType> campaignTypePrefs;
   final String email;
@@ -14,7 +14,7 @@ class CreateContributorRequest {
   CreateContributorRequest({
     required this.firstName,
     required this.lastName,
-    required this.localization,
+    this.localization,
     required this.projectDomainPrefs,
     required this.campaignTypePrefs,
     required this.email,
@@ -26,7 +26,7 @@ class CreateContributorRequest {
     return {
       'firstName': firstName,
       'lastName': lastName,
-      'localization': localization.toMap(),
+      'localization': localization?.toMap(),
       'projectDomainPrefs': projectDomainPrefs
           .map((domain) => _mapProjectDomainToBackend(domain))
           .toList(),
