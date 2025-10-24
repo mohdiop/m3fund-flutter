@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/screens/login_screen.dart';
+import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -133,27 +133,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           actions: [
             // Skip Icon Button
-            Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: const CircleBorder(),
-                ),
-                onPressed: () {
-                  _pageViewController.animateToPage(
-                    2,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                icon: Icon(
-                  RemixIcons.skip_right_line,
-                  color: Colors.white,
-                  size: 24,
+            if (_currentPageIndex != 2)
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: const CircleBorder(),
+                  ),
+                  onPressed: () {
+                    _pageViewController.animateToPage(
+                      2,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  icon: Icon(
+                    RemixIcons.skip_right_line,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         body: PageView(
@@ -380,8 +381,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   "• n’utiliser la plateforme qu’à des fins licites ;\n",
                             ),
                             TextSpan(
-                              text:
-                                  "• ne pas usurper l’identité d’autrui ;\n",
+                              text: "• ne pas usurper l’identité d’autrui ;\n",
                             ),
                             TextSpan(
                               text:
@@ -413,8 +413,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   "Les paiements sont effectués via les solutions sécurisées intégrées à la plateforme.\n\n",
                             ),
                             TextSpan(
-                              text:
-                                  "M3Fund prélève une commission fixe de 5% ",
+                              text: "M3Fund prélève une commission fixe de 5% ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
@@ -439,9 +438,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: TextStyle(fontSize: 15, height: 1.5),
                       ),
                       _divider(),
-                      _sectionTitle(
-                        "10 – Protection des données personnelles",
-                      ),
+                      _sectionTitle("10 – Protection des données personnelles"),
                       const Text(
                         "M3Fund collecte et traite les données des contributeurs conformément à la loi malienne sur la protection des données personnelles.\n\n"
                         "Les données collectées (identité, contact, historique de contribution, etc.) sont utilisées exclusivement pour la gestion du compte, la mise en relation avec les porteurs et la conformité réglementaire (KYC, lutte anti-blanchiment).\n\n"
@@ -457,9 +454,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         style: TextStyle(fontSize: 15, height: 1.5),
                       ),
                       _divider(),
-                      _sectionTitle(
-                        "12 – Suspension ou résiliation du compte",
-                      ),
+                      _sectionTitle("12 – Suspension ou résiliation du compte"),
                       const Text(
                         "M3Fund se réserve le droit de suspendre ou supprimer le compte d’un contributeur en cas de violation des CGU, de comportement frauduleux, ou de non-respect des lois en vigueur.",
                         style: TextStyle(fontSize: 15, height: 1.5),

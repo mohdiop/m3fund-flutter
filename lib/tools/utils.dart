@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/screens/login_screen.dart';
-import 'package:m3fund_flutter/screens/signin_screen.dart';
+import 'package:m3fund_flutter/screens/auth/login_screen.dart';
+import 'package:m3fund_flutter/screens/auth/signin_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 void showBlurLocalizationDialog({
   required BuildContext context,
@@ -105,10 +106,9 @@ void showBlurLocalizationDialog({
                                     ? SizedBox(
                                         height: 24,
                                         width: 24,
-                                        child: CircularProgressIndicator(
+                                        child: SpinKitSpinningLines(
                                           color: primaryColor,
-                                          backgroundColor: Colors.white,
-                                          strokeWidth: 2,
+                                          size: 28,
                                         ),
                                       )
                                     : Text(

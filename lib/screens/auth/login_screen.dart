@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
-import 'package:m3fund_flutter/screens/main_screen.dart';
-import 'package:m3fund_flutter/screens/signin_screen.dart';
+import 'package:m3fund_flutter/screens/home/main_screen.dart';
+import 'package:m3fund_flutter/screens/auth/signin_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -23,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _showError = false;
   String _currentError = "";
+  bool _isLoading = false;
 
   bool areBlankFields() {
     return (_usernameController.text.trim().isEmpty &&
@@ -173,14 +175,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
+                      backgroundColor: _isLoading ? f4Grey : primaryColor,
                       foregroundColor: Colors.white,
                       fixedSize: Size(300, 54),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text("Se connecter", style: TextStyle(fontSize: 24)),
+                    child: !_isLoading
+                        ? Text("Se connecter", style: TextStyle(fontSize: 24))
+                        : SpinKitSpinningLines(color: primaryColor, size: 32),
                     onPressed: () async {
                       if (areBlankFields()) {
                         setState(() {
@@ -192,22 +196,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           _showError = false;
                         });
                         try {
+                          setState(() {
+                            _isLoading = true;
+                          });
                           await _authenticationService.login(
                             authenticationRequest: AuthenticationRequest(
                               email: _usernameController.text,
                               password: _passwordController.text,
                             ),
                           );
+                          setState(() {
+                            _isLoading = false;
+                          });
                           if (context.mounted) {
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (_) => const MainScreen(),
                               ),
-                              (Route<dynamic> route) =>
-                                  false, // ✅ supprime toutes les routes précédentes
+                              (_) => false,
                             );
                           }
                         } catch (e) {
+                          setState(() {
+                            _isLoading = false;
+                          });
                           setState(() {
                             ExceptionResponse exception =
                                 ExceptionResponse.fromJson(

@@ -4,7 +4,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/screens/customs/custom_pref_chooser.dart';
-import 'package:m3fund_flutter/screens/localization_screen.dart';
+import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
 import 'package:m3fund_flutter/tools/user_prefs_manager.dart';
 import 'package:remixicon/remixicon.dart';
 

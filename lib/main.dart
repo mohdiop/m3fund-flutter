@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/screens/splash_screen.dart';
+import 'package:m3fund_flutter/screens/launcher/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {

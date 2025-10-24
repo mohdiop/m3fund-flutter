@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:m3fund_flutter/screens/account_screen.dart';
+import 'package:m3fund_flutter/screens/settings/account_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_sub_menu.dart';
+import 'package:m3fund_flutter/screens/auth/login_screen.dart';
+import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -56,6 +58,18 @@ class _SettingsSceenState extends State<SettingsSceen> {
                 rightIcon: RemixIcons.arrow_right_s_line,
                 menuTitle: "Changer la langue",
               ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                AuthenticationService auth = AuthenticationService();
+                await auth.logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => LoginScreen()),
+                  (_) => false,
+                );
+              },
+              child: Text("Déconnexion"),
             ),
           ],
         ),

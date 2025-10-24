@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/screens/discussions_screen.dart';
-import 'package:m3fund_flutter/screens/home_screen.dart';
-import 'package:m3fund_flutter/screens/settings_sceen.dart';
-import 'package:m3fund_flutter/screens/stats_screen.dart';
+import 'package:m3fund_flutter/screens/home/discussions_screen.dart';
+import 'package:m3fund_flutter/screens/home/home_screen.dart';
+import 'package:m3fund_flutter/screens/home/settings_sceen.dart';
+import 'package:m3fund_flutter/screens/home/stats_screen.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,20 +25,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    _loadIsAuthenticatedState();
-    _pages = [
-      HomeScreen(isAuthenticated: _isAuthenticated),
-      StatsScreen(isAuthenticated: _isAuthenticated),
-      DiscussionsScreen(isAuthenticated: _isAuthenticated),
-      SettingsSceen(isAuthenticated: _isAuthenticated),
-    ];
     super.initState();
+    _loadIsAuthenticatedState();
   }
 
   Future<void> _loadIsAuthenticatedState() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isAuthenticated = prefs.getBool("isAuthenticated") ?? false;
+      _pages = [
+        HomeScreen(isAuthenticated: _isAuthenticated),
+        StatsScreen(isAuthenticated: _isAuthenticated),
+        DiscussionsScreen(isAuthenticated: _isAuthenticated),
+        SettingsSceen(isAuthenticated: _isAuthenticated),
+      ];
     });
   }
 

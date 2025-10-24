@@ -8,11 +8,12 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/requests/create_localization_request.dart';
-import 'package:m3fund_flutter/screens/main_screen.dart';
+import 'package:m3fund_flutter/screens/home/main_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:m3fund_flutter/services/osm_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LocalizationScreen extends StatefulWidget {
   final CreateContributorRequest contributorRequest;
@@ -30,6 +31,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
   LatLng? _markerPosition;
   bool _isLoading = true;
   final ValueNotifier<bool> _loadForRegistration = ValueNotifier(false);
+  bool _positionLoading = false;
 
   @override
   void initState() {
@@ -86,10 +88,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
     if (_isLoading || _currentPosition == null || _markerPosition == null) {
       return const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            color: primaryColor,
-          ),
+          child: SpinKitSpinningLines(color: primaryColor, size: 32),
         ),
       );
     }
@@ -179,75 +178,87 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                 child: Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
+                      backgroundColor: _positionLoading ? f4Grey : primaryColor,
                       foregroundColor: Colors.white,
                       fixedSize: Size(300, 54),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text("Continuer", style: TextStyle(fontSize: 24)),
+                    child: _positionLoading
+                        ? SpinKitSpinningLines(color: primaryColor, size: 32)
+                        : Text("Continuer", style: TextStyle(fontSize: 24)),
                     onPressed: () async {
                       if (_currentPosition != null) {
                         try {
+                          setState(() {
+                            _positionLoading = true;
+                          });
                           final onValue = await _osmService.getAddressFromOSM(
                             _currentPosition!.latitude,
                             _currentPosition!.longitude,
                           );
-
-                          showBlurLocalizationDialog(
-                            isLoading: _loadForRegistration,
-                            context: context,
-                            title: "Votre position actuelle",
-                            content:
-                                "Votre position actuelle est à ${onValue['district']}, ${onValue['city']}, ${onValue['region']}, ${onValue['country']}. Cela nous permettra de vous proposer des contenus plus personnalisés dans l'environ.",
-                            actionText: "S'inscrire",
-                            closureText: "Annuler",
-                            icon: RemixIcons.user_location_line,
-                            action: () async {
-                              widget.contributorRequest.localization =
-                                  CreateLocalizationRequest(
-                                    country: onValue['country'].toString(),
-                                    region: onValue['region'].toString(),
-                                    town: onValue['city'].toString(),
-                                    street: onValue['district'].toString(),
-                                    longitude: _currentPosition!.longitude,
-                                    latitude: _currentPosition!.latitude,
-                                  );
-
-                              try {
-                                await _authenticationService.register(
-                                  createContributorRequest:
-                                      widget.contributorRequest,
-                                );
-                                await _authenticationService.login(
-                                  authenticationRequest: AuthenticationRequest(
-                                    email: widget.contributorRequest.email,
-                                    password:
-                                        widget.contributorRequest.password,
-                                  ),
-                                );
-                                if (context.mounted) {
-                                  if (context.mounted) {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (_) => const MainScreen(),
-                                      ),
-                                      (Route<dynamic> route) => false,
+                          setState(() {
+                            _positionLoading = false;
+                          });
+                          if (context.mounted) {
+                            showBlurLocalizationDialog(
+                              isLoading: _loadForRegistration,
+                              context: context,
+                              title: "Votre position actuelle",
+                              content:
+                                  "Votre position actuelle est à ${onValue['district']}, ${onValue['city']}, ${onValue['region']}, ${onValue['country']}. Cela nous permettra de vous proposer des contenus plus personnalisés dans l'environ.",
+                              actionText: "S'inscrire",
+                              closureText: "Annuler",
+                              icon: RemixIcons.user_location_line,
+                              action: () async {
+                                widget.contributorRequest.localization =
+                                    CreateLocalizationRequest(
+                                      country: onValue['country'].toString(),
+                                      region: onValue['region'].toString(),
+                                      town: onValue['city'].toString(),
+                                      street: onValue['district'].toString(),
+                                      longitude: _currentPosition!.longitude,
+                                      latitude: _currentPosition!.latitude,
                                     );
+
+                                try {
+                                  await _authenticationService.register(
+                                    createContributorRequest:
+                                        widget.contributorRequest,
+                                  );
+                                  await _authenticationService.login(
+                                    authenticationRequest:
+                                        AuthenticationRequest(
+                                          email:
+                                              widget.contributorRequest.email,
+                                          password: widget
+                                              .contributorRequest
+                                              .password,
+                                        ),
+                                  );
+                                  if (context.mounted) {
+                                    if (context.mounted) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (_) => const MainScreen(),
+                                        ),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    }
                                   }
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(e.toString()),
+                                      backgroundColor: Colors.brown,
+                                      duration: const Duration(seconds: 3),
+                                    ),
+                                  );
                                 }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(e.toString()),
-                                    backgroundColor: Colors.brown,
-                                    duration: const Duration(seconds: 3),
-                                  ),
-                                );
-                              }
-                            },
-                          );
+                              },
+                            );
+                          }
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

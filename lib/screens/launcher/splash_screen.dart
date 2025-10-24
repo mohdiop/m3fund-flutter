@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:m3fund_flutter/screens/main_screen.dart';
-import 'package:m3fund_flutter/screens/login_screen.dart';
-import 'package:m3fund_flutter/screens/onboarding_screen.dart';
+import 'package:m3fund_flutter/screens/home/main_screen.dart';
+import 'package:m3fund_flutter/screens/auth/login_screen.dart';
+import 'package:m3fund_flutter/screens/launcher/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   final bool isFirstTime;
