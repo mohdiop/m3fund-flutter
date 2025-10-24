@@ -60,6 +60,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
           suffixIconConstraints: BoxConstraints(minHeight: 50, minWidth: 50),
           suffixIcon: widget.isPassword
               ? IconButton(
+                  style: IconButton.styleFrom(
+                    hoverColor: Colors.transparent,
+                    overlayColor: Colors.transparent,
+                  ),
                   icon: Icon(
                     _obscureText
                         ? RemixIcons.eye_off_line

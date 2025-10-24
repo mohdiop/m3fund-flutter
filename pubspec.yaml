@@ -47,6 +47,7 @@ dependencies:
   latlong2: ^0.9.1
   geolocator: ^14.0.2
   google_nav_bar: ^5.0.7
+  line_awesome_flutter: ^3.0.1
 
 flutter_launcher_icons:
   android: true

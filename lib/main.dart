@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,12 +15,20 @@ Future<void> main() async {
     MaterialApp(
       theme: ThemeData(
         textSelectionTheme: const TextSelectionThemeData(
-          selectionColor: Color(0xFF06A664),
+          selectionColor: primaryColor,
           cursorColor: Colors.white,
-          selectionHandleColor: Color(0xFF06A664),
+          selectionHandleColor: primaryColor,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
         ),
       ),
-      home: SplashScreen(isFirstTime: isFirstTime, isAuthenticated: isAuthenticated ?? false,),
+      home: SplashScreen(
+        isFirstTime: isFirstTime,
+        isAuthenticated: isAuthenticated ?? false,
+      ),
       debugShowCheckedModeBanner: false,
     ),
   );

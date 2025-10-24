@@ -1,124 +1,89 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isAuthenticated;
+  const HomeScreen({super.key, required this.isAuthenticated});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectIndex = 0;
+  bool _hasUnreadNotifications = false;
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(),
-      child: Scaffold(
-        body: Center(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        leadingWidth: 110,
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: EdgeInsets.all(10),
+          child: Image.asset("assets/nbLogoName.png"),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: primaryColor,
+                maximumSize: Size(40, 40),
+              ),
+              icon: Stack(
                 children: [
-                  for (int i = 0; i < 100; i++)
-                    Text(
-                      "Exejhefkpjezpfjpkzjmfjemjfmkajefjaemljfmlaejmfjealjfmljeaemple",
+                  Icon(
+                    RemixIcons.notification_line,
+                    size: 24,
+                    color: Colors.white,
+                  ),
+                  if (_hasUnreadNotifications)
+                    Positioned(
+                      width: 7,
+                      height: 7,
+                      top: 3,
+                      left: 16,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: secondaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
                     ),
                 ],
               ),
+              onPressed: () {
+                if (!widget.isAuthenticated) {
+                  showRequestConnectionDialog(context);
+                }
+              },
             ),
           ),
-        ),
-        extendBody: true,
-        bottomNavigationBar: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          GestureDetector(
+            onTap: () {
+              if (!widget.isAuthenticated) {
+                showRequestConnectionDialog(context);
+              }
+            },
             child: Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              height: 90,
-              width: double.infinity,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: 68,
-                  width: 350,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: GNav(
-                      gap: 5,
-                      color: Colors.white,
-                      activeColor: Colors.white,
-                      tabBackgroundColor: customBlackColor,
-                      curve: Curves.easeInCubic,
-                      tabBorderRadius: 10,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      iconSize: 28,
-                      selectedIndex: _selectIndex,
-                      onTabChange: (index) {
-                        setState(() => _selectIndex = index);
-                      },
-                      tabs: [
-                        GButton(
-                          icon: _selectIndex == 0
-                              ? RemixIcons.home_9_fill
-                              : RemixIcons.home_9_line,
-                          text: "Accueil",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                        GButton(
-                          icon: _selectIndex == 1
-                              ? RemixIcons.line_chart_fill
-                              : RemixIcons.line_chart_line,
-                          text: "Statistiques",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                        GButton(
-                          icon: _selectIndex == 2
-                              ? RemixIcons.question_answer_fill
-                              : RemixIcons.question_answer_line,
-                          text: "Discussions",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                        GButton(
-                          icon: _selectIndex == 3
-                              ? RemixIcons.settings_5_fill
-                              : RemixIcons.settings_5_line,
-                          text: "Paramètres",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              margin: EdgeInsets.only(right: 10),
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: customBlackColor, width: 3),
+              ),
+              child: ClipOval(
+                child: Image.asset("assets/default.jpg", fit: BoxFit.cover),
               ),
             ),
           ),
-        ),
+        ],
       ),
+      extendBodyBehindAppBar: true,
+      body: Center(child: Text("Home Screen")),
     );
   }
 }

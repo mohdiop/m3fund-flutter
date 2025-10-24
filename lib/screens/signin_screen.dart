@@ -8,6 +8,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
+import 'package:m3fund_flutter/screens/login_screen.dart';
 import 'package:m3fund_flutter/screens/user_prefs_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
@@ -57,28 +58,6 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: IconButton(
-            style: IconButton.styleFrom(
-              backgroundColor: primaryColor,
-              shape: const CircleBorder(),
-            ),
-            icon: Icon(
-              RemixIcons.arrow_left_line,
-              size: 24,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-      ),
       backgroundColor: Colors.white,
       body: Scrollbar(
         thumbVisibility: false,
@@ -86,7 +65,7 @@ class _SigninScreenState extends State<SigninScreen> {
         thickness: 0,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(top: 0),
+            padding: EdgeInsets.only(top: 30),
             child: Center(
               child: Column(
                 children: [
@@ -349,6 +328,32 @@ class _SigninScreenState extends State<SigninScreen> {
                         }
                       }
                     },
+                  ),
+                  SizedBox(height: 30),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => LoginScreen()),
+                        (route) => false,
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Vous avez déjà un compte? ",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        Text(
+                          "Se connecter.",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20),
                 ],

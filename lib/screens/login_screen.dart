@@ -5,7 +5,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
-import 'package:m3fund_flutter/screens/home_screen.dart';
+import 'package:m3fund_flutter/screens/main_screen.dart';
 import 'package:m3fund_flutter/screens/signin_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        MaterialPageRoute(builder: (_) => const MainScreen()),
                       );
                     },
                     child: Align(
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (context.mounted) {
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                builder: (_) => const HomeScreen(),
+                                builder: (_) => const MainScreen(),
                               ),
                               (Route<dynamic> route) =>
                                   false, // ✅ supprime toutes les routes précédentes
@@ -243,8 +243,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Text("S'inscrire", style: TextStyle(fontSize: 24)),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SigninScreen()),
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => SigninScreen()),
+                        (route) => false,
                       );
                     },
                   ),

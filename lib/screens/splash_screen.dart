@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:m3fund_flutter/screens/home_screen.dart';
+import 'package:m3fund_flutter/screens/main_screen.dart';
 import 'package:m3fund_flutter/screens/login_screen.dart';
 import 'package:m3fund_flutter/screens/onboarding_screen.dart';
 
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (widget.isAuthenticated) {
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      ).pushReplacement(MaterialPageRoute(builder: (_) => MainScreen()));
     } else if (widget.isFirstTime) {
       Navigator.of(
         context,
