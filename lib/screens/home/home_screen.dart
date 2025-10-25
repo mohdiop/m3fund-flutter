@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
+import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -14,6 +16,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _hasUnreadNotifications = false;
+  ContributorResponse? _user;
+
+  final UserService _userService = UserService();
+
+  @override
+  void initState() {
+    if (widget.isAuthenticated) {
+      _loadUserInfo();
+    }
+    super.initState();
+  }
+
+  Future<void> _loadUserInfo() async {
+    ContributorResponse loadedUser = await _userService.me();
+    setState(() {
+      _user = loadedUser;
+    });
+  }
+
+  String _greetingWordByTime() {
+    final now = DateTime.now();
+    final hour = now.hour;
+
+    if (hour >= 5 && hour < 14) {
+      return "Bonjour";
+    } else {
+      return "Bonsoir";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leadingWidth: 110,
         toolbarHeight: 70,
+        centerTitle: true,
+        title: widget.isAuthenticated
+            ? Text(
+                "${_greetingWordByTime()}, ${_user?.lastName ?? ''}",
+                style: const TextStyle(fontSize: 15),
+              )
+            : null,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         leading: Padding(
@@ -155,7 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBodyBehindAppBar: true,
       body: CampaignsScreen(
         isAuthenticated: widget.isAuthenticated,
-        userPosition: "Sotuba, Bamako, Mali",
+        userPosition:
+            "${_user?.localization.country ?? 'Pays'}, ${_user?.localization.region ?? 'Ville'}, ${_user?.localization.street ?? _user?.localization.town ?? 'Quartier'}",
       ),
     );
   }

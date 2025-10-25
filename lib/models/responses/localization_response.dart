@@ -1,5 +1,6 @@
 class LocalizationResponse {
   int id;
+  String country;
   String region;
   String town;
   String street;
@@ -8,6 +9,7 @@ class LocalizationResponse {
 
   LocalizationResponse({
     required this.id,
+    required this.country,
     required this.region,
     required this.town,
     required this.street,
@@ -18,6 +20,7 @@ class LocalizationResponse {
   factory LocalizationResponse.fromJson(Map<String, dynamic> jsonBody) {
     return LocalizationResponse(
       id: jsonBody['id'] as int,
+      country: jsonBody['country'] ?? '',
       region: jsonBody['region'] ?? '',
       town: jsonBody['town'] ?? '',
       street: jsonBody['street'] ?? '',

@@ -16,6 +16,7 @@ class CampaignResponse {
   final CampaignState state;
   final List<RewardResponse> rewards;
   final double currentFund;
+  final int numberOfVolunteer;
 
   CampaignResponse({
     required this.id,
@@ -30,6 +31,7 @@ class CampaignResponse {
     required this.state,
     required this.rewards,
     required this.currentFund,
+    required this.numberOfVolunteer
   });
 
   factory CampaignResponse.fromJson(Map<String, dynamic> jsonBody) {
@@ -52,6 +54,7 @@ class CampaignResponse {
           .map((r) => RewardResponse.fromJson(r as Map<String, dynamic>))
           .toList(),
       currentFund: (jsonBody['currentFund'] as num).toDouble(),
+      numberOfVolunteer: jsonBody['numberOfVolunteer'] as int
     );
   }
 
