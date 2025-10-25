@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -17,12 +18,81 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leadingWidth: 110,
+        toolbarHeight: 70,
         backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         leading: Padding(
           padding: EdgeInsets.all(10),
           child: Image.asset("assets/nbLogoName.png"),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size(350, 44),
+          child: ClipRRect(
+            child: Container(
+              padding: EdgeInsets.only(bottom: 5),
+              decoration: BoxDecoration(color: Colors.white),
+              alignment: AlignmentGeometry.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 10,
+                children: [
+                  SizedBox(
+                    width: 295,
+                    height: 44,
+                    child: TextField(
+                      cursorColor: customBlackColor,
+                      style: TextStyle(fontSize: 12),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: f4Grey,
+                        hoverColor: f4Grey,
+                        hint: Text(
+                          "Rechercher par ici ...",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color.fromRGBO(0, 0, 0, 0.6),
+                          ),
+                        ),
+                        prefixIcon: Icon(RemixIcons.search_2_line, size: 24),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                            width: 0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                            width: 0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: SizedBox(
+                      width: 44,
+                      height: 44,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10),
+                          color: f4Grey,
+                        ),
+                        child: Icon(RemixIcons.equalizer_2_line),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
         actions: [
           Padding(
@@ -83,7 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       extendBodyBehindAppBar: true,
-      body: Center(child: Text("Home Screen")),
+      body: CampaignsScreen(
+        isAuthenticated: widget.isAuthenticated,
+        userPosition: "Sotuba, Bamako, Mali",
+      ),
     );
   }
 }

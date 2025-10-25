@@ -205,9 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: _passwordController.text,
                             ),
                           );
-                          setState(() {
-                            _isLoading = false;
-                          });
                           if (context.mounted) {
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(

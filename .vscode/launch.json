@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "m3fund_flutter (Flutter Edge)",
+            "program": "lib/main.dart",
+            "deviceId": "edge",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port",
+                "5000"
+            ]
+        }
+    ]
+}
