@@ -141,31 +141,33 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                initialCenter: _currentPosition!,
-                initialZoom: 15,
-                onTap: (tapPosition, latLng) => _moveMarker(latLng),
-              ),
-              children: [
-                openStreetMapTileLayer,
-                MarkerLayer(
-                  markers: [
-                    Marker(
-                      point: _markerPosition!,
-                      width: 60,
-                      height: 60,
-                      child: const Icon(
-                        Icons.location_on,
-                        color: primaryColor,
-                        size: 45,
-                      ),
+            child: mounted
+                ? FlutterMap(
+                    mapController: _mapController,
+                    options: MapOptions(
+                      initialCenter: _currentPosition!,
+                      initialZoom: 15,
+                      onTap: (tapPosition, latLng) => _moveMarker(latLng),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    children: [
+                      openStreetMapTileLayer,
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: _markerPosition!,
+                            width: 60,
+                            height: 60,
+                            child: const Icon(
+                              Icons.location_on,
+                              color: primaryColor,
+                              size: 45,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                : SpinKitSpinningLines(color: primaryColor, size: 32),
           ),
         ),
         bottomSheet: ClipRRect(

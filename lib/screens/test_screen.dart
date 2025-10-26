@@ -31,7 +31,7 @@ class _TestScreenState extends State<TestScreen> {
 
   Future<void> initImg() async {
     setState(() async {
-      bytes = await _downloadService.fetchImageBytes(
+      bytes = await _downloadService.fetchDataBytes(
         "C:\\Users\\moham\\Desktop\\m3fund\\pictures\\f42fd4c2-8aa1-4651-9a03-31c946a32705.png",
       );
     });

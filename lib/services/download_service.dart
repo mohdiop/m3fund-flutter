@@ -4,7 +4,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:dio/dio.dart';
 
 class DownloadService {
-  Future<Uint8List?> fetchImageBytes(String path) async {
+  Future<Uint8List?> fetchDataBytes(String path) async {
     final dio = Dio();
     final url = "$baseUrl/public/download";
     final response = await dio.get(

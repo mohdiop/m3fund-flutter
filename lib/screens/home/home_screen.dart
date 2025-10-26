@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: CampaignsScreen(
         isAuthenticated: widget.isAuthenticated,
         userPosition:
-            "${_user?.localization.country ?? 'Pays'}, ${_user?.localization.region ?? 'Ville'}, ${_user?.localization.street ?? _user?.localization.town ?? 'Quartier'}",
+            "${_user?.localization.street ?? _user?.localization.town ?? 'Quartier'}, ${_user?.localization.region ?? 'Ville'}, ${_user?.localization.country ?? 'Pays'}",
       ),
     );
   }

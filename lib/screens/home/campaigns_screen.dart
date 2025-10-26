@@ -24,6 +24,7 @@ class CampaignsScreen extends StatefulWidget {
 class _CampaignsScreenState extends State<CampaignsScreen> {
   bool _isLoading = false;
   List<CampaignResponse> campaigns = [];
+  bool _errorOccuredWhenLoading = false;
 
   final CampaignService _campaignService = CampaignService();
 
@@ -37,7 +38,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     setState(() {
       _isLoading = true;
     });
-    campaigns = await _campaignService.getAllCampaigns();
+    try {
+      campaigns = await _campaignService.getAllCampaigns();
+    } catch (e) {
+      setState(() {
+        _errorOccuredWhenLoading = true;
+      });
+    }
     setState(() {
       _isLoading = false;
     });
@@ -149,16 +156,51 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                             for (var campaign in campaigns)
                                               CustomCampaignCard(
                                                 campaign: campaign,
+                                                isAuthenticated:
+                                                    widget.isAuthenticated,
                                               ),
                                           ],
                                         ),
                                       ),
                                     ),
                             )
+                          : _isLoading
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  SpinKitSpinningLines(
+                                    color: primaryColor,
+                                    size: 32,
+                                  ),
+                                  Text(
+                                    "Chargement ...",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : _errorOccuredWhenLoading
+                          ? Center(
+                              child: Text(
+                                "Impossible de charger les données depuis le serveur.",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black.withValues(alpha: 0.6),
+                                ),
+                              ),
+                            )
                           : Center(
                               child: Text(
                                 "Pas de recommandations pour l'instant.",
-                                style: const TextStyle(fontSize: 15),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black.withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
                     ],
@@ -204,16 +246,49 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                           for (var campaign in campaigns)
                                             CustomCampaignCard(
                                               campaign: campaign,
+                                              isAuthenticated:
+                                                  widget.isAuthenticated,
                                             ),
                                         ],
                                       ),
                                     ),
                                   ),
                           )
+                        : _isLoading
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SpinKitSpinningLines(
+                                  color: primaryColor,
+                                  size: 32,
+                                ),
+                                Text(
+                                  "Chargement ...",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : _errorOccuredWhenLoading
+                        ? Center(
+                            child: Text(
+                              "Impossible de charger les données depuis le serveur.",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          )
                         : Center(
                             child: Text(
                               "Pas de nouvelles campagnes pour l'instant.",
-                              style: const TextStyle(fontSize: 15),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black.withValues(alpha: 0.6),
+                              ),
                             ),
                           ),
                   ],
@@ -259,16 +334,49 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                           for (var campaign in campaigns)
                                             CustomCampaignCard(
                                               campaign: campaign,
+                                              isAuthenticated:
+                                                  widget.isAuthenticated,
                                             ),
                                         ],
                                       ),
                                     ),
                                   ),
                           )
+                        : _isLoading
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SpinKitSpinningLines(
+                                  color: primaryColor,
+                                  size: 32,
+                                ),
+                                Text(
+                                  "Chargement ...",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : _errorOccuredWhenLoading
+                        ? Center(
+                            child: Text(
+                              "Impossible de charger les données depuis le serveur.",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          )
                         : Center(
                             child: Text(
                               "Les rangs ne sont pas encore établis.",
-                              style: const TextStyle(fontSize: 15),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black.withValues(alpha: 0.6),
+                              ),
                             ),
                           ),
                   ],

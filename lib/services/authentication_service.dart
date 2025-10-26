@@ -154,9 +154,9 @@ class AuthenticationService {
   }
 
   Future<String?> getRefreshToken() async =>
-      _storage.read(key: 'refresh_token');
+      await _storage.read(key: 'refresh_token');
 
-  Future<String?> getAccessToken() async => _storage.read(key: 'access_token');
+  Future<String?> getAccessToken() async => await _storage.read(key: 'access_token');
 
   Future<void> _deleteTokens() async {
     await _storage.delete(key: 'refresh_token');
