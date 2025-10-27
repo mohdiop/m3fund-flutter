@@ -1,11 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
+import 'package:m3fund_flutter/models/requests/create_gift_request.dart';
+import 'package:m3fund_flutter/models/requests/create_payment_request.dart';
 import 'package:m3fund_flutter/models/responses/campaign_response.dart';
+import 'package:m3fund_flutter/models/responses/gift_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
+import 'package:m3fund_flutter/screens/home/payment_success_screen.dart';
+import 'package:m3fund_flutter/services/gift_service.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String contributionWord;
@@ -29,6 +37,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
     {"name": "Carte bancaire", "asset": "assets/bank.png"},
   ];
   int _selectMethod = 0;
+
+  bool _isBlankAmount = false;
+  bool _isLoading = false;
+
+  final GiftService _giftService = GiftService();
+  final Uuid _uuid = Uuid();
+
+  PaymentType _getPaymentType(int index) {
+    switch (index) {
+      case 0:
+        return PaymentType.orangeMoney;
+      case 1:
+        return PaymentType.moovMoney;
+      case 2:
+        return PaymentType.paypal;
+      case 3:
+        return PaymentType.bankCard;
+      default:
+        return PaymentType.orangeMoney;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,22 +129,47 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
+                      if (_isBlankAmount)
+                        Text(
+                          "Veuillez fournir un montant",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.red,
+                          ),
+                        ),
+                      if (_isBlankAmount) SizedBox(height: 10),
                       SizedBox(
                         height: 62,
                         width: 300,
                         child: TextField(
                           controller: _amountController,
                           style: const TextStyle(fontSize: 12),
+                          onTap: () {
+                            setState(() {
+                              _isBlankAmount = false;
+                            });
+                          },
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: false,
+                            signed: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                           decoration: InputDecoration(
                             hintText: "Ex: 10000",
-                            hintStyle: const TextStyle(
-                              color: Colors.grey,
+                            hintStyle: TextStyle(
+                              color: _isBlankAmount
+                                  ? Colors.red.shade300
+                                  : Colors.grey,
                               fontSize: 12,
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF2D2D2D),
+                              borderSide: BorderSide(
+                                color: _isBlankAmount
+                                    ? Colors.red
+                                    : customBlackColor,
                                 width: 2,
                               ),
                             ),
@@ -137,9 +191,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             suffixIcon: Center(
                               child: Text(
                                 "FCFA",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.black,
+                                  color: _isBlankAmount
+                                      ? Colors.red
+                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -243,18 +299,74 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     alignment: Alignment.topCenter,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
+                        backgroundColor: _isLoading
+                            ? Colors.white
+                            : primaryColor,
                         foregroundColor: Colors.white,
                         fixedSize: const Size(300, 54),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        "Procéder au paiement",
-                        style: TextStyle(fontSize: 24),
-                      ),
+                      onPressed: () async {
+                        if (_amountController.text.trim().isEmpty) {
+                          setState(() {
+                            _isBlankAmount = true;
+                          });
+                        } else {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          try {
+                            GiftResponse giftResponse = await _giftService
+                                .createGift(
+                                  campaignId: widget.campaignResponse.id,
+                                  gift: CreateGiftRequest(
+                                    payment: CreatePaymentRequest(
+                                      transactionId: _uuid.v4(),
+                                      type: _getPaymentType(_selectMethod),
+                                      state: PaymentState.success,
+                                      amount: double.parse(
+                                        _amountController.text.toString(),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                            if (mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PaymentSuccessScreen(
+                                    giftResponse: giftResponse,
+                                  ),
+                                ),
+                                (route) => false,
+                              );
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            }
+                          } catch (e) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                          }
+                        }
+                      },
+                      child: _isLoading
+                          ? Center(
+                              child: SpinKitSpinningLines(
+                                color: primaryColor,
+                                size: 32,
+                              ),
+                            )
+                          : const Text(
+                              "Procéder au paiement",
+                              style: TextStyle(fontSize: 24),
+                            ),
                     ),
                   ),
                 ),

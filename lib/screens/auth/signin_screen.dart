@@ -28,6 +28,7 @@ class _SigninScreenState extends State<SigninScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _scrollController = ScrollController();
 
   String _choosenCountryCode = "+223";
 
@@ -65,7 +66,9 @@ class _SigninScreenState extends State<SigninScreen> {
         thumbVisibility: false,
         trackVisibility: false,
         thickness: 0,
+        controller: _scrollController,
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding: EdgeInsets.only(top: 30),
             child: Center(
@@ -113,96 +116,94 @@ class _SigninScreenState extends State<SigninScreen> {
                     children: [
                       SizedBox(
                         width: 300,
-                        child: Expanded(
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                              dialogTheme: DialogThemeData(
-                                backgroundColor: Colors.white,
-                              ),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            dialogTheme: DialogThemeData(
+                              backgroundColor: Colors.white,
                             ),
-                            child: IntlPhoneField(
-                              controller: _phoneNumberController,
-                              style: TextStyle(fontSize: 12),
-                              cursorColor: primaryColor,
-                              languageCode: "FR",
-                              pickerDialogStyle: PickerDialogStyle(
-                                searchFieldCursorColor: primaryColor,
-                                searchFieldInputDecoration: InputDecoration(
-                                  hint: Text(
-                                    "Rechercher votre pays ici ...",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  focusColor: primaryColor,
-                                  fillColor: primaryColor,
-                                  prefixIcon: Icon(RemixIcons.search_2_line),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                    borderSide: BorderSide(
-                                      color: primaryColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                    borderSide: BorderSide(
-                                      color: customBlackColor,
-                                      width: 2,
-                                    ),
-                                  ),
+                          ),
+                          child: IntlPhoneField(
+                            controller: _phoneNumberController,
+                            style: TextStyle(fontSize: 12),
+                            cursorColor: primaryColor,
+                            languageCode: "FR",
+                            pickerDialogStyle: PickerDialogStyle(
+                              searchFieldCursorColor: primaryColor,
+                              searchFieldInputDecoration: InputDecoration(
+                                hint: Text(
+                                  "Rechercher votre pays ici ...",
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                              ),
-                              decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.never,
-                                labelText: 'Numéro de téléphone',
-                                labelStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFF2D2D2D),
-                                    width: 2,
-                                  ),
-                                ),
+                                focusColor: primaryColor,
+                                fillColor: primaryColor,
+                                prefixIcon: Icon(RemixIcons.search_2_line),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFF06A664),
+                                  borderRadius: BorderRadius.circular(100),
+                                  borderSide: BorderSide(
+                                    color: primaryColor,
                                     width: 2,
                                   ),
                                 ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                  borderSide: BorderSide(
+                                    color: customBlackColor,
                                     width: 2,
                                   ),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Colors.red,
-                                    width: 2,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 24,
-                                  horizontal: 0,
                                 ),
                               ),
-                              initialCountryCode: 'ML',
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              onChanged: (phone) {
-                                setState(() {
-                                  _choosenCountryCode = phone.countryCode;
-                                });
-                              },
                             ),
+                            decoration: InputDecoration(
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              labelText: 'Numéro de téléphone',
+                              labelStyle: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF2D2D2D),
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF06A664),
+                                  width: 2,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 24,
+                                horizontal: 0,
+                              ),
+                            ),
+                            initialCountryCode: 'ML',
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            onChanged: (phone) {
+                              setState(() {
+                                _choosenCountryCode = phone.countryCode;
+                              });
+                            },
                           ),
                         ),
                       ),

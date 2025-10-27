@@ -29,6 +29,15 @@ class _SettingsSceenState extends State<SettingsSceen> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
+        actions: [
+          Text(
+              "v1.0.0",
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black.withValues(alpha: 0.2),
+              ),
+            ),
+        ],
       ),
       body: Center(
         child: Column(

@@ -35,13 +35,16 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
 
   @override
   void initState() {
-    super.initState();
     _determinePosition();
+    super.initState();
   }
 
   Future<void> _determinePosition() async {
-    setState(() => _isLoading = true);
-
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) throw Exception('Activez la localisation');
 
@@ -65,11 +68,8 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
       _markerPosition = latLng;
       _isLoading = false;
     });
-
-    _mapController.move(latLng, 15);
   }
 
-  // Déplacer le marqueur à l’endroit cliqué
   void _moveMarker(LatLng position) {
     setState(() {
       _markerPosition = position;
@@ -81,17 +81,11 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
   void dispose() {
     super.dispose();
     _loadForRegistration.dispose();
+    _mapController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading || _currentPosition == null || _markerPosition == null) {
-      return const Scaffold(
-        body: Center(
-          child: SpinKitSpinningLines(color: primaryColor, size: 32),
-        ),
-      );
-    }
     return Theme(
       data: ThemeData(
         bottomSheetTheme: BottomSheetThemeData(
@@ -111,7 +105,9 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                   size: 24,
                   color: Colors.white,
                 ),
-                onPressed: _determinePosition,
+                onPressed: () async {
+                  if (!_isLoading) await _determinePosition();
+                },
               ),
             ),
           ],
@@ -142,31 +138,43 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: mounted
-                ? FlutterMap(
-                    mapController: _mapController,
-                    options: MapOptions(
-                      initialCenter: _currentPosition!,
-                      initialZoom: 15,
-                      onTap: (tapPosition, latLng) => _moveMarker(latLng),
-                    ),
-                    children: [
-                      openStreetMapTileLayer,
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: _markerPosition!,
-                            width: 60,
-                            height: 60,
-                            child: const Icon(
-                              Icons.location_on,
-                              color: primaryColor,
-                              size: 45,
-                            ),
+                ? _isLoading
+                      ? Center(
+                          child: SpinKitSpinningLines(
+                            color: primaryColor,
+                            size: 32,
                           ),
-                        ],
-                      ),
-                    ],
-                  )
+                        )
+                      : FlutterMap(
+                          mapController: _mapController,
+                          options: MapOptions(
+                            initialCenter: _currentPosition!,
+                            initialZoom: 15,
+                            onTap: (tapPosition, latLng) => _moveMarker(latLng),
+                            onMapReady: () async {
+                              if (_currentPosition != null) {
+                                _mapController.move(_currentPosition!, 15);
+                              }
+                            },
+                          ),
+                          children: [
+                            openStreetMapTileLayer,
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: _markerPosition!,
+                                  width: 60,
+                                  height: 60,
+                                  child: const Icon(
+                                    Icons.location_on,
+                                    color: primaryColor,
+                                    size: 45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                 : SpinKitSpinningLines(color: primaryColor, size: 32),
           ),
         ),
@@ -284,6 +292,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
 }
 
 TileLayer get openStreetMapTileLayer => TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  urlTemplate:
+      'https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=6Xnb0HvnIxAw4DOLZPdW',
   userAgentPackageName: 'com.mohdiop.m3fund',
 );
