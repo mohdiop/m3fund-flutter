@@ -2,16 +2,22 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/requests/create/create_localization_request.dart';
 import 'package:m3fund_flutter/models/requests/update/update_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
+import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
+import 'package:m3fund_flutter/services/osm_service.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final ContributorResponse user;
@@ -22,11 +28,17 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  final MapController _mapController = MapController();
   final AuthenticationService _authService = AuthenticationService();
   final UserService _userService = UserService();
   final ScrollController _scrollController = ScrollController();
+  final OSMService _osmService = OSMService();
   bool _isEditModeActive = false;
   bool _isLoading = false;
+  bool _isMapLoading = true;
+  LatLng? _currentPosition;
+  LatLng? _markerPosition;
+  String _currentPositionFormatted = "";
   ContributorResponse? _user;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -35,6 +47,41 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _determinePosition(
+    Function(bool) changeIsMapLoadingValue,
+    Function(LatLng) changeCurrentPosition,
+  ) async {
+    if (mounted) {
+      changeIsMapLoadingValue(true);
+    }
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) throw Exception('Activez la localisation');
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        showCustomTopSnackBar(context, "La permission a été refusée");
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      showCustomTopSnackBar(context, "Permission refusée définitivement");
+    }
+
+    final position = await Geolocator.getCurrentPosition();
+    final latLng = LatLng(position.latitude, position.longitude);
+
+    if (!mounted) return;
+    changeCurrentPosition(latLng);
+    changeIsMapLoadingValue(false);
+    _loadPositionFromOSM(latLng, (position) {
+      setState(() {
+        _currentPositionFormatted =
+            "${position.street == "" ? position.town : position.street}, ${position.region}, ${position.country}";
+      });
+    });
   }
 
   Widget _customProfileSubSection({
@@ -63,7 +110,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             Icon(icon, color: primaryColor),
             SizedBox(
-              width: 166,
+              width: (MediaQuery.of(context).size.width) <= 375
+                  ? MediaQuery.of(context).size.width <= 350
+                        ? 136
+                        : 166
+                  : MediaQuery.of(context).size.width / 2.1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -104,131 +155,403 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       barrierColor: Colors.black.withValues(alpha: 0.3),
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (_, __, ___) {
-        return Stack(
-          children: [
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-              child: Container(color: Colors.black.withValues(alpha: 0)),
-            ),
-            Center(
-              child: Dialog(
-                elevation: 0,
-                backgroundColor: Colors.white.withValues(alpha: 0.8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return Stack(
+              children: [
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(color: Colors.black.withValues(alpha: 0)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Modifier vos noms",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Icon(
-                        RemixIcons.user_3_fill,
-                        size: 44,
-                        color: primaryColor,
-                      ),
-                      const SizedBox(height: 20),
-                      CustomTextField(
-                        icon: null,
-                        hintText: "Prénom",
-                        isPassword: false,
-                        controller: _firstNameController,
-                        width: 200,
-                      ),
-                      const SizedBox(height: 10),
-                      CustomTextField(
-                        icon: null,
-                        hintText: "Nom",
-                        isPassword: false,
-                        controller: _lastNameController,
-                        width: 200,
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        spacing: 20,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                Center(
+                  child: Dialog(
+                    elevation: 0,
+                    backgroundColor: Colors.white.withValues(alpha: 0.8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            width: 110,
-                            height: 44,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                _isLoading = false;
-                              },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: primaryColor,
-                                backgroundColor: f4Grey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                "Quitter",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                ),
-                              ),
+                          Text(
+                            "Modifiez vos noms",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
-                            width: 110,
-                            height: 44,
-                            child: ElevatedButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : () async {
-                                      setState(() {
-                                        _isLoading = true;
-                                      });
-                                      await action();
-                                      setState(() {
-                                        _isLoading = false;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: primaryColor,
-                                backgroundColor: primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                          const SizedBox(height: 20),
+                          Icon(
+                            RemixIcons.user_3_fill,
+                            size: 44,
+                            color: primaryColor,
+                          ),
+                          const SizedBox(height: 20),
+                          CustomTextField(
+                            icon: null,
+                            hintText: "Prénom",
+                            isPassword: false,
+                            controller: _firstNameController,
+                            width: 200,
+                          ),
+                          const SizedBox(height: 10),
+                          CustomTextField(
+                            icon: null,
+                            hintText: "Nom",
+                            isPassword: false,
+                            controller: _lastNameController,
+                            width: 200,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 110,
+                                height: 44,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _isLoading = false;
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: primaryColor,
+                                    backgroundColor: f4Grey,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Quitter",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              child: _isLoading
-                                  ? SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: SpinKitSpinningLines(
-                                        color: primaryColor,
-                                        size: 28,
-                                      ),
-                                    )
-                                  : Text(
-                                      "Modifier",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                      ),
+                              SizedBox(
+                                width: 110,
+                                height: 44,
+                                child: ElevatedButton(
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () async {
+                                          setStateDialog(() {
+                                            _isLoading = true;
+                                          });
+                                          await action();
+                                          setStateDialog(() {
+                                            _isLoading = false;
+                                            _isEditModeActive = false;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: primaryColor,
+                                    backgroundColor: primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                            ),
+                                  ),
+                                  child: _isLoading
+                                      ? SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: SpinKitSpinningLines(
+                                            color: primaryColor,
+                                            size: 28,
+                                          ),
+                                        )
+                                      : Text(
+                                          "Modifier",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return FadeTransition(opacity: anim, child: child);
+      },
+    );
+  }
+
+  Future<void> _showChangeLocalizationDialog({
+    required Future<void> Function() action,
+  }) async {
+    setState(() {
+      _isMapLoading = false;
+    });
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Modification de la localization",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withValues(alpha: 0.3),
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, __, ___) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return Stack(
+              children: [
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(color: Colors.black.withValues(alpha: 0)),
+                ),
+                Center(
+                  child: Dialog(
+                    elevation: 0,
+                    backgroundColor: Colors.white.withValues(alpha: 0.8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Modifiez votre localization",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            width: 300,
+                            height: 44,
+                            padding: EdgeInsets.only(left: 10, right: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(0, 0),
+                                  blurRadius: 1,
+                                  spreadRadius: 0,
+                                  color: Colors.black.withValues(alpha: 0.2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _currentPositionFormatted,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await _determinePosition(
+                                      (value) {
+                                        setStateDialog(() {
+                                          _isMapLoading = value;
+                                        });
+                                      },
+                                      (value) {
+                                        setStateDialog(() {
+                                          _currentPosition = value;
+                                          _markerPosition = value;
+                                        });
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        RemixIcons.map_pin_user_line,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Center(
+                            child: SizedBox(
+                              width: 300,
+                              height: 300,
+                              child: mounted
+                                  ? _isMapLoading
+                                        ? Center(
+                                            child: SpinKitSpinningLines(
+                                              color: primaryColor,
+                                              size: 32,
+                                            ),
+                                          )
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadiusGeometry.circular(
+                                                  10,
+                                                ),
+                                            child: FlutterMap(
+                                              mapController: _mapController,
+                                              options: MapOptions(
+                                                initialCenter:
+                                                    _currentPosition!,
+                                                initialZoom: 15,
+                                                onTap: (tapPosition, latLng) {
+                                                  setStateDialog(() {
+                                                    _isMapLoading = true;
+                                                    _markerPosition = latLng;
+                                                    _currentPosition = latLng;
+                                                    _isMapLoading = false;
+                                                  });
+                                                  _loadPositionFromOSM(latLng, (
+                                                    position,
+                                                  ) {
+                                                    setStateDialog(() {
+                                                      _currentPositionFormatted =
+                                                          "${position.street == "" ? position.town : position.street}, ${position.region}, ${position.country}";
+                                                    });
+                                                  });
+                                                },
+                                                onMapReady: () async {
+                                                  if (_currentPosition !=
+                                                      null) {
+                                                    _mapController.move(
+                                                      _currentPosition!,
+                                                      15,
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              children: [
+                                                openStreetMapTileLayer,
+                                                MarkerLayer(
+                                                  markers: [
+                                                    Marker(
+                                                      point: _markerPosition!,
+                                                      width: 60,
+                                                      height: 60,
+                                                      child: const Icon(
+                                                        Icons.location_on,
+                                                        color: primaryColor,
+                                                        size: 45,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                  : SpinKitSpinningLines(
+                                      color: primaryColor,
+                                      size: 32,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 110,
+                                height: 44,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _isLoading = false;
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: primaryColor,
+                                    backgroundColor: f4Grey,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Quitter",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 110,
+                                height: 44,
+                                child: ElevatedButton(
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () async {
+                                          setStateDialog(() {
+                                            _isLoading = true;
+                                          });
+                                          await action();
+                                          setStateDialog(() {
+                                            _isLoading = false;
+                                            _isEditModeActive = false;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: primaryColor,
+                                    backgroundColor: primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: _isLoading
+                                      ? SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: SpinKitSpinningLines(
+                                            color: primaryColor,
+                                            size: 28,
+                                          ),
+                                        )
+                                      : Text(
+                                          "Modifier",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
       transitionBuilder: (_, anim, __, child) {
@@ -241,8 +564,41 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     setState(() {
       _user = widget.user;
+      _currentPosition = LatLng(
+        _user!.localization.latitude,
+        _user!.localization.longitude,
+      );
+      _markerPosition = LatLng(
+        _user!.localization.latitude,
+        _user!.localization.longitude,
+      );
+    });
+    _loadPositionFromOSM(_currentPosition!, (position) {
+      setState(() {
+        _currentPositionFormatted =
+            "${position.street == "" ? position.town : position.street}, ${position.region}, ${position.country}";
+      });
     });
     super.initState();
+  }
+
+  Future<void> _loadPositionFromOSM(
+    LatLng pos,
+    Function(CreateLocalizationRequest) func,
+  ) async {
+    var osmPosition = await _osmService.getAddressFromOSM(
+      pos.latitude,
+      pos.longitude,
+    );
+    var position = CreateLocalizationRequest(
+      country: osmPosition['country'].toString(),
+      region: osmPosition['region'].toString(),
+      town: osmPosition['city'].toString(),
+      street: osmPosition['district'].toString(),
+      longitude: _currentPosition!.longitude,
+      latitude: _currentPosition!.latitude,
+    );
+    func(position);
   }
 
   @override
@@ -472,6 +828,42 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               value:
                                   "${_user!.localization.street == "" ? _user!.localization.town : _user!.localization.street}, ${_user!.localization.region}, ${_user!.localization.country}",
                               isEditable: true,
+                              onClick: _isEditModeActive
+                                  ? () async {
+                                      await _showChangeLocalizationDialog(
+                                        action: () async {
+                                          if (_currentPosition != null) {
+                                            CreateLocalizationRequest?
+                                            localization;
+                                            await _loadPositionFromOSM(
+                                              _currentPosition!,
+                                              (value) {
+                                                localization = value;
+                                              },
+                                            );
+                                            try {
+                                              var user = await _userService
+                                                  .patchUser(
+                                                    contributor:
+                                                        UpdateContributorRequest(
+                                                          localization:
+                                                              localization,
+                                                        ),
+                                                  );
+                                              setState(() {
+                                                _user = user;
+                                              });
+                                            } catch (e) {
+                                              showCustomTopSnackBar(
+                                                context,
+                                                e.toString(),
+                                              );
+                                            }
+                                          }
+                                        },
+                                      );
+                                    }
+                                  : null,
                             ),
                           ],
                         ),

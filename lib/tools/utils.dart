@@ -330,8 +330,8 @@ Future<void> showCustomTopSnackBar(BuildContext context, String message) async {
   entry = OverlayEntry(
     builder: (context) => Positioned(
       top: 10,
-      left: 20,
-      right: 20,
+      left: 10,
+      right: 10,
       child: FadeTransition(
         opacity: animation,
         child: Material(
