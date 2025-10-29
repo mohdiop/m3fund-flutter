@@ -13,6 +13,7 @@ import 'package:m3fund_flutter/screens/customs/custom_campaign_card.dart';
 import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
 import 'package:m3fund_flutter/screens/home/payment_screen.dart';
 import 'package:m3fund_flutter/services/download_service.dart';
+import 'package:m3fund_flutter/services/volunteering_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:remixicon/remixicon.dart';
@@ -83,8 +84,10 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
   int _currentImageIndex = 0;
   late VideoPlayerController _controller;
   bool _loading = true;
+  final ScrollController _scrollController = ScrollController();
 
   final DownloadService _downloadService = DownloadService();
+  final VolunteeringService _volunteeringService = VolunteeringService();
 
   @override
   void initState() {
@@ -178,11 +181,12 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                     ),
                     SizedBox(width: 10),
                     SizedBox(
-                      width: 150,
+                      width: MediaQuery.of(context).size.width / 5,
                       child: Text(
                         widget.campaignResponse.projectResponse.name,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -235,11 +239,14 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        behavior: ScrollConfiguration.of(
+          context,
+        ).copyWith(scrollbars: false, overscroll: true),
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
-              SizedBox(height: 60),
+              SizedBox(height: 70),
 
               // Carousel Slider
               Container(
@@ -607,7 +614,13 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                     );
                                   }
                                 case CampaignType.volunteering:
-                                  () {};
+                                  {
+                                    showConfirmContributionDialog(
+                                      context,
+                                      widget.campaignResponse.id,
+                                      _volunteeringService,
+                                    );
+                                  }
                                 case CampaignType.investment:
                                   () {};
                               }

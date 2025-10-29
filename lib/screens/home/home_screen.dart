@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/main.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
+import 'package:m3fund_flutter/screens/home/user_profile_screen.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
@@ -14,11 +16,17 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  bool _hasUnreadNotifications = false;
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
+  final bool _hasUnreadNotifications = false;
   ContributorResponse? _user;
 
   final UserService _userService = UserService();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
 
   @override
   void initState() {
@@ -26,6 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
       _loadUserInfo();
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    _loadUserInfo();
   }
 
   Future<void> _loadUserInfo() async {
@@ -58,12 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ? Text(
                 "${_greetingWordByTime()}, ${_user?.lastName ?? ''}",
                 style: const TextStyle(fontSize: 15),
+                overflow: TextOverflow.ellipsis,
               )
             : null,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         leading: Padding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(left: 14, top: 10, bottom: 10),
           child: Image.asset("assets/nbLogoName.png"),
         ),
         bottom: PreferredSize(
@@ -170,13 +191,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if (!widget.isAuthenticated) {
                 showRequestConnectionDialog(context);
+              } else {
+                if (_user == null) {
+                  await showCustomTopSnackBar(
+                    context,
+                    "Impossible de charger les données pour l'instant ...",
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => UserProfileScreen(user: _user!),
+                    ),
+                  );
+                }
               }
             },
             child: Container(
-              margin: EdgeInsets.only(right: 10),
+              margin: EdgeInsets.only(right: 14),
               width: 40,
               height: 40,
               decoration: BoxDecoration(

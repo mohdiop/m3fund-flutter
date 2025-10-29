@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _showError = false;
   String _currentError = "";
   bool _isLoading = false;
+  final ScrollController _scrollController = ScrollController();
 
   bool areBlankFields() {
     return (_usernameController.text.trim().isEmpty &&
@@ -47,11 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Scrollbar(
-        thumbVisibility: false,
-        trackVisibility: false,
-        thickness: 0,
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding: EdgeInsets.only(top: 30),
             child: Center(

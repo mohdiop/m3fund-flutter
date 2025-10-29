@@ -1,4 +1,4 @@
-import 'package:m3fund_flutter/models/requests/create_payment_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_payment_request.dart';
 
 class CreateGiftRequest {
   CreatePaymentRequest payment;

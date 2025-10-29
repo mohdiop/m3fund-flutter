@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
@@ -62,11 +62,8 @@ class _SigninScreenState extends State<SigninScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Scrollbar(
-        thumbVisibility: false,
-        trackVisibility: false,
-        thickness: 0,
-        controller: _scrollController,
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Padding(

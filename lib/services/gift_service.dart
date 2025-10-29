@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/models/requests/create_gift_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_gift_request.dart';
 import 'package:m3fund_flutter/models/responses/gift_response.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:http/http.dart' as http;

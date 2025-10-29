@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/auth/signin_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:m3fund_flutter/screens/home/home_screen.dart';
+import 'package:m3fund_flutter/services/volunteering_service.dart';
+import 'package:remixicon/remixicon.dart';
 
 void showBlurLocalizationDialog({
   required BuildContext context,
@@ -169,7 +173,7 @@ void showBlurDialog({
           Center(
             child: Dialog(
               elevation: 0,
-              backgroundColor: Colors.white.withValues(alpha: 0.9),
+              backgroundColor: Colors.white.withValues(alpha: 0.8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -191,11 +195,10 @@ void showBlurDialog({
                     Text(content, textAlign: TextAlign.center),
                     const SizedBox(height: 20),
                     Row(
-                      spacing: 20,
+                      spacing: 15,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 150,
                           height: 44,
                           child: ElevatedButton(
                             onPressed: () async {
@@ -218,7 +221,6 @@ void showBlurDialog({
                           ),
                         ),
                         SizedBox(
-                          width: 150,
                           height: 44,
                           child: ElevatedButton(
                             onPressed: () async {
@@ -258,8 +260,8 @@ showRequestConnectionDialog(BuildContext context) {
     context: context,
     title: "Connexion Requise",
     content: "Pour accéder à cette section, vous devez être connecté.",
-    leftButtonText: "S'inscrire",
-    rightButtonText: "Se connecter",
+    leftButtonText: "Inscription",
+    rightButtonText: "Connexion",
     icon: LineAwesomeIcons.user_slash_solid,
     leftButtonAction: () async {
       Navigator.pushAndRemoveUntil(
@@ -273,6 +275,106 @@ showRequestConnectionDialog(BuildContext context) {
         context,
         MaterialPageRoute(builder: (_) => LoginScreen()),
       );
+    },
+  );
+}
+
+showConfirmContributionDialog(
+  BuildContext context,
+  int campaignId,
+  VolunteeringService volunteeringService,
+) {
+  showBlurDialog(
+    context: context,
+    title: "Contribution",
+    content:
+        "Voulez-vous contribuer à ce projet? Le porteur du projet vous contactera.",
+    leftButtonText: "Annuler",
+    rightButtonText: "Oui, je veux",
+    icon: RemixIcons.shake_hands_line,
+    leftButtonAction: () async {
+      Navigator.pop(context);
+    },
+    rightButtonAction: () async {
+      try {
+        await volunteeringService.createVolunteering(campaignId);
+      } catch (e) {
+        throw Exception(e.toString());
+      }
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomeScreen(isAuthenticated: true)),
+        );
+      }
+    },
+  );
+}
+
+Future<void> showCustomTopSnackBar(BuildContext context, String message) async {
+  final overlay = Overlay.of(context);
+  late OverlayEntry entry;
+
+  HapticFeedback.mediumImpact();
+  final controller = AnimationController(
+    vsync: Navigator.of(context),
+    duration: const Duration(milliseconds: 300),
+    reverseDuration: const Duration(milliseconds: 300),
+  );
+
+  final animation = CurvedAnimation(
+    parent: controller,
+    curve: Curves.easeInOut,
+  );
+
+  entry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: 10,
+      left: 20,
+      right: 20,
+      child: FadeTransition(
+        opacity: animation,
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(12),
+          color: primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(entry);
+
+  controller.forward();
+
+  Future.delayed(const Duration(seconds: 4), () async {
+    await controller.reverse;
+    entry.remove();
+    controller.dispose();
+  });
+}
+
+showLogoutDialog(BuildContext context, Future<void> Function() logout) {
+  showBlurDialog(
+    context: context,
+    title: "Déconnexion",
+    content: "Êtes-vous sûr de vouloir vous déconnecter?.",
+    leftButtonText: "Annuler",
+    rightButtonText: "Oui",
+    icon: RemixIcons.logout_circle_r_line,
+    leftButtonAction: () async {
+      Navigator.pop(context);
+    },
+    rightButtonAction: () async {
+      await logout();
     },
   );
 }

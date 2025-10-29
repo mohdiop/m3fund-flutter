@@ -15,6 +15,8 @@ class PaymentSuccessScreen extends StatefulWidget {
 }
 
 class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
+  final ScrollController _firstScrollController = ScrollController();
+  final ScrollController _secondScrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                 context,
               ).copyWith(scrollbars: false),
               child: SingleChildScrollView(
+                controller: _firstScrollController,
                 child: Column(
                   spacing: 20,
                   children: [
@@ -225,6 +228,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                             context,
                           ).copyWith(scrollbars: false),
                           child: SingleChildScrollView(
+                            controller: _secondScrollController,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               spacing: 10,

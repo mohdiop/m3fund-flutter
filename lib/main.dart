@@ -4,6 +4,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/launcher/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('fr_FR', null);
@@ -32,6 +33,7 @@ Future<void> main() async {
         isAuthenticated: isAuthenticated ?? false,
       ),
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
     ),
   );
 }

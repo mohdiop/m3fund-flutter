@@ -1,5 +1,5 @@
 import 'package:m3fund_flutter/models/enums/enums.dart';
-import 'package:m3fund_flutter/models/requests/create_localization_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_localization_request.dart';
 
 class CreateContributorRequest {
   final String firstName;

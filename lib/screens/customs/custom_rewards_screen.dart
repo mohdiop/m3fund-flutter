@@ -12,6 +12,8 @@ class CustomRewardsScreen extends StatefulWidget {
 }
 
 class _CustomRewardsScreenState extends State<CustomRewardsScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,6 +45,7 @@ class _CustomRewardsScreenState extends State<CustomRewardsScreen> {
                     context,
                   ).copyWith(scrollbars: false),
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Row(
                       children: widget.rewards
                           .map(

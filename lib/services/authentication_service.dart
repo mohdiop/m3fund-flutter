@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
-import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

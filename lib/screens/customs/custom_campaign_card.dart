@@ -50,14 +50,18 @@ String getCampaignTypeFormatted(CampaignType campaignType) {
   }
 }
 
-double getFundingPerc(double currentFund, double targetFund) {
-  return (100 * currentFund) / targetFund;
+String getFundingPerc(double currentFund, double targetFund) {
+  return ((100 * currentFund) / targetFund).toStringAsFixed(2);
 }
 
 class CustomCampaignCard extends StatefulWidget {
   final CampaignResponse campaign;
   final bool isAuthenticated;
-  const CustomCampaignCard({super.key, required this.campaign, required this.isAuthenticated});
+  const CustomCampaignCard({
+    super.key,
+    required this.campaign,
+    required this.isAuthenticated,
+  });
 
   @override
   State<CustomCampaignCard> createState() => _CustomCampaignCardState();

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/customs/custom_sub_menu.dart';
@@ -17,33 +19,42 @@ class _AccountScreenState extends State<AccountScreen> {
       padding: EdgeInsets.only(top: 20),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(
-            "Compte",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          toolbarHeight: 40,
-          leadingWidth: 110,
-          centerTitle: true,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: primaryColor,
-                shape: const CircleBorder(),
-                maximumSize: Size(40, 40),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  toolbarHeight: 50,
+                  leadingWidth: 50,
+                  centerTitle: true,
+                  title: Text(
+                    "Compte",
+                    style: const TextStyle(fontSize: 24, color: Colors.black),
+                  ),
+
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: const CircleBorder(),
+                      ),
+                      icon: const Icon(
+                        RemixIcons.arrow_left_line,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                ),
               ),
-              icon: Icon(
-                RemixIcons.arrow_left_line,
-                size: 24,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
           ),
         ),

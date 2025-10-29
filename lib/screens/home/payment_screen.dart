@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
-import 'package:m3fund_flutter/models/requests/create_gift_request.dart';
-import 'package:m3fund_flutter/models/requests/create_payment_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_gift_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_payment_request.dart';
 import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/models/responses/gift_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
@@ -75,11 +75,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 surfaceTintColor: Colors.transparent,
                 toolbarHeight: 50,
                 leadingWidth: 50,
-                title: Center(
-                  child: Text(
-                    "${widget.contributionWord} ${widget.campaignResponse.projectResponse.name}",
-                    style: const TextStyle(fontSize: 24, color: Colors.black),
-                  ),
+                centerTitle: true,
+                title: Text(
+                  "${widget.contributionWord} ${widget.campaignResponse.projectResponse.name}",
+                  style: const TextStyle(fontSize: 24, color: Colors.black),
                 ),
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 10),
@@ -112,7 +111,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 60),
+                  SizedBox(height: 70),
                   if (widget.campaignResponse.type == CampaignType.donation)
                     CustomRewardsScreen(
                       rewards: widget.campaignResponse.rewards,

@@ -53,109 +53,124 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: 60,
-          leadingWidth: 110,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 100,
-                height: 38,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: isFirstPage ? primaryColor : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: isFirstPage
-                          ? MainAxisAlignment.center
-                          : MainAxisAlignment.start,
-                      spacing: 10,
-                      children: [
-                        if (_currentPageIndex == 0) ...[
-                          Icon(
-                            RemixIcons.global_line,
-                            color: Colors.white,
-                            size: 24,
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                  toolbarHeight: 60,
+                  leadingWidth: 110,
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: 100,
+                        height: 38,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: isFirstPage
+                                ? primaryColor
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          const Text(
-                            "fr",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: isFirstPage
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.start,
+                              spacing: 10,
+                              children: [
+                                if (_currentPageIndex == 0) ...[
+                                  Icon(
+                                    RemixIcons.global_line,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  const Text(
+                                    "fr",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(
+                                    RemixIcons.arrow_down_s_line,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ] else ...[
+                                  // Return to previous page button
+                                  IconButton(
+                                    onPressed: () {
+                                      if (_currentPageIndex == 2) {
+                                        _pageViewController.animateToPage(
+                                          1,
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      } else if (_currentPageIndex == 1) {
+                                        _pageViewController.animateToPage(
+                                          0,
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      }
+                                    },
+                                    style: IconButton.styleFrom(
+                                      backgroundColor: primaryColor,
+                                      shape: const CircleBorder(),
+                                    ),
+                                    icon: Icon(
+                                      RemixIcons.arrow_left_line,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
                           ),
-                          Icon(
-                            RemixIcons.arrow_down_s_line,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ] else ...[
-                          // Return to previous page button
-                          IconButton(
-                            onPressed: () {
-                              if (_currentPageIndex == 2) {
-                                _pageViewController.animateToPage(
-                                  1,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-                              } else if (_currentPageIndex == 1) {
-                                _pageViewController.animateToPage(
-                                  0,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-                              }
-                            },
-                            style: IconButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              shape: const CircleBorder(),
-                            ),
-                            icon: Icon(
-                              RemixIcons.arrow_left_line,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                          ),
-                        ],
-                      ],
+                        ),
+                      ),
                     ),
                   ),
+                  actions: [
+                    // Skip Icon Button
+                    if (_currentPageIndex != 2)
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            shape: const CircleBorder(),
+                          ),
+                          onPressed: () {
+                            _pageViewController.animateToPage(
+                              2,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                            );
+                          },
+                          icon: Icon(
+                            RemixIcons.skip_right_line,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
           ),
-          actions: [
-            // Skip Icon Button
-            if (_currentPageIndex != 2)
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    shape: const CircleBorder(),
-                  ),
-                  onPressed: () {
-                    _pageViewController.animateToPage(
-                      2,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  icon: Icon(
-                    RemixIcons.skip_right_line,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-          ],
         ),
         body: PageView(
           physics: const NeverScrollableScrollPhysics(),
@@ -166,35 +181,51 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             });
           },
           children: [
-            Column(
-              spacing: 10,
-              children: [
-                Image.asset("assets/bdi.png", width: 260),
-                Image.asset("assets/onboarding1.png", width: 260),
-                SizedBox(
-                  width: 300,
-                  child: Text(
-                    "Découvrez des projets innovants qui ont besoin de financement que ça soit par bénévolat, don ou investissement pour voir le jour.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height / 10,
+              ),
+              child: Column(
+                spacing: 50,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset("assets/bdi.png", width: 260),
+                  Image.asset("assets/onboarding1.png", width: 260),
+                  SizedBox(
+                    width: 300,
+                    child: Text(
+                      "Découvrez des projets innovants qui ont besoin de financement que ça soit par bénévolat, don ou investissement pour voir le jour.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Column(
-              spacing: 10,
-              children: [
-                Image.asset("assets/bdi.png", width: 260),
-                Image.asset("assets/onboarding2.png", width: 260),
-                SizedBox(
-                  width: 300,
-                  child: Text(
-                    "Faites des dons, des bénévolats et des investissements afin de permettre à ces projets de vivre ou de continuer à vivre. ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height / 10,
+              ),
+              child: Column(
+                spacing: 50,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset("assets/bdi.png", width: 260),
+                  Image.asset("assets/onboarding2.png", width: 260),
+                  SizedBox(
+                    width: 300,
+                    child: Text(
+                      "Faites des dons, des bénévolats et des investissements afin de permettre à ces projets de vivre ou de continuer à vivre. ",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             ScrollbarTheme(
               data: ScrollbarThemeData(
@@ -204,9 +235,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 thickness: WidgetStateProperty.all(6),
                 radius: const Radius.circular(8),
               ),
-              child: Scrollbar(
-                controller: _scrollController,
-                thumbVisibility: true,
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(
+                  context,
+                ).copyWith(scrollbars: false),
                 child: SingleChildScrollView(
                   controller: _scrollController,
                   padding: const EdgeInsets.symmetric(
@@ -216,6 +248,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 60),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Center(

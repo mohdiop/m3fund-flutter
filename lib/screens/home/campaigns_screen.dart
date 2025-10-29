@@ -25,6 +25,10 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
   bool _isLoading = false;
   List<CampaignResponse> campaigns = [];
   bool _errorOccuredWhenLoading = false;
+  final ScrollController _firstScrollController = ScrollController();
+  final ScrollController _secondScrollController = ScrollController();
+  final ScrollController _thirdScrollController = ScrollController();
+  final ScrollController _lastScrollController = ScrollController();
 
   final CampaignService _campaignService = CampaignService();
 
@@ -57,12 +61,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
+          controller: _firstScrollController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 20,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 14),
                 child: Text(
                   "Découvrir des projets",
                   style: TextStyle(fontSize: 20),
@@ -121,16 +126,19 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                 Container(
                   alignment: Alignment.centerLeft,
                   width: double.infinity,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(color: f4Grey),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Nos recommandations vers ${widget.userPosition}📍",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                      Container(
+                        margin: EdgeInsets.only(left: 14),
+                        child: Text(
+                          "Nos recommandations vers ${widget.userPosition}📍",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                       campaigns.isNotEmpty
@@ -149,15 +157,20 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                         context,
                                       ).copyWith(scrollbars: false),
                                       child: SingleChildScrollView(
+                                        controller: _secondScrollController,
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
-                                          spacing: 30,
                                           children: [
                                             for (var campaign in campaigns)
-                                              CustomCampaignCard(
-                                                campaign: campaign,
-                                                isAuthenticated:
-                                                    widget.isAuthenticated,
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 14,
+                                                ),
+                                                child: CustomCampaignCard(
+                                                  campaign: campaign,
+                                                  isAuthenticated:
+                                                      widget.isAuthenticated,
+                                                ),
                                               ),
                                           ],
                                         ),
@@ -211,16 +224,19 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(color: f4Grey),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Les nouvelles campagnes",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                    Container(
+                      margin: EdgeInsets.only(left: 14),
+                      child: Text(
+                        "Les nouvelles campagnes",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                     campaigns.isNotEmpty
@@ -239,15 +255,20 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                       context,
                                     ).copyWith(scrollbars: false),
                                     child: SingleChildScrollView(
+                                      controller: _thirdScrollController,
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
-                                        spacing: 30,
                                         children: [
                                           for (var campaign in campaigns)
-                                            CustomCampaignCard(
-                                              campaign: campaign,
-                                              isAuthenticated:
-                                                  widget.isAuthenticated,
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 14,
+                                              ),
+                                              child: CustomCampaignCard(
+                                                campaign: campaign,
+                                                isAuthenticated:
+                                                    widget.isAuthenticated,
+                                              ),
                                             ),
                                         ],
                                       ),
@@ -299,16 +320,19 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(color: f4Grey),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Les plus soutenus",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                    Container(
+                      margin: EdgeInsets.only(left: 14),
+                      child: Text(
+                        "Les plus soutenus",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                     campaigns.isNotEmpty
@@ -327,15 +351,20 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                       context,
                                     ).copyWith(scrollbars: false),
                                     child: SingleChildScrollView(
+                                      controller: _lastScrollController,
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
-                                        spacing: 30,
                                         children: [
                                           for (var campaign in campaigns)
-                                            CustomCampaignCard(
-                                              campaign: campaign,
-                                              isAuthenticated:
-                                                  widget.isAuthenticated,
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 14,
+                                              ),
+                                              child: CustomCampaignCard(
+                                                campaign: campaign,
+                                                isAuthenticated:
+                                                    widget.isAuthenticated,
+                                              ),
                                             ),
                                         ],
                                       ),

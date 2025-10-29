@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/requests/update/update_contributor_request.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,25 @@ class UserService {
       (token) => http.get(
         url,
         headers: _authenticationService.tokenHeaders(token: token),
+      ),
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return ContributorResponse.fromJson(data);
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  Future<ContributorResponse> patchUser({
+    required UpdateContributorRequest contributor,
+  }) async {
+    final url = Uri.parse("$baseUrl/contributors");
+    final response = await _authenticationService.sendAuthorizedRequest(
+      (token) => http.patch(
+        url,
+        headers: _authenticationService.tokenHeaders(token: token),
+        body: jsonEncode(contributor.toMap()),
       ),
     );
     if (response.statusCode == 200) {

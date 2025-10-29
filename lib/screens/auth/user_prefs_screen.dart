@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
-import 'package:m3fund_flutter/models/requests/create_contributor_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
 import 'package:m3fund_flutter/screens/customs/custom_pref_chooser.dart';
 import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
 import 'package:m3fund_flutter/tools/user_prefs_manager.dart';
@@ -18,6 +18,7 @@ class UserPrefsScreen extends StatefulWidget {
 
 class _UserPrefsScreenState extends State<UserPrefsScreen> {
   final UserPrefsManager _userPrefsManager = UserPrefsManager();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -52,7 +53,9 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
       ),
       backgroundColor: Colors.white,
       body: Scrollbar(
+        controller: _scrollController,
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Center(
             child: SizedBox(
               width: 339,

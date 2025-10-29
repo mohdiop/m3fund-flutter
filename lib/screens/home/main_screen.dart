@@ -43,6 +43,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void activate() {
+    _loadIsAuthenticatedState();
+    super.activate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(),
