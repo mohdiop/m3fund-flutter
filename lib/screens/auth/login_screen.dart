@@ -216,8 +216,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         } catch (e) {
                           setState(() {
                             _isLoading = false;
-                          });
-                          setState(() {
                             ExceptionResponse exception =
                                 ExceptionResponse.fromJson(
                                   jsonDecode(
@@ -259,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     },
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                 ],
               ),
             ),

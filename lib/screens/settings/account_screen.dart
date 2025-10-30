@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/customs/custom_sub_menu.dart';
+import 'package:m3fund_flutter/screens/settings/change_email_screen.dart';
+import 'package:m3fund_flutter/screens/settings/change_number_screen.dart';
+import 'package:m3fund_flutter/screens/settings/change_password_screen.dart';
 import 'package:remixicon/remixicon.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -64,20 +67,38 @@ class _AccountScreenState extends State<AccountScreen> {
             child: Column(
               spacing: 15,
               children: [
-                CustomSubMenu(
-                  leftIcon: RemixIcons.phone_line,
-                  rightIcon: RemixIcons.arrow_right_s_line,
-                  menuTitle: "Changer de numéro",
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ChangeNumberScreen()),
+                  ),
+                  child: CustomSubMenu(
+                    leftIcon: RemixIcons.phone_line,
+                    rightIcon: RemixIcons.arrow_right_s_line,
+                    menuTitle: "Changer de numéro",
+                  ),
                 ),
-                CustomSubMenu(
-                  leftIcon: RemixIcons.mail_line,
-                  rightIcon: RemixIcons.arrow_right_s_line,
-                  menuTitle: "Changer d'émail",
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ChangeEmailScreen()),
+                  ),
+                  child: CustomSubMenu(
+                    leftIcon: RemixIcons.mail_line,
+                    rightIcon: RemixIcons.arrow_right_s_line,
+                    menuTitle: "Changer d'émail",
+                  ),
                 ),
-                CustomSubMenu(
-                  leftIcon: RemixIcons.lock_line,
-                  rightIcon: RemixIcons.arrow_right_s_line,
-                  menuTitle: "Changer de mot de passe",
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ChangePasswordScreen()),
+                  ),
+                  child: CustomSubMenu(
+                    leftIcon: RemixIcons.lock_line,
+                    rightIcon: RemixIcons.arrow_right_s_line,
+                    menuTitle: "Changer de mot de passe",
+                  ),
                 ),
                 CustomSubMenu(
                   leftIcon: RemixIcons.delete_bin_2_line,

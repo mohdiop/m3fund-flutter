@@ -12,6 +12,7 @@ import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/auth/user_prefs_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
+import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
 class SigninScreen extends StatefulWidget {
@@ -45,19 +46,7 @@ class _SigninScreenState extends State<SigninScreen> {
         _passwordController.text.trim().isEmpty &&
         _confirmPasswordController.text.trim().isEmpty;
   }
-
-  bool _validateEmail(String email) {
-    final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return emailRegex.hasMatch(email);
-  }
-
-  bool _validatePassword(String password) {
-    final RegExp passwordRegex = RegExp(
-      "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@\$!%*?&]).{8,64}\$",
-    );
-    return passwordRegex.hasMatch(password);
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,7 +252,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               "Veuillez remplir tous les champs obligatoires.";
                           _showError = true;
                         });
-                      } else if (!_validatePassword(
+                      } else if (!validatePassword(
                         _passwordController.text.trim(),
                       )) {
                         setState(() {
@@ -278,7 +267,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           _showError = true;
                         });
                       } else if (_emailController.text.trim().isNotEmpty &&
-                          !_validateEmail(_emailController.text.trim())) {
+                          validateEmail(_emailController.text.trim())) {
                         setState(() {
                           _currentError =
                               "Format d'email invalide, ex: example@example.com.";

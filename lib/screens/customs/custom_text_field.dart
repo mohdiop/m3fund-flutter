@@ -7,6 +7,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final double width;
+  final void Function(String?)? onChange;
   const CustomTextField({
     super.key,
     required this.icon,
@@ -14,6 +15,7 @@ class CustomTextField extends StatefulWidget {
     required this.isPassword,
     required this.controller,
     required this.width,
+    this.onChange,
   });
 
   @override
@@ -75,6 +77,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : null,
         ),
         cursorColor: const Color(0xFF06A664),
+        onChanged: widget.onChange,
       ),
     );
   }

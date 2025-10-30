@@ -378,3 +378,15 @@ showLogoutDialog(BuildContext context, Future<void> Function() logout) {
     },
   );
 }
+
+bool validateEmail(String email) {
+  final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  return emailRegex.hasMatch(email);
+}
+
+ bool validatePassword(String password) {
+    final RegExp passwordRegex = RegExp(
+      "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@\$!%*?&]).{8,64}\$",
+    );
+    return passwordRegex.hasMatch(password);
+  }
