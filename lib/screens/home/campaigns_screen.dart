@@ -6,6 +6,7 @@ import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_campaign_card.dart';
 import 'package:m3fund_flutter/services/campaign_service.dart';
+import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
 class CampaignsScreen extends StatefulWidget {
@@ -23,7 +24,8 @@ class CampaignsScreen extends StatefulWidget {
 
 class _CampaignsScreenState extends State<CampaignsScreen> {
   bool _isLoading = false;
-  List<CampaignResponse> campaigns = [];
+  List<CampaignResponse> _campaigns = [];
+  List<CampaignResponse> _recommendedCampaigns = [];
   bool _errorOccuredWhenLoading = false;
   final ScrollController _firstScrollController = ScrollController();
   final ScrollController _secondScrollController = ScrollController();
@@ -43,8 +45,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
       _isLoading = true;
     });
     try {
-      campaigns = await _campaignService.getAllCampaigns();
+      _campaigns = await _campaignService.getAllCampaigns();
+      if (widget.isAuthenticated) {
+        _recommendedCampaigns = await _campaignService
+            .getRecommendedCampaigns();
+      }
     } catch (e) {
+      showCustomTopSnackBar(context, e.toString(), color: Colors.redAccent);
       setState(() {
         _errorOccuredWhenLoading = true;
       });
@@ -141,7 +148,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           ),
                         ),
                       ),
-                      campaigns.isNotEmpty
+                      _recommendedCampaigns.isNotEmpty
                           ? PreferredSize(
                               preferredSize: Size(double.infinity, 250),
                               child: _isLoading
@@ -161,7 +168,8 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                         scrollDirection: Axis.horizontal,
                                         child: Row(
                                           children: [
-                                            for (var campaign in campaigns)
+                                            for (var campaign
+                                                in _recommendedCampaigns)
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                   horizontal: 14,
@@ -239,7 +247,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                         ),
                       ),
                     ),
-                    campaigns.isNotEmpty
+                    _campaigns.isNotEmpty
                         ? PreferredSize(
                             preferredSize: Size(double.infinity, 250),
                             child: _isLoading
@@ -259,7 +267,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         children: [
-                                          for (var campaign in campaigns)
+                                          for (var campaign in _campaigns)
                                             Container(
                                               padding: EdgeInsets.symmetric(
                                                 horizontal: 14,
@@ -335,7 +343,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                         ),
                       ),
                     ),
-                    campaigns.isNotEmpty
+                    _campaigns.isNotEmpty
                         ? PreferredSize(
                             preferredSize: Size(double.infinity, 250),
                             child: _isLoading
@@ -355,7 +363,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         children: [
-                                          for (var campaign in campaigns)
+                                          for (var campaign in _campaigns)
                                             Container(
                                               padding: EdgeInsets.symmetric(
                                                 horizontal: 14,

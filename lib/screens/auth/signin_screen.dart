@@ -46,7 +46,7 @@ class _SigninScreenState extends State<SigninScreen> {
         _passwordController.text.trim().isEmpty &&
         _confirmPasswordController.text.trim().isEmpty;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,8 +266,8 @@ class _SigninScreenState extends State<SigninScreen> {
                           _currentError = "Les mots de passe ne matchent pas.";
                           _showError = true;
                         });
-                      } else if (_emailController.text.trim().isNotEmpty &&
-                          validateEmail(_emailController.text.trim())) {
+                      } else if (_emailController.text.trim().isEmpty &&
+                          !validateEmail(_emailController.text.trim())) {
                         setState(() {
                           _currentError =
                               "Format d'email invalide, ex: example@example.com.";

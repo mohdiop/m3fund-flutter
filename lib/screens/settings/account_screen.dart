@@ -103,6 +103,11 @@ class _AccountScreenState extends State<AccountScreen> {
                 CustomSubMenu(
                   leftIcon: RemixIcons.delete_bin_2_line,
                   rightIcon: RemixIcons.arrow_right_s_line,
+                  menuTitle: "Modifier les préférences",
+                ),
+                CustomSubMenu(
+                  leftIcon: RemixIcons.delete_bin_2_line,
+                  rightIcon: RemixIcons.arrow_right_s_line,
                   menuTitle: "Supprimer mon compte",
                 ),
               ],

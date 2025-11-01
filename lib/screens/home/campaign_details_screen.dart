@@ -12,6 +12,7 @@ import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_campaign_card.dart';
 import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
 import 'package:m3fund_flutter/screens/home/payment_screen.dart';
+import 'package:m3fund_flutter/services/contribution_service.dart';
 import 'package:m3fund_flutter/services/download_service.dart';
 import 'package:m3fund_flutter/services/volunteering_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
@@ -88,16 +89,33 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
 
   final DownloadService _downloadService = DownloadService();
   final VolunteeringService _volunteeringService = VolunteeringService();
+  final ContributionService _contributionService = ContributionService();
+
+  bool _allreadyContributed = false;
 
   @override
   void initState() {
     super.initState();
     _initVideo();
+    _getAllreadyContributedState();
   }
 
   _launchURL(String url) async {
     if (!await launchUrl(Uri.parse(url))) {
       throw "Impossible d'aller sur $url";
+    }
+  }
+
+  _getAllreadyContributedState() async {
+    if (widget.campaignResponse.type == CampaignType.volunteering) {
+      var contributions = await _contributionService.getMyContributions();
+      for (var volunteering in contributions.volunteering) {
+        if (volunteering.campaignId == widget.campaignResponse.id) {
+          setState(() {
+            _allreadyContributed = true;
+          });
+        }
+      }
     }
   }
 
@@ -590,12 +608,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: Text(switch (widget.campaignResponse.type) {
-                            CampaignType.donation => "Financer",
-                            CampaignType.volunteering => "Contribuer",
-                            CampaignType.investment => "Investir",
-                          }, style: TextStyle(fontSize: 24)),
-                          onPressed: () async {
+                          onPressed: _allreadyContributed? null: () async {
                             if (!widget.isAuthenticated) {
                               showRequestConnectionDialog(context);
                             } else {
@@ -615,10 +628,13 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                   }
                                 case CampaignType.volunteering:
                                   {
+                                    ValueNotifier<bool> isLoading =
+                                        ValueNotifier(false);
                                     showConfirmContributionDialog(
-                                      context,
-                                      widget.campaignResponse.id,
-                                      _volunteeringService,
+                                      context: context,
+                                      campaignId: widget.campaignResponse.id,
+                                      volunteeringService: _volunteeringService,
+                                      isLoading: isLoading,
                                     );
                                   }
                                 case CampaignType.investment:
@@ -626,6 +642,11 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                               }
                             }
                           },
+                          child: Text(switch (widget.campaignResponse.type) {
+                            CampaignType.donation => "Financer",
+                            CampaignType.volunteering => _allreadyContributed? "Contribuer" : "Vous avez déjà contribué",
+                            CampaignType.investment => "Investir",
+                          }, style: TextStyle(fontSize: _allreadyContributed? 15 : 24)),
                         ),
                       ),
                     ],
