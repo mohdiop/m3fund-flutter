@@ -11,6 +11,7 @@ import 'package:m3fund_flutter/screens/customs/custom_request_auth_page.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/services/contribution_service.dart';
 import 'package:m3fund_flutter/services/payment_service.dart';
+import 'package:m3fund_flutter/services/project_service.dart';
 import 'package:m3fund_flutter/services/reward_winning_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 
@@ -26,6 +27,7 @@ class _StatsScreenState extends State<StatsScreen> {
   final PaymentService _paymentService = PaymentService();
   final RewardWinningService _rewardWinningService = RewardWinningService();
   final ContributionService _contributionService = ContributionService();
+  final ProjectService _projectService = ProjectService();
   double _totalPayments = .0;
   int _totalWinnedRewards = 0;
   int _contributedProjects = 0;
@@ -37,11 +39,7 @@ class _StatsScreenState extends State<StatsScreen> {
 
   int? touchedIndex;
 
-  final List<Map<String, dynamic>> data = [
-    {'label': 'Éducation', 'value': 25.0, 'color': Colors.teal},
-    {'label': 'Santé', 'value': 30.0, 'color': Colors.lightBlue},
-    {'label': 'Agriculture', 'value': 45.0, 'color': Colors.orange},
-  ];
+  List<Map<String, dynamic>> _data = [];
 
   Future<void> _loadUserStats() async {
     try {
@@ -59,16 +57,20 @@ class _StatsScreenState extends State<StatsScreen> {
       for (var volunteering in contributions.volunteering) {
         uniqueProject.add(volunteering.campaignId);
       }
+      var projects = await _projectService.getAllProjectsByCampaigns(
+        uniqueProject.toList(),
+      );
       setState(() {
         _totalPayments = total;
         _contributedProjects = uniqueProject.length;
         _totalWinnedRewards = allRewardsWinned.length;
         _allPayments = allPayments;
         _allRewards = allRewardsWinned;
+        _data = generateProjectDomainStats(projects);
         _lastFiveMonthsSummary = summarizeLastFiveMonths(allPayments);
       });
     } catch (e) {
-      showCustomTopSnackBar(context, e.toString());
+      showCustomTopSnackBar(context, e.toString(), color: Colors.redAccent);
     }
   }
 
@@ -247,7 +249,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             text: _detailsMonth ?? "(mois)",
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black.withValues(alpha: 0.6),
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -263,12 +265,17 @@ class _StatsScreenState extends State<StatsScreen> {
                                 "${formatToFrAmount(_detailsAmount ?? 0)} FCFA",
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black.withValues(alpha: 0.6),
+                              color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Répartition des contributions par domaine",
+                      style: const TextStyle(fontSize: 12, color: Colors.black),
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -314,16 +321,16 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   List<PieChartSectionData> _buildSections() {
-    return List.generate(data.length, (index) {
+    return List.generate(_data.length, (index) {
       final isTouched = index == touchedIndex;
       final double radius = isTouched ? 80 : 70;
 
       return PieChartSectionData(
-        color: data[index]['color'],
-        value: data[index]['value'],
+        color: _data[index]['color'],
+        value: roundTo2(_data[index]['value']),
         title: isTouched
-            ? '${data[index]['label']}\n${data[index]['value']}%'
-            : '${data[index]['value']}%',
+            ? '${_data[index]['label']}\n${roundTo2(_data[index]['value'])}%'
+            : '${roundTo2(_data[index]['value'])}%',
         radius: radius,
         titleStyle: TextStyle(
           fontSize: isTouched ? 15 : 12,
@@ -338,16 +345,31 @@ class _StatsScreenState extends State<StatsScreen> {
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 20,
-      children: data.map((item) {
+      children: _data.map((item) {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(width: 14, height: 14, color: item['color']),
+            Container(
+              width: 14,
+              height: 14,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3),
+                color: item['color'],
+              ),
+            ),
             const SizedBox(width: 6),
-            Text(item['label']),
+            Text(
+              item['label'],
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black.withValues(alpha: 0.6),
+              ),
+            ),
           ],
         );
       }).toList(),
     );
   }
+
+  double roundTo2(double value) => (value * 100).roundToDouble() / 100;
 }

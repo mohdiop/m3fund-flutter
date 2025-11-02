@@ -26,6 +26,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
   bool _isLoading = false;
   List<CampaignResponse> _campaigns = [];
   List<CampaignResponse> _recommendedCampaigns = [];
+  List<CampaignResponse> _newCampaigns = [];
   bool _errorOccuredWhenLoading = false;
   final ScrollController _firstScrollController = ScrollController();
   final ScrollController _secondScrollController = ScrollController();
@@ -46,6 +47,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     });
     try {
       _campaigns = await _campaignService.getAllCampaigns();
+      _newCampaigns = await _campaignService.getNewCampaigns();
       if (widget.isAuthenticated) {
         _recommendedCampaigns = await _campaignService
             .getRecommendedCampaigns();
@@ -247,7 +249,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                         ),
                       ),
                     ),
-                    _campaigns.isNotEmpty
+                    _newCampaigns.isNotEmpty
                         ? PreferredSize(
                             preferredSize: Size(double.infinity, 250),
                             child: _isLoading
@@ -267,7 +269,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         children: [
-                                          for (var campaign in _campaigns)
+                                          for (var campaign in _newCampaigns)
                                             Container(
                                               padding: EdgeInsets.symmetric(
                                                 horizontal: 14,

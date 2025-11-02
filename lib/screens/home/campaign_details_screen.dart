@@ -608,45 +608,57 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: _allreadyContributed? null: () async {
-                            if (!widget.isAuthenticated) {
-                              showRequestConnectionDialog(context);
-                            } else {
-                              switch (widget.campaignResponse.type) {
-                                case CampaignType.donation:
-                                  {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => PaymentScreen(
-                                          contributionWord: "Financer",
-                                          campaignResponse:
-                                              widget.campaignResponse,
-                                        ),
-                                      ),
-                                    );
+                          onPressed: _allreadyContributed
+                              ? null
+                              : () async {
+                                  if (!widget.isAuthenticated) {
+                                    showRequestConnectionDialog(context);
+                                  } else {
+                                    switch (widget.campaignResponse.type) {
+                                      case CampaignType.donation:
+                                        {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => PaymentScreen(
+                                                contributionWord: "Financer",
+                                                campaignResponse:
+                                                    widget.campaignResponse,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      case CampaignType.volunteering:
+                                        {
+                                          ValueNotifier<bool> isLoading =
+                                              ValueNotifier(false);
+                                          showConfirmContributionDialog(
+                                            context: context,
+                                            campaignId:
+                                                widget.campaignResponse.id,
+                                            volunteeringService:
+                                                _volunteeringService,
+                                            isLoading: isLoading,
+                                          );
+                                        }
+                                      case CampaignType.investment:
+                                        () {};
+                                    }
                                   }
-                                case CampaignType.volunteering:
-                                  {
-                                    ValueNotifier<bool> isLoading =
-                                        ValueNotifier(false);
-                                    showConfirmContributionDialog(
-                                      context: context,
-                                      campaignId: widget.campaignResponse.id,
-                                      volunteeringService: _volunteeringService,
-                                      isLoading: isLoading,
-                                    );
-                                  }
-                                case CampaignType.investment:
-                                  () {};
-                              }
-                            }
-                          },
-                          child: Text(switch (widget.campaignResponse.type) {
-                            CampaignType.donation => "Financer",
-                            CampaignType.volunteering => _allreadyContributed? "Contribuer" : "Vous avez déjà contribué",
-                            CampaignType.investment => "Investir",
-                          }, style: TextStyle(fontSize: _allreadyContributed? 15 : 24)),
+                                },
+                          child: Text(
+                            switch (widget.campaignResponse.type) {
+                              CampaignType.donation => "Financer",
+                              CampaignType.volunteering =>
+                                !_allreadyContributed
+                                    ? "Contribuer"
+                                    : "Vous avez déjà contribué",
+                              CampaignType.investment => "Investir",
+                            },
+                            style: TextStyle(
+                              fontSize: _allreadyContributed ? 15 : 24,
+                            ),
+                          ),
                         ),
                       ),
                     ],

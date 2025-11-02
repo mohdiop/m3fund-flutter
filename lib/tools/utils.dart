@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/responses/exception_response.dart';
 import 'package:m3fund_flutter/models/responses/payment_response.dart';
+import 'package:m3fund_flutter/models/responses/project_response.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/auth/signin_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -584,4 +586,81 @@ List<Map<String, dynamic>> summarizeLastFiveMonths(List<PaymentResponse> payment
   }).toList();
 
   return result;
+}
+
+List<Map<String, dynamic>> generateProjectDomainStats(
+    List<ProjectResponse> projects) {
+  if (projects.isEmpty) return [];
+
+  // Étape 1: Compter les occurrences de chaque domaine
+  final Map<ProjectDomain, int> domainCount = {};
+  for (var project in projects) {
+    domainCount[project.domain] = (domainCount[project.domain] ?? 0) + 1;
+  }
+
+  // Étape 2: Calculer le total
+  final int total = projects.length;
+
+  // Étape 3: Associer un label et une couleur à chaque domaine
+  final Map<ProjectDomain, Map<String, dynamic>> domainMeta = {
+    ProjectDomain.education: {
+      'label': 'Éducation',
+      'color': Colors.teal,
+    },
+    ProjectDomain.health: {
+      'label': 'Santé',
+      'color': Colors.lightBlue,
+    },
+    ProjectDomain.agriculture: {
+      'label': 'Agriculture',
+      'color': Colors.orange,
+    },
+    ProjectDomain.breeding: {
+      'label': 'Élevage',
+      'color': Colors.brown,
+    },
+    ProjectDomain.mine: {
+      'label': 'Mine',
+      'color': Colors.grey,
+    },
+    ProjectDomain.culture: {
+      'label': 'Culture',
+      'color': Colors.purple,
+    },
+    ProjectDomain.environment: {
+      'label': 'Environnement',
+      'color': Colors.green,
+    },
+    ProjectDomain.computerScience: {
+      'label': 'Informatique',
+      'color': Colors.blueGrey,
+    },
+    ProjectDomain.solidarity: {
+      'label': 'Solidarité',
+      'color': Colors.pink,
+    },
+    ProjectDomain.shopping: {
+      'label': 'Commerce',
+      'color': Colors.amber,
+    },
+    ProjectDomain.social: {
+      'label': 'Social',
+      'color': Colors.redAccent,
+    },
+  };
+
+  // Étape 4: Construire la liste de données
+  final List<Map<String, dynamic>> data = domainCount.entries.map((entry) {
+    final domain = entry.key;
+    final count = entry.value;
+    final meta = domainMeta[domain];
+
+    return {
+      'label': meta?['label'] ?? domain.toString(),
+      'value': (count / total) * 100,
+      'color': meta?['color'] ?? Colors.grey,
+    };
+  }).toList();
+
+  return data;
 }

@@ -79,7 +79,10 @@ class _CustomPaymentsStatsChartState extends State<CustomPaymentsStatsChart> {
               interval: 20,
               getTitlesWidget: (value, _) => Text(
                 '${value.toInt()}%',
-                style: const TextStyle(fontSize: 10, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.black.withValues(alpha: 0.6),
+                ),
               ),
             ),
           ),
@@ -90,7 +93,10 @@ class _CustomPaymentsStatsChartState extends State<CustomPaymentsStatsChart> {
               showTitles: true,
               getTitlesWidget: (value, _) => Text(
                 widget.data[value.toInt()]["mois"].toString(),
-                style: const TextStyle(fontSize: 12, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.black.withValues(alpha: 0.6),
+                ),
               ),
             ),
           ),

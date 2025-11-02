@@ -675,7 +675,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           SliverAppBar(
             automaticallyImplyLeading: false,
             leading: null,
-            expandedHeight: 300,
+            expandedHeight: MediaQuery.of(context).size.width,
             collapsedHeight: 60,
             stretch: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -689,6 +689,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(shape: BoxShape.rectangle),
                     child: Image.asset("assets/woman.png", fit: BoxFit.cover),
                   ),
@@ -943,7 +944,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: Colors.black.withValues(alpha: 0.6),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: MediaQuery.of(context).size.height / 2.7),
               ],
             ),
           ),

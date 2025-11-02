@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:m3fund_flutter/constants.dart';
@@ -38,8 +39,11 @@ class AuthenticationService {
   ) async {
     var token = await _getValidAccessToken();
     var response = await requestFunction(token);
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.statusCode.toString());
 
     if (response.statusCode == 401) {
+      debugPrint(response.body);
       try {
         await refreshTokens();
       } catch (e) {
@@ -120,11 +124,12 @@ class AuthenticationService {
     if (refreshToken == null) {
       throw Exception("Aucun refresh token trouvé");
     }
+    debugPrint(refreshToken);
 
     final response = await http.post(
       url,
-      headers: headers,
-      body: jsonEncode({"refreshToken": refreshToken}),
+      headers: {'Content-Type': 'text/plain'},
+      body: refreshToken,
     );
 
     if (response.statusCode == 200) {
@@ -156,7 +161,8 @@ class AuthenticationService {
   Future<String?> getRefreshToken() async =>
       await _storage.read(key: 'refresh_token');
 
-  Future<String?> getAccessToken() async => await _storage.read(key: 'access_token');
+  Future<String?> getAccessToken() async =>
+      await _storage.read(key: 'access_token');
 
   Future<void> _deleteTokens() async {
     await _storage.delete(key: 'refresh_token');

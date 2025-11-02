@@ -228,7 +228,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                             context,
                           ).copyWith(scrollbars: false),
                           child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
                             controller: _secondScrollController,
+                            padding: EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               spacing: 10,

@@ -17,7 +17,7 @@ class _CustomRewardsScreenState extends State<CustomRewardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(color: f4Grey),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: widget.rewards.isEmpty
@@ -45,8 +45,11 @@ class _CustomRewardsScreenState extends State<CustomRewardsScreen> {
                     context,
                   ).copyWith(scrollbars: false),
                   child: SingleChildScrollView(
+                    padding: EdgeInsets.all(5),
                     controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
                     child: Row(
+                      spacing: 20,
                       children: widget.rewards
                           .map(
                             (reward) => Container(
