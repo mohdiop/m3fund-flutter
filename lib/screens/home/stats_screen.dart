@@ -9,6 +9,7 @@ import 'package:m3fund_flutter/models/responses/reward_winning_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_payments_stats_chart.dart';
 import 'package:m3fund_flutter/screens/customs/custom_request_auth_page.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
+import 'package:m3fund_flutter/screens/home/user_payments_screen.dart';
 import 'package:m3fund_flutter/services/contribution_service.dart';
 import 'package:m3fund_flutter/services/payment_service.dart';
 import 'package:m3fund_flutter/services/project_service.dart';
@@ -130,32 +131,43 @@ class _StatsScreenState extends State<StatsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 20,
                       children: [
-                        Container(
-                          width: 150,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                "Total Contribué",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white,
-                                ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    UserPaymentsScreen(payments: _allPayments),
                               ),
-                              Text(
-                                "${formatToFrAmount(_totalPayments)} FCFA",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                            );
+                          },
+                          child: Container(
+                            width: 150,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  "Total Contribué",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  "${formatToFrAmount(_totalPayments)} FCFA",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Container(

@@ -9,7 +9,7 @@ class OSMService {
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'User-Agent': 'com.mohdiop.m3fund', // obligatoire
+        'User-Agent': 'com.mohdiop.m3fund',
       },
     );
 

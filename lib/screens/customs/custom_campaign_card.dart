@@ -10,6 +10,7 @@ import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/services/download_service.dart';
+import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
 IconData getDomainIcon(ProjectDomain domain) {
@@ -80,37 +81,6 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
     super.initState();
   }
 
-  String _timeRemaining(DateTime endAt) {
-    final now = DateTime.now();
-    if (endAt.isBefore(now)) {
-      return "Terminée";
-    }
-
-    final difference = endAt.difference(now);
-
-    final years = (difference.inDays / 365).floor();
-    final months = (difference.inDays / 30).floor();
-    final weeks = (difference.inDays / 7).floor();
-    final days = difference.inDays;
-    final hours = difference.inHours;
-    final minutes = difference.inMinutes;
-
-    if (years >= 1) {
-      return "$years ${years > 1 ? 'ans' : 'an'}";
-    } else if (months >= 1) {
-      return "$months ${months > 1 ? 'mois' : 'mois'}";
-    } else if (weeks >= 1) {
-      return "$weeks ${weeks > 1 ? 'semaines' : 'semaine'}";
-    } else if (days >= 1) {
-      return "$days ${days > 1 ? 'jours' : 'jour'}";
-    } else if (hours >= 1) {
-      return "$hours ${hours > 1 ? 'heures' : 'heure'}";
-    } else if (minutes >= 1) {
-      return "$minutes ${minutes > 1 ? 'minutes' : 'minute'}";
-    } else {
-      return "quelques secondes";
-    }
-  }
 
   Future<void> _initBackgroundImage() async {
     List<Uint8List?> prepImgs = [];
@@ -386,7 +356,7 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
                                               ),
                                             ),
                                             Text(
-                                              _timeRemaining(
+                                              timeRemaining(
                                                 widget.campaign.endAt,
                                               ),
                                               style: const TextStyle(

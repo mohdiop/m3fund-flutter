@@ -39,11 +39,8 @@ class AuthenticationService {
   ) async {
     var token = await _getValidAccessToken();
     var response = await requestFunction(token);
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.statusCode.toString());
 
     if (response.statusCode == 401) {
-      debugPrint(response.body);
       try {
         await refreshTokens();
       } catch (e) {
@@ -124,7 +121,6 @@ class AuthenticationService {
     if (refreshToken == null) {
       throw Exception("Aucun refresh token trouvé");
     }
-    debugPrint(refreshToken);
 
     final response = await http.post(
       url,

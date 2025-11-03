@@ -7,6 +7,7 @@ class PaymentResponse {
   final PaymentState state;
   final DateTime madeAt;
   final double amount;
+  final String projectName;
 
   PaymentResponse({
     required this.id,
@@ -15,6 +16,7 @@ class PaymentResponse {
     required this.state,
     required this.madeAt,
     required this.amount,
+    required this.projectName
   });
 
   factory PaymentResponse.fromJson(Map<String, dynamic> jsonBody) {
@@ -25,6 +27,7 @@ class PaymentResponse {
       state: _paymentStateFromString(jsonBody['state']),
       madeAt: DateTime.parse(jsonBody['madeAt'].toString()),
       amount: (jsonBody['amount'] as num).toDouble(),
+      projectName: jsonBody['projectName'] as String
     );
   }
 

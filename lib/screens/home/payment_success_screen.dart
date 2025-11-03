@@ -218,31 +218,32 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     ),
                     if (widget.giftResponse.gainedRewards.isNotEmpty)
                       Container(
+                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           color: f4Grey,
                           shape: BoxShape.rectangle,
                         ),
-                        padding: EdgeInsets.all(20),
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(
-                            context,
-                          ).copyWith(scrollbars: false),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            controller: _secondScrollController,
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              spacing: 10,
-                              children: [
-                                Text(
-                                  "Récompenses gagnées",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Row(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Column(
+                          spacing: 10,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Récompenses gagnées",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
+                            ),
+                            ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(
+                                context,
+                              ).copyWith(scrollbars: false),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: _secondScrollController,
+                                padding: EdgeInsets.all(10),
+                                child: Row(
                                   spacing: 20,
                                   children: widget.giftResponse.gainedRewards
                                       .map(
@@ -295,9 +296,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                       )
                                       .toList(),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     SizedBox(

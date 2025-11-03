@@ -664,3 +664,67 @@ List<Map<String, dynamic>> generateProjectDomainStats(
 
   return data;
 }
+
+String timeRemaining(DateTime endAt) {
+    final now = DateTime.now();
+    if (endAt.isBefore(now)) {
+      return "Terminée";
+    }
+
+    final difference = endAt.difference(now);
+
+    final years = (difference.inDays / 365).floor();
+    final months = (difference.inDays / 30).floor();
+    final weeks = (difference.inDays / 7).floor();
+    final days = difference.inDays;
+    final hours = difference.inHours;
+    final minutes = difference.inMinutes;
+
+    if (years >= 1) {
+      return "$years ${years > 1 ? 'ans' : 'an'}";
+    } else if (months >= 1) {
+      return "$months ${months > 1 ? 'mois' : 'mois'}";
+    } else if (weeks >= 1) {
+      return "$weeks ${weeks > 1 ? 'semaines' : 'semaine'}";
+    } else if (days >= 1) {
+      return "$days ${days > 1 ? 'jours' : 'jour'}";
+    } else if (hours >= 1) {
+      return "$hours ${hours > 1 ? 'heures' : 'heure'}";
+    } else if (minutes >= 1) {
+      return "$minutes ${minutes > 1 ? 'minutes' : 'minute'}";
+    } else {
+      return "quelques secondes";
+    }
+  }
+
+String timeElapsed(DateTime startAt) {
+  final now = DateTime.now();
+  if (startAt.isAfter(now)) {
+    return "À venir";
+  }
+
+  final difference = now.difference(startAt);
+
+  final years = (difference.inDays / 365).floor();
+  final months = (difference.inDays / 30).floor();
+  final weeks = (difference.inDays / 7).floor();
+  final days = difference.inDays;
+  final hours = difference.inHours;
+  final minutes = difference.inMinutes;
+
+  if (years >= 1) {
+    return "Il y a $years ${years > 1 ? 'ans' : 'an'}";
+  } else if (months >= 1) {
+    return "Il y a $months mois";
+  } else if (weeks >= 1) {
+    return "Il y a $weeks ${weeks > 1 ? 'semaines' : 'semaine'}";
+  } else if (days >= 1) {
+    return "Il y a $days ${days > 1 ? 'jours' : 'jour'}";
+  } else if (hours >= 1) {
+    return "Il y a $hours ${hours > 1 ? 'heures' : 'heure'}";
+  } else if (minutes >= 1) {
+    return "Il y a $minutes ${minutes > 1 ? 'minutes' : 'minute'}";
+  } else {
+    return "Il y a quelques secondes";
+  }
+}
