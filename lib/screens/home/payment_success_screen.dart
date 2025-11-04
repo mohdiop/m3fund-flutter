@@ -228,11 +228,14 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                           spacing: 10,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Récompenses gagnées",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Récompenses gagnées",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                             ScrollConfiguration(

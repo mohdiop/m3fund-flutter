@@ -2,21 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
-import 'package:m3fund_flutter/models/enums/enums.dart';
-import 'package:m3fund_flutter/models/responses/payment_response.dart';
+import 'package:m3fund_flutter/models/responses/reward_winning_response.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
-import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
-class UserPaymentsScreen extends StatefulWidget {
-  final List<PaymentResponse> payments;
-  const UserPaymentsScreen({super.key, required this.payments});
+class UserRewardsScreen extends StatefulWidget {
+  final List<RewardWinningResponse> rewards;
+  const UserRewardsScreen({super.key, required this.rewards});
 
   @override
-  State<UserPaymentsScreen> createState() => _UserPaymentsScreenState();
+  State<UserRewardsScreen> createState() => _UserRewardsScreenState();
 }
 
-class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
+class _UserRewardsScreenState extends State<UserRewardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +33,7 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
                 toolbarHeight: 70,
                 centerTitle: true,
                 title: Text(
-                  "Mes paiements",
+                  "Mes récompenses gagnées",
                   style: const TextStyle(fontSize: 18, color: Colors.black),
                 ),
 
@@ -134,89 +132,83 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 140, bottom: 50),
+            padding: const EdgeInsets.only(top: 130, bottom: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 15,
               children: [
-                for (var payment in widget.payments)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 10,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
+                if (widget.rewards.isEmpty)
+                  Center(
+                    child: Text(
+                      "Aucune récompense gagnée pour l'instant.",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  )
+                else
+                  ...widget.rewards.map(
+                    (reward) => Center(
+                      child: Container(
+                        width: 300,
+                        height: 54,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.6),
+                              offset: Offset(0, 0),
+                              blurRadius: 1,
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
                         child: Row(
                           spacing: 10,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              switch (payment.type) {
-                                PaymentType.orangeMoney => "assets/om.png",
-                                PaymentType.moovMoney => "assets/moov.png",
-                                PaymentType.paypal => "assets/paypal.png",
-                                PaymentType.bankCard => "assets/bank.png",
-                              },
-                              width: 44,
-                              height: 44,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 5,
-                                children: [
-                                  RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    text: TextSpan(
-                                      text: "Dépense dans ",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black.withValues(
-                                          alpha: 0.6,
+                            Image.asset("assets/reward.png"),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  reward.reward.name,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: "Gagné le ",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: formatToDateAndTimeFr(
+                                          reward.gainedAt,
+                                        ),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      children: [
-                                        TextSpan(
-                                          text: payment.projectName,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    ],
                                   ),
-                                  Text(
-                                    "${switch (payment.type) {
-                                      PaymentType.orangeMoney => "Orange Money",
-                                      PaymentType.moovMoney => "Moov Money",
-                                      PaymentType.paypal => "Paypal",
-                                      PaymentType.bankCard => "Carte Bancaire",
-                                    }} ~ ${timeElapsed(payment.madeAt)}",
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                              "${formatToFrAmount(payment.amount)} FCFA",
-                              style: TextStyle(
-                                fontSize: payment.amount >= 10000000 ? 10 : 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        width: 350,
-                        decoration: BoxDecoration(color: Color(0xFFD9D9D9)),
-                        height: 1,
-                      ),
-                    ],
+                    ),
                   ),
               ],
             ),

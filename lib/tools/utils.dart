@@ -728,3 +728,19 @@ String timeElapsed(DateTime startAt) {
     return "Il y a quelques secondes";
   }
 }
+
+List<PaymentResponse> sortPaymentsByDate(List<PaymentResponse> payments, {bool descending = true}) {
+  // Crée une copie pour éviter de modifier la liste originale
+  final sortedList = List<PaymentResponse>.from(payments);
+
+  // Trie selon la date `madeAt`
+  sortedList.sort((a, b) {
+    if (descending) {
+      return b.madeAt.compareTo(a.madeAt); // Du plus récent au plus ancien
+    } else {
+      return a.madeAt.compareTo(b.madeAt); // Du plus ancien au plus récent
+    }
+  });
+
+  return sortedList;
+}

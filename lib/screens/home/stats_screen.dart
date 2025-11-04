@@ -10,11 +10,13 @@ import 'package:m3fund_flutter/screens/customs/custom_payments_stats_chart.dart'
 import 'package:m3fund_flutter/screens/customs/custom_request_auth_page.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/screens/home/user_payments_screen.dart';
+import 'package:m3fund_flutter/screens/home/user_rewards_screen.dart';
 import 'package:m3fund_flutter/services/contribution_service.dart';
 import 'package:m3fund_flutter/services/payment_service.dart';
 import 'package:m3fund_flutter/services/project_service.dart';
 import 'package:m3fund_flutter/services/reward_winning_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
+import 'package:remixicon/remixicon.dart';
 
 class StatsScreen extends StatefulWidget {
   final bool isAuthenticated;
@@ -136,8 +138,9 @@ class _StatsScreenState extends State<StatsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    UserPaymentsScreen(payments: _allPayments),
+                                builder: (context) => UserPaymentsScreen(
+                                  payments: sortPaymentsByDate(_allPayments),
+                                ),
                               ),
                             );
                           },
@@ -151,17 +154,35 @@ class _StatsScreenState extends State<StatsScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(
-                                  "Total Contribué",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total Contribué",
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Icon(
+                                        RemixIcons.arrow_right_s_line,
+                                        size: 24,
+                                        color: Colors.white,
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Text(
                                   "${formatToFrAmount(_totalPayments)} FCFA",
-                                  style: const TextStyle(
-                                    fontSize: 20,
+                                  style: TextStyle(
+                                    fontSize: _totalPayments >= 10000000.0
+                                        ? 18
+                                        : 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -200,32 +221,57 @@ class _StatsScreenState extends State<StatsScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      width: 200,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: customBlackColor,
-                        borderRadius: BorderRadius.circular(10),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              UserRewardsScreen(rewards: _allRewards),
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "Total de récompenses gagnées",
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
+                      child: Container(
+                        width: 220,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: customBlackColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Total de récompenses gagnées",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Icon(
+                                    RemixIcons.arrow_right_s_line,
+                                    size: 24,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(
-                            "$_totalWinnedRewards",
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                            Text(
+                              "$_totalWinnedRewards",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -289,41 +335,52 @@ class _StatsScreenState extends State<StatsScreen> {
                       "Répartition des contributions par domaine",
                       style: const TextStyle(fontSize: 12, color: Colors.black),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 250,
-                          width: 250,
-                          child: PieChart(
-                            PieChartData(
-                              sectionsSpace: 2,
-                              centerSpaceRadius: 40,
-                              pieTouchData: PieTouchData(
-                                touchCallback: (event, response) {
-                                  if (!event.isInterestedForInteractions ||
-                                      response == null ||
-                                      response.touchedSection == null) {
-                                    setState(() {
-                                      touchedIndex = null;
-                                    });
-                                    return;
-                                  }
-                                  setState(() {
-                                    touchedIndex = response
-                                        .touchedSection!
-                                        .touchedSectionIndex;
-                                  });
-                                },
+                    _data.isEmpty
+                        ? Center(
+                            child: Text(
+                              "Contribuer pour voir quelque chose",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black.withValues(alpha: 0.6),
                               ),
-                              sections: _buildSections(),
                             ),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 250,
+                                width: 250,
+                                child: PieChart(
+                                  PieChartData(
+                                    sectionsSpace: 2,
+                                    centerSpaceRadius: 40,
+                                    pieTouchData: PieTouchData(
+                                      touchCallback: (event, response) {
+                                        if (!event
+                                                .isInterestedForInteractions ||
+                                            response == null ||
+                                            response.touchedSection == null) {
+                                          setState(() {
+                                            touchedIndex = null;
+                                          });
+                                          return;
+                                        }
+                                        setState(() {
+                                          touchedIndex = response
+                                              .touchedSection!
+                                              .touchedSectionIndex;
+                                        });
+                                      },
+                                    ),
+                                    sections: _buildSections(),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              _buildLegend(),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        _buildLegend(),
-                      ],
-                    ),
                     SizedBox(height: 100),
                   ],
                 ),
