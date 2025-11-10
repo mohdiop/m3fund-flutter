@@ -72,7 +72,8 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
           await _loadCampaigns();
         },
         color: primaryColor,
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.white,
+        displacement: 50,
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
           child: ListView(

@@ -99,8 +99,8 @@ class _StatsScreenState extends State<StatsScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: AppBar(
-                      backgroundColor: Colors.transparent,
-                      surfaceTintColor: Colors.transparent,
+                      backgroundColor: Colors.white.withValues(alpha: 0.01),
+                      surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                       leading: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
@@ -128,7 +128,7 @@ class _StatsScreenState extends State<StatsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: 20,
                   children: [
-                    SizedBox(height: 50),
+                    SizedBox(height: 100),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 20,

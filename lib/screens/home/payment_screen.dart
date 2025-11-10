@@ -70,9 +70,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                surfaceTintColor: Colors.transparent,
+                backgroundColor: Colors.white.withValues(alpha: 0.01),
+                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                 toolbarHeight: 50,
                 leadingWidth: 50,
                 centerTitle: true,
@@ -111,7 +110,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 70),
+                  SizedBox(height: 130),
                   if (widget.campaignResponse.type == CampaignType.donation)
                     CustomRewardsScreen(
                       rewards: widget.campaignResponse.rewards,

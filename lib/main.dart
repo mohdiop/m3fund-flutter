@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/screens/launcher/splash_screen.dart';
@@ -15,6 +16,12 @@ Future<void> main() async {
   if (isAuthenticated == null) {
     await prefs.setBool("isAuthenticated", false);
   }
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light, // icônes blanches
+    ),
+  );
   runApp(
     MaterialApp(
       theme: ThemeData(
@@ -26,7 +33,7 @@ Future<void> main() async {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
         ),
         pageTransitionsTheme: PageTransitionsTheme(
           builders: {
@@ -39,16 +46,6 @@ Future<void> main() async {
           },
         ),
       ),
-      builder: (context, child) {
-        return GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            if (details.delta.dx > 10 && Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
-          },
-          child: child,
-        );
-      },
       home: SplashScreen(
         isFirstTime: isFirstTime,
         isAuthenticated: isAuthenticated ?? false,

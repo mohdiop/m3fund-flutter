@@ -106,7 +106,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ),
         child: Row(
           spacing: 10,
-
           children: [
             Icon(icon, color: primaryColor),
             SizedBox(
@@ -114,7 +113,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ? MediaQuery.of(context).size.width <= 350
                         ? 136
                         : 166
-                  : MediaQuery.of(context).size.width / 2.1,
+                  : MediaQuery.of(context).size.width / 2.2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -128,6 +127,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                   Text(
                     value,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,

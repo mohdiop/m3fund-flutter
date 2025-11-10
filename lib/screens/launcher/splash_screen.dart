@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:m3fund_flutter/screens/home/main_screen.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/launcher/onboarding_screen.dart';
@@ -23,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     _navigate();
   }
 
@@ -49,12 +47,20 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(color: Colors.white),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Image.asset("assets/logoName.png", width: 221)],
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
+      extendBody: true,
+      body: Center(
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(color: Colors.white),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Image.asset("assets/logoName.png", width: 221)],
+          ),
         ),
       ),
     );

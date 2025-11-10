@@ -213,18 +213,27 @@ class _LoginScreenState extends State<LoginScreen> {
                               (_) => false,
                             );
                           }
-                        } catch (e) {
+                        } catch (ex) {
                           setState(() {
                             _isLoading = false;
+                          });
+                          try {
                             ExceptionResponse exception =
                                 ExceptionResponse.fromJson(
                                   jsonDecode(
-                                    e.toString().replaceAll("Exception: ", ""),
+                                    ex.toString().replaceAll("Exception: ", ""),
                                   ),
                                 );
-                            _currentError = exception.message;
-                            _showError = true;
-                          });
+                            setState(() {
+                              _currentError = exception.message;
+                              _showError = true;
+                            });
+                          } catch (e) {
+                            setState(() {
+                              _currentError = ex.toString();
+                              _showError = false;
+                            });
+                          }
                         }
                       }
                     },

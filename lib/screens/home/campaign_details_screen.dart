@@ -156,8 +156,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
             child: Padding(
               padding: EdgeInsets.only(top: 10),
               child: AppBar(
-                backgroundColor: Colors.transparent,
-                surfaceTintColor: Colors.transparent,
+                backgroundColor: Colors.white.withValues(alpha: 0.01),
+                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                 toolbarHeight: 50,
                 leadingWidth: 50,
                 titleSpacing: 0,
@@ -264,7 +264,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
           controller: _scrollController,
           child: Column(
             children: [
-              SizedBox(height: 70),
+              SizedBox(height: 130),
 
               // Carousel Slider
               Container(

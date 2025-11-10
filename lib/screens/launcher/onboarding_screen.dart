@@ -53,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: _currentPageIndex == 2,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: ClipRRect(
@@ -184,9 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Container(
               height: MediaQuery.of(context).size.height / 3,
               alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 10,
-              ),
+              padding: EdgeInsets.only(top: 20),
               child: Column(
                 spacing: 50,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -207,9 +205,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Container(
               height: MediaQuery.of(context).size.height / 3,
               alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 10,
-              ),
+              padding: EdgeInsets.only(top: 20),
               child: Column(
                 spacing: 50,
                 mainAxisAlignment: MainAxisAlignment.start,
