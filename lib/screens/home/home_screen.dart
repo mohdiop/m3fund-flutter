@@ -4,6 +4,7 @@ import 'package:m3fund_flutter/main.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
 import 'package:m3fund_flutter/screens/home/user_profile_screen.dart';
+import 'package:m3fund_flutter/services/notification_service.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
@@ -17,10 +18,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware {
-  final bool _hasUnreadNotifications = false;
+  bool _hasUnreadNotifications = false;
   ContributorResponse? _user;
 
   final UserService _userService = UserService();
+  final NotificationService _notificationService = NotificationService();
 
   @override
   void didChangeDependencies() {
@@ -53,6 +55,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     setState(() {
       _user = loadedUser;
     });
+    var notifications = await _notificationService.getMyNotifications();
+    for (var notification in notifications) {
+      if (!notification.isRead) {
+        setState(() {
+          _hasUnreadNotifications = true;
+        });
+      }
+    }
   }
 
   String _greetingWordByTime() {
@@ -170,13 +180,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   ),
                   if (_hasUnreadNotifications)
                     Positioned(
-                      width: 7,
-                      height: 7,
-                      top: 3,
-                      left: 16,
+                      width: 10,
+                      height: 10,
+                      top: 0,
+                      left: 14,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: secondaryColor,
+                          color: Colors.redAccent,
                           shape: BoxShape.circle,
                         ),
                       ),

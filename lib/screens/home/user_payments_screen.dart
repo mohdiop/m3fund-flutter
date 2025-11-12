@@ -29,8 +29,8 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: AppBar(
-                backgroundColor: Colors.transparent,
-                surfaceTintColor: Colors.transparent,
+                backgroundColor: Colors.white.withValues(alpha: 0.01),
+                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                 elevation: 0,
                 toolbarHeight: 70,
                 centerTitle: true,

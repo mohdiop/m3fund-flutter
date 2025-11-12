@@ -81,7 +81,6 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
     super.initState();
   }
 
-
   Future<void> _initBackgroundImage() async {
     List<Uint8List?> prepImgs = [];
     for (var imageUrl in widget.campaign.projectResponse.imagesUrl) {
@@ -431,7 +430,7 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
                                               CampaignType.investment => Row(
                                                 children: [
                                                   Text(
-                                                    "${widget.campaign.shareOffered.toString()} %",
+                                                    "${widget.campaign.shareOffered.toStringAsFixed(2)} %",
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.white,
