@@ -62,8 +62,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  surfaceTintColor: Colors.transparent,
+                  backgroundColor: Colors.white.withValues(alpha: 0.01),
+                  surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                   toolbarHeight: 60,
                   leadingWidth: 110,
                   leading: Padding(
@@ -244,7 +244,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 60),
+                      SizedBox(height: 120),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Center(

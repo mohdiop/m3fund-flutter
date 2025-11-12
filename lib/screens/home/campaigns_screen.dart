@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
@@ -69,6 +70,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
       padding: EdgeInsets.only(top: 115),
       child: RefreshIndicator(
         onRefresh: () async {
+          HapticFeedback.mediumImpact();
           await _loadCampaigns();
         },
         color: primaryColor,
@@ -86,7 +88,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                 spacing: 20,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 14),
+                    padding: const EdgeInsets.only(left: 14, top: 60),
                     child: Text(
                       "Découvrir des projets",
                       style: TextStyle(fontSize: 20),

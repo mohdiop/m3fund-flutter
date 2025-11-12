@@ -73,10 +73,12 @@ void showBlurLocalizationDialog({
                             SizedBox(
                               height: 44,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  isLoading.value = false;
-                                },
+                                onPressed: isLoading.value
+                                    ? null
+                                    : () {
+                                        Navigator.pop(context);
+                                        isLoading.value = false;
+                                      },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: primaryColor,
                                   backgroundColor: f4Grey,
@@ -480,7 +482,7 @@ Future<void> showCustomTopSnackBar(
 
   entry = OverlayEntry(
     builder: (context) => Positioned(
-      top: 10,
+      top: 60,
       left: 10,
       right: 10,
       child: FadeTransition(
@@ -542,14 +544,19 @@ bool validatePassword(String password) {
   return passwordRegex.hasMatch(password);
 }
 
-List<Map<String, dynamic>> summarizeLastFiveMonths(List<PaymentResponse> payments) {
+List<Map<String, dynamic>> summarizeLastFiveMonths(
+  List<PaymentResponse> payments,
+) {
   final now = DateTime.now();
 
   // Créer une map pour stocker les montants par mois
   Map<int, double> monthTotals = {};
 
   // Obtenir les 5 derniers mois (y compris le mois courant)
-  List<int> lastFiveMonths = List.generate(5, (i) => (now.month - i - 1 + 12) % 12 + 1);
+  List<int> lastFiveMonths = List.generate(
+    5,
+    (i) => (now.month - i - 1 + 12) % 12 + 1,
+  );
 
   // Initialiser les montants à 0
   for (var month in lastFiveMonths) {
@@ -571,7 +578,7 @@ List<Map<String, dynamic>> summarizeLastFiveMonths(List<PaymentResponse> payment
   const monthNames = [
     '', // placeholder pour index 0
     'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
   ];
 
   // Construire le résultat
@@ -580,7 +587,9 @@ List<Map<String, dynamic>> summarizeLastFiveMonths(List<PaymentResponse> payment
     final percentage = totalAmount > 0 ? (amount / totalAmount) * 100 : 0.0;
     return {
       'mois': monthNames[month],
-      'val': double.parse(percentage.toStringAsFixed(1)), // arrondi à 1 décimale
+      'val': double.parse(
+        percentage.toStringAsFixed(1),
+      ), // arrondi à 1 décimale
       'amount': amount,
     };
   }).toList();
@@ -589,7 +598,8 @@ List<Map<String, dynamic>> summarizeLastFiveMonths(List<PaymentResponse> payment
 }
 
 List<Map<String, dynamic>> generateProjectDomainStats(
-    List<ProjectResponse> projects) {
+  List<ProjectResponse> projects,
+) {
   if (projects.isEmpty) return [];
 
   // Étape 1: Compter les occurrences de chaque domaine
@@ -603,30 +613,12 @@ List<Map<String, dynamic>> generateProjectDomainStats(
 
   // Étape 3: Associer un label et une couleur à chaque domaine
   final Map<ProjectDomain, Map<String, dynamic>> domainMeta = {
-    ProjectDomain.education: {
-      'label': 'Éducation',
-      'color': Colors.teal,
-    },
-    ProjectDomain.health: {
-      'label': 'Santé',
-      'color': Colors.lightBlue,
-    },
-    ProjectDomain.agriculture: {
-      'label': 'Agriculture',
-      'color': Colors.orange,
-    },
-    ProjectDomain.breeding: {
-      'label': 'Élevage',
-      'color': Colors.brown,
-    },
-    ProjectDomain.mine: {
-      'label': 'Mine',
-      'color': Colors.grey,
-    },
-    ProjectDomain.culture: {
-      'label': 'Culture',
-      'color': Colors.purple,
-    },
+    ProjectDomain.education: {'label': 'Éducation', 'color': Colors.teal},
+    ProjectDomain.health: {'label': 'Santé', 'color': Colors.lightBlue},
+    ProjectDomain.agriculture: {'label': 'Agriculture', 'color': Colors.orange},
+    ProjectDomain.breeding: {'label': 'Élevage', 'color': Colors.brown},
+    ProjectDomain.mine: {'label': 'Mine', 'color': Colors.grey},
+    ProjectDomain.culture: {'label': 'Culture', 'color': Colors.purple},
     ProjectDomain.environment: {
       'label': 'Environnement',
       'color': Colors.green,
@@ -635,18 +627,9 @@ List<Map<String, dynamic>> generateProjectDomainStats(
       'label': 'Informatique',
       'color': Colors.blueGrey,
     },
-    ProjectDomain.solidarity: {
-      'label': 'Solidarité',
-      'color': Colors.pink,
-    },
-    ProjectDomain.shopping: {
-      'label': 'Commerce',
-      'color': Colors.amber,
-    },
-    ProjectDomain.social: {
-      'label': 'Social',
-      'color': Colors.redAccent,
-    },
+    ProjectDomain.solidarity: {'label': 'Solidarité', 'color': Colors.pink},
+    ProjectDomain.shopping: {'label': 'Commerce', 'color': Colors.amber},
+    ProjectDomain.social: {'label': 'Social', 'color': Colors.redAccent},
   };
 
   // Étape 4: Construire la liste de données
@@ -666,36 +649,36 @@ List<Map<String, dynamic>> generateProjectDomainStats(
 }
 
 String timeRemaining(DateTime endAt) {
-    final now = DateTime.now();
-    if (endAt.isBefore(now)) {
-      return "Terminée";
-    }
-
-    final difference = endAt.difference(now);
-
-    final years = (difference.inDays / 365).floor();
-    final months = (difference.inDays / 30).floor();
-    final weeks = (difference.inDays / 7).floor();
-    final days = difference.inDays;
-    final hours = difference.inHours;
-    final minutes = difference.inMinutes;
-
-    if (years >= 1) {
-      return "$years ${years > 1 ? 'ans' : 'an'}";
-    } else if (months >= 1) {
-      return "$months ${months > 1 ? 'mois' : 'mois'}";
-    } else if (weeks >= 1) {
-      return "$weeks ${weeks > 1 ? 'semaines' : 'semaine'}";
-    } else if (days >= 1) {
-      return "$days ${days > 1 ? 'jours' : 'jour'}";
-    } else if (hours >= 1) {
-      return "$hours ${hours > 1 ? 'heures' : 'heure'}";
-    } else if (minutes >= 1) {
-      return "$minutes ${minutes > 1 ? 'minutes' : 'minute'}";
-    } else {
-      return "quelques secondes";
-    }
+  final now = DateTime.now();
+  if (endAt.isBefore(now)) {
+    return "Terminée";
   }
+
+  final difference = endAt.difference(now);
+
+  final years = (difference.inDays / 365).floor();
+  final months = (difference.inDays / 30).floor();
+  final weeks = (difference.inDays / 7).floor();
+  final days = difference.inDays;
+  final hours = difference.inHours;
+  final minutes = difference.inMinutes;
+
+  if (years >= 1) {
+    return "$years ${years > 1 ? 'ans' : 'an'}";
+  } else if (months >= 1) {
+    return "$months ${months > 1 ? 'mois' : 'mois'}";
+  } else if (weeks >= 1) {
+    return "$weeks ${weeks > 1 ? 'semaines' : 'semaine'}";
+  } else if (days >= 1) {
+    return "$days ${days > 1 ? 'jours' : 'jour'}";
+  } else if (hours >= 1) {
+    return "$hours ${hours > 1 ? 'heures' : 'heure'}";
+  } else if (minutes >= 1) {
+    return "$minutes ${minutes > 1 ? 'minutes' : 'minute'}";
+  } else {
+    return "quelques secondes";
+  }
+}
 
 String timeElapsed(DateTime startAt) {
   final now = DateTime.now();
@@ -729,7 +712,10 @@ String timeElapsed(DateTime startAt) {
   }
 }
 
-List<PaymentResponse> sortPaymentsByDate(List<PaymentResponse> payments, {bool descending = true}) {
+List<PaymentResponse> sortPaymentsByDate(
+  List<PaymentResponse> payments, {
+  bool descending = true,
+}) {
   // Crée une copie pour éviter de modifier la liste originale
   final sortedList = List<PaymentResponse>.from(payments);
 

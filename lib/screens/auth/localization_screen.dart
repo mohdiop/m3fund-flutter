@@ -111,15 +111,16 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
               ),
             ),
           ],
-          toolbarHeight: 80,
           backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
+          leadingWidth: 50,
           leading: Padding(
             padding: const EdgeInsets.only(left: 10),
             child: IconButton(
               style: IconButton.styleFrom(
                 backgroundColor: primaryColor,
                 shape: const CircleBorder(),
+                fixedSize: Size(24, 24),
               ),
               icon: Icon(
                 RemixIcons.arrow_left_line,
@@ -142,7 +143,8 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                       ? Center(
                           child: SpinKitSpinningLines(
                             color: primaryColor,
-                            size: 32,
+                            size: 62,
+                            lineWidth: 3,
                           ),
                         )
                       : FlutterMap(

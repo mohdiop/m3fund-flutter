@@ -194,7 +194,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             hintText: "Prénom",
                             isPassword: false,
                             controller: _firstNameController,
-                            width: 200,
+                            width: 250,
                           ),
                           const SizedBox(height: 10),
                           CustomTextField(
@@ -202,7 +202,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             hintText: "Nom",
                             isPassword: false,
                             controller: _lastNameController,
-                            width: 200,
+                            width: 250,
                           ),
                           const SizedBox(height: 20),
                           Row(
@@ -213,10 +213,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 width: 110,
                                 height: 44,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _isLoading = false;
-                                  },
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () {
+                                          Navigator.pop(context);
+                                          _isLoading = false;
+                                        },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: primaryColor,
                                     backgroundColor: f4Grey,
@@ -353,12 +355,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  _currentPositionFormatted,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Colors.black.withValues(alpha: 0.6),
-                                    fontSize: 12,
+                                SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    _currentPositionFormatted,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 GestureDetector(
@@ -480,10 +487,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 width: 110,
                                 height: 44,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _isLoading = false;
-                                  },
+                                  onPressed: _isLoading
+                                      ? null
+                                      : () {
+                                          Navigator.pop(context);
+                                          _isLoading = false;
+                                        },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: primaryColor,
                                     backgroundColor: f4Grey,
@@ -612,9 +621,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: AppBar(
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white.withValues(alpha: 0.01),
                 elevation: 0,
-                surfaceTintColor: Colors.transparent,
+                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
                 toolbarHeight: 50,
                 leadingWidth: 50,
                 leading: Padding(

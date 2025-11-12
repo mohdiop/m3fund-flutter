@@ -165,7 +165,7 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 150),
                   Row(
                     spacing: 15,
                     children: [

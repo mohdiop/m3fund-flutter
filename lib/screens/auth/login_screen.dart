@@ -48,226 +48,228 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Padding(
-            padding: EdgeInsets.only(top: 30),
-            child: Center(
-              child: Column(
-                children: [
-                  Image.asset("assets/logoName.png", width: 221),
-                  SizedBox(height: 15),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      padding: EdgeInsets.zero,
-                      fixedSize: Size(250, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
+      body: Center(
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: Center(
+                child: Column(
+                  children: [
+                    Image.asset("assets/logoName.png", width: 221),
+                    SizedBox(height: 15),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: EdgeInsets.zero,
+                        fixedSize: Size(250, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        elevation: 3,
                       ),
-                      elevation: 3,
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => const MainScreen()),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Continuer sans se connecter",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 25),
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                              child: Icon(
+                                RemixIcons.arrow_right_line,
+                                size: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const MainScreen()),
-                      );
-                    },
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    SizedBox(height: 43),
+                    SizedBox(
+                      width: 300,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Connexion",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    CustomTextField(
+                      hintText: "Téléphone (avec indicatif) ou email",
+                      icon: Icon(
+                        RemixIcons.user_3_line,
+                        size: 24,
+                        color: Color.fromRGBO(0, 0, 0, 0.6),
+                      ),
+                      isPassword: false,
+                      controller: _usernameController,
+                      width: 300,
+                    ),
+                    SizedBox(height: 10),
+                    CustomTextField(
+                      icon: Icon(
+                        RemixIcons.lock_2_line,
+                        size: 24,
+                        color: Color.fromRGBO(0, 0, 0, 0.6),
+                      ),
+                      hintText: "Mot de passe",
+                      isPassword: true,
+                      controller: _passwordController,
+                      width: 300,
+                    ),
+                    SizedBox(height: 8),
+                    if (_showError)
+                      Column(
                         children: [
-                          Text(
-                            "Continuer sans se connecter",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: 280,
+                            child: Text(
+                              _currentError,
+                              style: TextStyle(fontSize: 12, color: Colors.red),
                             ),
                           ),
-                          SizedBox(width: 25),
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            child: Icon(
-                              RemixIcons.arrow_right_line,
-                              size: 24,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(width: 5),
+                          SizedBox(height: 8),
                         ],
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 43),
-                  SizedBox(
-                    width: 300,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Connexion",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  CustomTextField(
-                    hintText: "Téléphone (avec indicatif) ou email",
-                    icon: Icon(
-                      RemixIcons.user_3_line,
-                      size: 24,
-                      color: Color.fromRGBO(0, 0, 0, 0.6),
-                    ),
-                    isPassword: false,
-                    controller: _usernameController,
-                    width: 300,
-                  ),
-                  SizedBox(height: 10),
-                  CustomTextField(
-                    icon: Icon(
-                      RemixIcons.lock_2_line,
-                      size: 24,
-                      color: Color.fromRGBO(0, 0, 0, 0.6),
-                    ),
-                    hintText: "Mot de passe",
-                    isPassword: true,
-                    controller: _passwordController,
-                    width: 300,
-                  ),
-                  SizedBox(height: 8),
-                  if (_showError)
-                    Column(
-                      children: [
-                        SizedBox(
-                          width: 280,
+                    SizedBox(
+                      width: 280,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {},
                           child: Text(
-                            _currentError,
-                            style: TextStyle(fontSize: 12, color: Colors.red),
+                            "Mot de passe oublié?",
+                            style: TextStyle(color: secondaryColor, fontSize: 12),
                           ),
                         ),
-                        SizedBox(height: 8),
-                      ],
+                      ),
                     ),
-                  SizedBox(
-                    width: 280,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Text(
-                          "Mot de passe oublié?",
-                          style: TextStyle(color: secondaryColor, fontSize: 12),
+                    SizedBox(height: 30),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isLoading ? f4Grey : primaryColor,
+                        foregroundColor: Colors.white,
+                        fixedSize: Size(300, 54),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isLoading ? f4Grey : primaryColor,
-                      foregroundColor: Colors.white,
-                      fixedSize: Size(300, 54),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: !_isLoading
-                        ? Text("Se connecter", style: TextStyle(fontSize: 24))
-                        : SpinKitSpinningLines(color: primaryColor, size: 32),
-                    onPressed: () async {
-                      if (areBlankFields()) {
-                        setState(() {
-                          _currentError = "Veuillez remplir tous les champs";
-                          _showError = true;
-                        });
-                      } else {
-                        setState(() {
-                          _showError = false;
-                        });
-                        try {
+                      child: !_isLoading
+                          ? Text("Se connecter", style: TextStyle(fontSize: 24))
+                          : SpinKitSpinningLines(color: primaryColor, size: 32),
+                      onPressed: () async {
+                        if (areBlankFields()) {
                           setState(() {
-                            _isLoading = true;
+                            _currentError = "Veuillez remplir tous les champs";
+                            _showError = true;
                           });
-                          await _authenticationService.login(
-                            authenticationRequest: AuthenticationRequest(
-                              email: _usernameController.text,
-                              password: _passwordController.text,
-                            ),
-                          );
-                          if (context.mounted) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (_) => const MainScreen(),
-                              ),
-                              (_) => false,
-                            );
-                          }
-                        } catch (ex) {
+                        } else {
                           setState(() {
-                            _isLoading = false;
+                            _showError = false;
                           });
                           try {
-                            ExceptionResponse exception =
-                                ExceptionResponse.fromJson(
-                                  jsonDecode(
-                                    ex.toString().replaceAll("Exception: ", ""),
-                                  ),
-                                );
                             setState(() {
-                              _currentError = exception.message;
-                              _showError = true;
+                              _isLoading = true;
                             });
-                          } catch (e) {
+                            await _authenticationService.login(
+                              authenticationRequest: AuthenticationRequest(
+                                email: _usernameController.text,
+                                password: _passwordController.text,
+                              ),
+                            );
+                            if (context.mounted) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (_) => const MainScreen(),
+                                ),
+                                (_) => false,
+                              );
+                            }
+                          } catch (ex) {
                             setState(() {
-                              _currentError = ex.toString();
-                              _showError = false;
+                              _isLoading = false;
                             });
+                            try {
+                              ExceptionResponse exception =
+                                  ExceptionResponse.fromJson(
+                                    jsonDecode(
+                                      ex.toString().replaceAll("Exception: ", ""),
+                                    ),
+                                  );
+                              setState(() {
+                                _currentError = exception.message;
+                                _showError = true;
+                              });
+                            } catch (e) {
+                              setState(() {
+                                _currentError = ex.toString();
+                                _showError = false;
+                              });
+                            }
                           }
                         }
-                      }
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "ou",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Color.fromRGBO(0, 0, 0, 0.6),
+                      },
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      fixedSize: Size(300, 54),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: Color(0xFF2D2D2D), width: 2),
+                    SizedBox(height: 20),
+                    Text(
+                      "ou",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color.fromRGBO(0, 0, 0, 0.6),
                       ),
                     ),
-                    child: Text("S'inscrire", style: TextStyle(fontSize: 24)),
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (_) => SigninScreen()),
-                        (route) => false,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 15),
-                ],
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        fixedSize: Size(300, 54),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Color(0xFF2D2D2D), width: 2),
+                        ),
+                      ),
+                      child: Text("S'inscrire", style: TextStyle(fontSize: 24)),
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => SigninScreen()),
+                          (route) => false,
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15),
+                  ],
+                ),
               ),
             ),
           ),

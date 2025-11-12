@@ -132,7 +132,7 @@ class _UserRewardsScreenState extends State<UserRewardsScreen> {
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 130, bottom: 50),
+            padding: const EdgeInsets.only(top: 170, bottom: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 15,
