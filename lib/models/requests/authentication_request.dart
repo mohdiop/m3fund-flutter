@@ -1,10 +1,14 @@
 class AuthenticationRequest {
-  String email;
+  String username;
   String password;
 
-  AuthenticationRequest({required this.email, required this.password});
+  AuthenticationRequest({required this.username, required this.password});
 
   Map<String, dynamic> toMap() {
-    return {'email': email, 'password': password, 'platform': 'MOBILE_CONTRIBUTOR'};
+    return {
+      'username': username,
+      'password': password,
+      'platform': 'MOBILE_CONTRIBUTOR',
+    };
   }
 }

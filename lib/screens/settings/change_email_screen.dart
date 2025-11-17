@@ -187,7 +187,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                       });
                       await _authenticationService.login(
                         authenticationRequest: AuthenticationRequest(
-                          email: _pastEmail!,
+                          username: _pastEmail!,
                           password: _passwordController.text.trim(),
                         ),
                       );

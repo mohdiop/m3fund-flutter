@@ -168,7 +168,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {},
                           child: Text(
                             "Mot de passe oublié?",
-                            style: TextStyle(color: secondaryColor, fontSize: 12),
+                            style: TextStyle(
+                              color: secondaryColor,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -202,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                             await _authenticationService.login(
                               authenticationRequest: AuthenticationRequest(
-                                email: _usernameController.text,
+                                username: _usernameController.text,
                                 password: _passwordController.text,
                               ),
                             );
@@ -222,7 +225,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               ExceptionResponse exception =
                                   ExceptionResponse.fromJson(
                                     jsonDecode(
-                                      ex.toString().replaceAll("Exception: ", ""),
+                                      ex.toString().replaceAll(
+                                        "Exception: ",
+                                        "",
+                                      ),
                                     ),
                                   );
                               setState(() {
@@ -231,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             } catch (e) {
                               setState(() {
-                                _currentError = ex.toString();
+                                _currentError = ex.toString() + e.toString();
                                 _showError = false;
                               });
                             }

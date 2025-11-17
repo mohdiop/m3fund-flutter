@@ -180,7 +180,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       });
                       await _authenticationService.login(
                         authenticationRequest: AuthenticationRequest(
-                          email: _email!,
+                          username: _email!,
                           password: _previousPasswordContoller.text.trim(),
                         ),
                       );

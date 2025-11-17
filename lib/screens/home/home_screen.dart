@@ -152,9 +152,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(10),
-                          color: f4Grey,
+                          color: customBlackColor.withValues(alpha: 0.6),
                         ),
-                        child: Icon(RemixIcons.equalizer_2_line),
+                        child: Icon(
+                          RemixIcons.equalizer_2_line,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

@@ -242,7 +242,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                                   await _authenticationService.login(
                                     authenticationRequest:
                                         AuthenticationRequest(
-                                          email:
+                                          username:
                                               widget.contributorRequest.email,
                                           password: widget
                                               .contributorRequest

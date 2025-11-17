@@ -73,7 +73,7 @@ class _TestScreenState extends State<TestScreen> {
                   try {
                     await authenticationService.login(
                       authenticationRequest: AuthenticationRequest(
-                        email: "mohameddiop1951@gmail.com",
+                        username: "mohameddiop1951@gmail.com",
                         password: "Test@1234",
                       ),
                     );
