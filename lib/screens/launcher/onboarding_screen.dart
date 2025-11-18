@@ -497,7 +497,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         "Entrée en vigueur : les présentes CGU sont applicables à compter du 01 Novembre 2025.",
                         style: TextStyle(fontSize: 15, height: 1.5),
                       ),
-                      const SizedBox(height: 100),
+                      const SizedBox(height: 120),
                     ],
                   ),
                 ),
@@ -511,7 +511,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              height: 100,
+              height: 120,
               width: double.infinity,
               child: Column(
                 spacing: 10,
