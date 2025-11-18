@@ -31,6 +31,26 @@ class NotificationResponse {
     );
   }
 
+  NotificationResponse copyWith({
+    int? id,
+    String? title,
+    String? content,
+    String? senderName,
+    DateTime? sentAt,
+    bool? isRead,
+    NotificationType? type,
+  }) {
+    return NotificationResponse(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      senderName: senderName ?? this.senderName,
+      sentAt: sentAt ?? this.sentAt,
+      isRead: isRead ?? this.isRead,
+      type: type ?? this.type,
+    );
+  }
+
   static NotificationType _notificationTypeFromString(String? type) {
     switch (type?.toUpperCase()) {
       case 'NEW_MESSAGE':
