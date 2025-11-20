@@ -87,14 +87,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         title: widget.isAuthenticated
             ? Text(
                 "${_greetingWordByTime()}, ${_user?.lastName ?? ''}",
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 18),
                 overflow: TextOverflow.ellipsis,
               )
             : null,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         leading: Padding(
-          padding: EdgeInsets.only(left: 14, top: 10, bottom: 10),
+          padding: EdgeInsets.only(
+            left: (MediaQuery.of(context).size.width - 350) / 2,
+            top: 10,
+            bottom: 10,
+          ),
           child: Image.asset("assets/nbLogoName.png"),
         ),
         bottom: PreferredSize(
@@ -121,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                         hint: Text(
                           "Rechercher par ici ...",
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Color.fromRGBO(0, 0, 0, 0.6),
                           ),
                         ),
@@ -224,7 +228,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
               }
             },
             child: Container(
-              margin: EdgeInsets.only(right: 14),
+              margin: EdgeInsets.only(
+                right: (MediaQuery.of(context).size.width - 350) / 2,
+              ),
               width: 40,
               height: 40,
               decoration: BoxDecoration(

@@ -621,13 +621,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: AppBar(
-                backgroundColor: Colors.white.withValues(alpha: 0.01),
+                backgroundColor: Colors.transparent,
                 elevation: 0,
-                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
+                surfaceTintColor: Colors.transparent,
                 toolbarHeight: 50,
-                leadingWidth: 50,
+                leadingWidth:
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 350) / 2,
+                  ),
                   child: IconButton(
                     style: IconButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -643,7 +646,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 actions: [
                   Container(
-                    margin: const EdgeInsets.only(right: 10),
+                    margin: EdgeInsets.only(
+                      right: (MediaQuery.of(context).size.width - 350) / 2,
+                    ),
                     child: Center(
                       child: IconButton(
                         style: IconButton.styleFrom(
@@ -953,7 +958,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: Colors.black.withValues(alpha: 0.6),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 2.7),
+                SizedBox(height: 200),
               ],
             ),
           ),

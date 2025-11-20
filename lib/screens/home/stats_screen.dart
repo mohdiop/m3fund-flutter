@@ -100,9 +100,11 @@ class _StatsScreenState extends State<StatsScreen> {
                     padding: EdgeInsets.only(top: 10),
                     child: AppBar(
                       backgroundColor: Colors.white.withValues(alpha: 0.01),
-                      surfaceTintColor: Colors.white.withValues(alpha: 0.01),
+                      surfaceTintColor: Colors.transparent,
                       leading: Padding(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.only(
+                          left: (MediaQuery.of(context).size.width - 350) / 2,
+                        ),
                         child: Text(
                           "Statistiques",
                           style: TextStyle(

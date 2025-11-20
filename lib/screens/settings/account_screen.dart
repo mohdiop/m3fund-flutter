@@ -31,14 +31,17 @@ class _AccountScreenState extends State<AccountScreen> {
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
-                leadingWidth: 50,
+                leadingWidth:
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
                 centerTitle: true,
                 title: Text(
                   "Compte",
                   style: const TextStyle(fontSize: 24, color: Colors.black),
                 ),
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 350) / 2,
+                  ),
                   child: IconButton(
                     style: IconButton.styleFrom(
                       backgroundColor: primaryColor,

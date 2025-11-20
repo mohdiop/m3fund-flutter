@@ -30,9 +30,11 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
               padding: const EdgeInsets.only(top: 10),
               child: AppBar(
                 backgroundColor: Colors.white.withValues(alpha: 0.01),
-                surfaceTintColor: Colors.white.withValues(alpha: 0.01),
+                surfaceTintColor: Colors.transparent,
                 elevation: 0,
                 toolbarHeight: 70,
+                leadingWidth:
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
                 centerTitle: true,
                 title: Text(
                   "Mes paiements",
@@ -40,7 +42,9 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
                 ),
 
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 350) / 2,
+                  ),
                   child: IconButton(
                     style: IconButton.styleFrom(
                       backgroundColor: primaryColor,

@@ -63,7 +63,8 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                 elevation: 0,
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
-                leadingWidth: 50,
+                leadingWidth:
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
                 centerTitle: true,
                 title: Text(
                   "Changez votre émail",
@@ -71,7 +72,9 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                 ),
 
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 350) / 2,
+                  ),
                   child: IconButton(
                     style: IconButton.styleFrom(
                       backgroundColor: primaryColor,

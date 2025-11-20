@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               padding: const EdgeInsets.only(bottom: 10),
-              height: 90,
+              height: 95,
               width: double.infinity,
               child: Align(
                 alignment: Alignment.topCenter,

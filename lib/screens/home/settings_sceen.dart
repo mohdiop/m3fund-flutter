@@ -21,7 +21,11 @@ class _SettingsSceenState extends State<SettingsSceen> {
         backgroundColor: Colors.white,
         leadingWidth: 300,
         leading: Padding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.only(
+            left: (MediaQuery.of(context).size.width - 350) / 2,
+            top: 10,
+            right: 10,
+          ),
           child: Text(
             "Paramètres",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

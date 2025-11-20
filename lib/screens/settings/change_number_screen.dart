@@ -70,7 +70,8 @@ class _ChangeNumberScreenState extends State<ChangeNumberScreen> {
                 backgroundColor: Colors.white,
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
-                leadingWidth: 50,
+                leadingWidth:
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
                 centerTitle: true,
                 title: Text(
                   "Changez votre numéro de téléphone",
@@ -78,7 +79,9 @@ class _ChangeNumberScreenState extends State<ChangeNumberScreen> {
                 ),
 
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 350) / 2,
+                  ),
                   child: IconButton(
                     style: IconButton.styleFrom(
                       backgroundColor: primaryColor,

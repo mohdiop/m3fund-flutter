@@ -88,7 +88,10 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                 spacing: 20,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 14, top: 60),
+                    padding: EdgeInsets.only(
+                      left: (MediaQuery.of(context).size.width - 350) / 2,
+                      top: 60,
+                    ),
                     child: Text(
                       "Découvrir des projets",
                       style: TextStyle(fontSize: 20),
@@ -153,7 +156,10 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: 14),
+                            margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  (MediaQuery.of(context).size.width - 350) / 2,
+                            ),
                             child: Text(
                               "Nos recommandations vers ${widget.userPosition}📍",
                               style: TextStyle(
@@ -180,22 +186,33 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                           child: SingleChildScrollView(
                                             controller: _secondScrollController,
                                             scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: [
-                                                for (var campaign
-                                                    in _recommendedCampaigns)
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                          horizontal: 14,
-                                                        ),
-                                                    child: CustomCampaignCard(
-                                                      campaign: campaign,
-                                                      isAuthenticated: widget
-                                                          .isAuthenticated,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    ((MediaQuery.of(
+                                                              context,
+                                                            ).size.width -
+                                                            350) /
+                                                        2) -
+                                                    10,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  for (var campaign
+                                                      in _recommendedCampaigns)
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                            horizontal: 10,
+                                                          ),
+                                                      child: CustomCampaignCard(
+                                                        campaign: campaign,
+                                                        isAuthenticated: widget
+                                                            .isAuthenticated,
+                                                      ),
                                                     ),
-                                                  ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -257,7 +274,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 14),
+                          margin: EdgeInsets.only(
+                            left: (MediaQuery.of(context).size.width - 350) / 2,
+                          ),
                           child: Text(
                             "Les nouvelles campagnes",
                             style: TextStyle(
@@ -284,21 +303,33 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                         child: SingleChildScrollView(
                                           controller: _thirdScrollController,
                                           scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              for (var campaign
-                                                  in _newCampaigns)
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 14,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  ((MediaQuery.of(
+                                                            context,
+                                                          ).size.width -
+                                                          350) /
+                                                      2) -
+                                                  10,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                for (var campaign
+                                                    in _newCampaigns)
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                        ),
+                                                    child: CustomCampaignCard(
+                                                      campaign: campaign,
+                                                      isAuthenticated: widget
+                                                          .isAuthenticated,
+                                                    ),
                                                   ),
-                                                  child: CustomCampaignCard(
-                                                    campaign: campaign,
-                                                    isAuthenticated:
-                                                        widget.isAuthenticated,
-                                                  ),
-                                                ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -356,7 +387,9 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 14),
+                          margin: EdgeInsets.only(
+                            left: (MediaQuery.of(context).size.width - 350) / 2,
+                          ),
                           child: Text(
                             "Les plus soutenus",
                             style: TextStyle(
@@ -383,20 +416,32 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                         child: SingleChildScrollView(
                                           controller: _lastScrollController,
                                           scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              for (var campaign in _campaigns)
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 14,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  ((MediaQuery.of(
+                                                            context,
+                                                          ).size.width -
+                                                          350) /
+                                                      2) -
+                                                  10,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                for (var campaign in _campaigns)
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                        ),
+                                                    child: CustomCampaignCard(
+                                                      campaign: campaign,
+                                                      isAuthenticated: widget
+                                                          .isAuthenticated,
+                                                    ),
                                                   ),
-                                                  child: CustomCampaignCard(
-                                                    campaign: campaign,
-                                                    isAuthenticated:
-                                                        widget.isAuthenticated,
-                                                  ),
-                                                ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

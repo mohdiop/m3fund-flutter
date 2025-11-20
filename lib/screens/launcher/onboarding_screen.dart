@@ -62,8 +62,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: AppBar(
-                  backgroundColor: Colors.white.withValues(alpha: 0.01),
-                  surfaceTintColor: Colors.white.withValues(alpha: 0.01),
+                  backgroundColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
                   toolbarHeight: 60,
                   leadingWidth: 110,
                   leading: Padding(

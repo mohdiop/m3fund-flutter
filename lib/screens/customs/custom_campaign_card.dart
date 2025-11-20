@@ -84,14 +84,22 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
   Future<void> _initBackgroundImage() async {
     List<Uint8List?> prepImgs = [];
     for (var imageUrl in widget.campaign.projectResponse.imagesUrl) {
-      final imageBytes = await _downloadService.fetchDataBytes(imageUrl);
-      prepImgs.add(imageBytes);
+      try {
+        final imageBytes = await _downloadService.fetchDataBytes(imageUrl);
+        prepImgs.add(imageBytes);
+      } catch (e) {
+        prepImgs.add(null);
+      }
     }
     Uint8List? ownerProfileBytes;
     if (widget.campaign.owner.profileUrl != "") {
-      ownerProfileBytes = await _downloadService.fetchDataBytes(
-        widget.campaign.owner.profileUrl,
-      );
+      try {
+        ownerProfileBytes = await _downloadService.fetchDataBytes(
+          widget.campaign.owner.profileUrl,
+        );
+      } catch (e) {
+        ownerProfileBytes = null;
+      }
     }
     if (!mounted) return;
     setState(() {
@@ -105,7 +113,7 @@ class _CustomCampaignCardState extends State<CustomCampaignCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (mounted) {
+        if (mounted && !_isLoading) {
           Navigator.push(
             context,
             MaterialPageRoute(
