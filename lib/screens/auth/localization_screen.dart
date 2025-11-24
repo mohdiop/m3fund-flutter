@@ -97,7 +97,9 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
         appBar: AppBar(
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: EdgeInsets.only(
+                right: (MediaQuery.of(context).size.width - 350) / 2,
+              ),
               child: IconButton(
                 style: IconButton.styleFrom(backgroundColor: primaryColor),
                 icon: const Icon(
@@ -111,11 +113,13 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
               ),
             ),
           ],
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white.withValues(alpha: 0.01),
           surfaceTintColor: Colors.transparent,
-          leadingWidth: 50,
+          leadingWidth: 43 + ((MediaQuery.of(context).size.width - 350) / 2),
           leading: Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(
+              left: (MediaQuery.of(context).size.width - 350) / 2,
+            ),
             child: IconButton(
               style: IconButton.styleFrom(
                 backgroundColor: primaryColor,
@@ -186,7 +190,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
             child: Container(
               padding: EdgeInsets.all(10),
               child: SizedBox(
-                height: 80,
+                height: 100,
                 child: Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

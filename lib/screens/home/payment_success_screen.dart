@@ -231,7 +231,12 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                                padding: EdgeInsets.only(
+                                  left:
+                                      (MediaQuery.of(context).size.width -
+                                          350) /
+                                      2,
+                                ),
                                 child: Text(
                                   "Récompenses gagnées",
                                   style: const TextStyle(
@@ -244,60 +249,71 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                 behavior: ScrollConfiguration.of(
                                   context,
                                 ).copyWith(scrollbars: false),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  controller: _secondScrollController,
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    spacing: 20,
-                                    children: widget.giftResponse.gainedRewards
-                                        .map(
-                                          (gainedReward) => Container(
-                                            height: 150,
-                                            width: 160,
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withValues(alpha: 0.2),
-                                                  spreadRadius: 0,
-                                                  blurRadius: 5,
-                                                ),
-                                              ],
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Column(
-                                              spacing: 10,
-                                              children: [
-                                                Image.asset(
-                                                  "assets/reward.png",
-                                                  width: 62,
-                                                ),
-                                                Text(
-                                                  gainedReward.reward.name,
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        (MediaQuery.of(context).size.width -
+                                            350) /
+                                        2,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    controller: _secondScrollController,
+                                    padding: EdgeInsets.all(10),
+                                    child: Row(
+                                      spacing: 20,
+                                      children: widget
+                                          .giftResponse
+                                          .gainedRewards
+                                          .map(
+                                            (gainedReward) => Container(
+                                              height: 150,
+                                              width: 160,
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withValues(alpha: 0.2),
+                                                    spreadRadius: 0,
+                                                    blurRadius: 5,
                                                   ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                Text(
-                                                  '${formatToFrAmount(gainedReward.reward.unlockAmount)} FCFA et plus',
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 12,
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Column(
+                                                spacing: 10,
+                                                children: [
+                                                  Image.asset(
+                                                    "assets/reward.png",
+                                                    width: 62,
                                                   ),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
+                                                  Text(
+                                                    gainedReward.reward.name,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  Text(
+                                                    '${formatToFrAmount(gainedReward.reward.unlockAmount)} FCFA et plus',
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
+                                          )
+                                          .toList(),
+                                    ),
                                   ),
                                 ),
                               ),

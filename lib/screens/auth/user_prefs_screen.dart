@@ -31,10 +31,13 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white.withValues(alpha: 0.01),
         surfaceTintColor: Colors.transparent,
+        leadingWidth: ((MediaQuery.of(context).size.width - 350) / 2) + 43,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: EdgeInsets.only(
+            left: (MediaQuery.of(context).size.width - 350) / 2,
+          ),
           child: IconButton(
             style: IconButton.styleFrom(
               backgroundColor: primaryColor,

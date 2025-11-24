@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -92,6 +93,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
   final ContributionService _contributionService = ContributionService();
 
   bool _allreadyContributed = false;
+  double _progress = 0.0;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -137,12 +140,37 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
 
       _controller = VideoPlayerController.file(tempFile)
         ..initialize().then((_) {
-          setState(() => _loading = false);
+          setState(() {
+            _loading = false;
+            _progress =
+                _controller.value.position.inMilliseconds /
+                (_controller.value.duration.inMilliseconds == 0
+                    ? 1
+                    : _controller.value.duration.inMilliseconds);
+          });
           _controller.play();
         });
+      _timer = Timer.periodic(const Duration(milliseconds: 16), (_) {
+        if (_controller.value.isInitialized && _controller.value.isPlaying) {
+          setState(() {
+            _progress =
+                _controller.value.position.inMilliseconds /
+                (_controller.value.duration.inMilliseconds == 0
+                    ? 1
+                    : _controller.value.duration.inMilliseconds);
+          });
+        }
+      });
     } catch (e) {
       debugPrint('Erreur de lecture vidéo: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -189,6 +217,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                     : Image.memory(
                                         widget.ownerProfile!,
                                         fit: BoxFit.cover,
+                                        width: 32,
+                                        height: 32,
                                       ),
                               ),
                               SizedBox(
@@ -715,9 +745,104 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                           ],
                         ),
                       )
-                    : AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
+                    : Container(
+                        decoration: BoxDecoration(color: Colors.black),
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              (MediaQuery.of(context).size.width - 350) / 2,
+                          vertical: 10,
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _controller.pause(),
+                                  child: AspectRatio(
+                                    aspectRatio: _controller.value.aspectRatio,
+                                    child: VideoPlayer(_controller),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onHorizontalDragUpdate: (details) {
+                                    final box =
+                                        context.findRenderObject() as RenderBox;
+                                    final local = box.globalToLocal(
+                                      details.globalPosition,
+                                    );
+                                    final relative = local.dx / box.size.width;
+                                    final newPosition =
+                                        _controller.value.duration * relative;
+                                    _controller.seekTo(newPosition);
+                                    _controller.play();
+                                  },
+                                  onTapDown: (details) {
+                                    final box =
+                                        context.findRenderObject() as RenderBox;
+                                    final local = box.globalToLocal(
+                                      details.globalPosition,
+                                    );
+                                    final relative = local.dx / box.size.width;
+                                    final newPosition =
+                                        _controller.value.duration * relative;
+                                    _controller.seekTo(newPosition);
+                                    _controller.play();
+                                  },
+                                  child: Container(
+                                    height: 6,
+                                    margin: const EdgeInsets.only(top: 8),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: f4Grey,
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    child: FractionallySizedBox(
+                                      alignment: Alignment.centerLeft,
+                                      widthFactor: _progress,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius: BorderRadius.circular(
+                                            3,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Positioned(
+                              bottom: 20,
+                              right: 10,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Icon(
+                                  RemixIcons.fullscreen_line,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            Positioned(
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () => _controller.play(),
+                                child: Icon(
+                                  _controller.value.isPlaying
+                                      ? null
+                                      : RemixIcons.play_large_fill,
+                                  size: 48,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                 SizedBox(height: 20),
 
