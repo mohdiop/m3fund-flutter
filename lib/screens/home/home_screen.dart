@@ -3,9 +3,11 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/main.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
+import 'package:m3fund_flutter/screens/home/notifications_screen.dart';
 import 'package:m3fund_flutter/screens/home/user_profile_screen.dart';
 import 'package:m3fund_flutter/services/notification_service.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
+import 'package:m3fund_flutter/tools/notification_read_storage.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -23,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   final UserService _userService = UserService();
   final NotificationService _notificationService = NotificationService();
+  final NotificationReadStorage _notificationReadStorage =
+      NotificationReadStorage.instance;
 
   @override
   void didChangeDependencies() {
@@ -51,17 +55,31 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   Future<void> _loadUserInfo() async {
-    ContributorResponse loadedUser = await _userService.me();
-    setState(() {
-      _user = loadedUser;
-    });
-    var notifications = await _notificationService.getMyNotifications();
-    for (var notification in notifications) {
-      if (!notification.isRead) {
-        setState(() {
-          _hasUnreadNotifications = true;
-        });
+    try {
+      final loadedUser = await _userService.me();
+      final notifications = await _notificationService.getMyNotifications();
+      final readIds = await _notificationReadStorage.loadReadIds();
+
+      bool hasUnread = false;
+      for (var notification in notifications) {
+        final alreadyRead =
+            notification.isRead || readIds.contains(notification.id);
+        if (!alreadyRead) {
+          hasUnread = true;
+          break;
+        }
       }
+
+      if (!mounted) return;
+      setState(() {
+        _user = loadedUser;
+        _hasUnreadNotifications = hasUnread;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _hasUnreadNotifications = false;
+      });
     }
   }
 
@@ -203,6 +221,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
               onPressed: () {
                 if (!widget.isAuthenticated) {
                   showRequestConnectionDialog(context);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
+                  );
                 }
               },
             ),
