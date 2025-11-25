@@ -61,12 +61,12 @@ class _SettingsSceenState extends State<SettingsSceen> {
                 menuTitle: "Changer la langue",
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height - 320),
+            SizedBox(height: MediaQuery.of(context).size.height - 380),
             Text(
               "v1.0.0",
               style: TextStyle(
-                fontSize: 12,
-                color: Colors.black.withValues(alpha: 0.2),
+                fontSize: 16,
+                color: Colors.black.withValues(alpha: 0.4),
               ),
             ),
           ],

@@ -22,6 +22,7 @@ import 'package:remixicon/remixicon.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:intl/intl.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 String formatToDateAndTimeFr(DateTime date) {
   final formatter = DateFormat('d MMMM yyyy à HH:mm', 'fr_FR');
@@ -745,103 +746,124 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                           ],
                         ),
                       )
-                    : Container(
-                        decoration: BoxDecoration(color: Colors.black),
-                        padding: EdgeInsets.symmetric(
-                          horizontal:
-                              (MediaQuery.of(context).size.width - 350) / 2,
-                          vertical: 10,
-                        ),
-                        child: Stack(
-                          children: [
-                            Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () => _controller.pause(),
-                                  child: AspectRatio(
-                                    aspectRatio: _controller.value.aspectRatio,
-                                    child: VideoPlayer(_controller),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onHorizontalDragUpdate: (details) {
-                                    final box =
-                                        context.findRenderObject() as RenderBox;
-                                    final local = box.globalToLocal(
-                                      details.globalPosition,
-                                    );
-                                    final relative = local.dx / box.size.width;
-                                    final newPosition =
-                                        _controller.value.duration * relative;
-                                    _controller.seekTo(newPosition);
-                                    _controller.play();
-                                  },
-                                  onTapDown: (details) {
-                                    final box =
-                                        context.findRenderObject() as RenderBox;
-                                    final local = box.globalToLocal(
-                                      details.globalPosition,
-                                    );
-                                    final relative = local.dx / box.size.width;
-                                    final newPosition =
-                                        _controller.value.duration * relative;
-                                    _controller.seekTo(newPosition);
-                                    _controller.play();
-                                  },
-                                  child: Container(
-                                    height: 6,
-                                    margin: const EdgeInsets.only(top: 8),
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: f4Grey,
-                                      borderRadius: BorderRadius.circular(3),
+                    : VisibilityDetector(
+                        key: Key(""),
+                        onVisibilityChanged: (info) {
+                          final visible = info.visibleFraction;
+
+                          if (visible > 0.5) {
+                            if (!_controller.value.isPlaying) {
+                              _controller.play();
+                            } else {
+                              if (_controller.value.isPlaying) {
+                                _controller.pause();
+                              }
+                            }
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(color: Colors.black),
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                (MediaQuery.of(context).size.width - 350) / 2,
+                            vertical: 10,
+                          ),
+                          child: Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => _controller.pause(),
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          _controller.value.aspectRatio,
+                                      child: VideoPlayer(_controller),
                                     ),
-                                    child: FractionallySizedBox(
-                                      alignment: Alignment.centerLeft,
-                                      widthFactor: _progress,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius: BorderRadius.circular(
-                                            3,
+                                  ),
+                                  GestureDetector(
+                                    onHorizontalDragUpdate: (details) {
+                                      final box =
+                                          context.findRenderObject()
+                                              as RenderBox;
+                                      final local = box.globalToLocal(
+                                        details.globalPosition,
+                                      );
+                                      final relative =
+                                          local.dx / box.size.width;
+                                      final newPosition =
+                                          _controller.value.duration * relative;
+                                      _controller.seekTo(newPosition);
+                                      _controller.play();
+                                    },
+                                    onTapDown: (details) {
+                                      final box =
+                                          context.findRenderObject()
+                                              as RenderBox;
+                                      final local = box.globalToLocal(
+                                        details.globalPosition,
+                                      );
+                                      final relative =
+                                          local.dx / box.size.width;
+                                      final newPosition =
+                                          _controller.value.duration * relative;
+                                      _controller.seekTo(newPosition);
+                                      _controller.play();
+                                    },
+                                    child: Container(
+                                      height: 6,
+                                      margin: const EdgeInsets.only(top: 8),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: f4Grey,
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      child: FractionallySizedBox(
+                                        alignment: Alignment.centerLeft,
+                                        widthFactor: _progress,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius: BorderRadius.circular(
+                                              3,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Positioned(
-                              bottom: 20,
-                              right: 10,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  RemixIcons.fullscreen_line,
-                                  size: 24,
-                                  color: Colors.white,
+                                ],
+                              ),
+                              Positioned(
+                                bottom: 20,
+                                right: 10,
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Icon(
+                                    RemixIcons.fullscreen_line,
+                                    size: 24,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            Positioned(
-                              top: 0,
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () => _controller.play(),
-                                child: Icon(
-                                  _controller.value.isPlaying
-                                      ? null
-                                      : RemixIcons.play_large_fill,
-                                  size: 48,
-                                  color: Colors.white.withValues(alpha: 0.8),
+                              Positioned(
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () => _controller.play(),
+                                  child: Icon(
+                                    _controller.value.isPlaying
+                                        ? null
+                                        : RemixIcons.play_large_fill,
+                                    size: 48,
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                 SizedBox(height: 20),

@@ -21,7 +21,7 @@ class _CustomSubMenuState extends State<CustomSubMenu> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 340,
-      height: 44,
+      height: 52,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/responses/notification_response.dart';
-import 'package:m3fund_flutter/screens/home/main_screen.dart';
 import 'package:m3fund_flutter/services/notification_service.dart';
 import 'package:m3fund_flutter/tools/notification_read_storage.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
@@ -20,14 +16,12 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   final NotificationService _notificationService = NotificationService();
-  final NotificationReadStorage _readStorage =
-      NotificationReadStorage.instance;
+  final NotificationReadStorage _readStorage = NotificationReadStorage.instance;
 
   List<NotificationResponse> _notifications = [];
   Set<int> _readNotificationIds = {};
   bool _isLoading = true;
   String? _errorMessage;
-  int _bottomNavIndex = 0;
 
   @override
   void initState() {
@@ -155,9 +149,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       return "${hour}h$minute";
     }
 
-    final yesterday = DateTime(now.year, now.month, now.day)
-        .subtract(const Duration(days: 1));
-    final isYesterday = date.year == yesterday.year &&
+    final yesterday = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(const Duration(days: 1));
+    final isYesterday =
+        date.year == yesterday.year &&
         date.month == yesterday.month &&
         date.day == yesterday.day;
     if (isYesterday) {
@@ -185,15 +183,35 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+      padding: EdgeInsets.fromLTRB(
+        (MediaQuery.of(context).size.width - 350) / 2,
+        20,
+        (MediaQuery.of(context).size.width - 350) / 2,
+        10,
+      ),
       child: Row(
         children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                RemixIcons.arrow_left_line,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +224,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     color: customBlackColor,
                   ),
                 ),
-                const SizedBox(height: 6),
                 Text(
                   "Restez informé(e) de tout ce qui compte.",
                   style: TextStyle(
@@ -215,21 +232,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   ),
                 ),
               ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                RemixIcons.close_line,
-                color: Colors.white,
-              ),
             ),
           ),
         ],
@@ -241,7 +243,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     ListView buildStatefulList(List<Widget> children) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(
+          horizontal: (MediaQuery.of(context).size.width - 350) / 2,
+          vertical: 10,
+        ),
         children: children,
       );
     }
@@ -259,10 +264,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              _errorMessage!,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(_errorMessage!, textAlign: TextAlign.center),
           ),
         ),
       ]);
@@ -291,19 +293,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 20),
               const Text(
                 "Aucune notification pour le moment",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               const Text(
                 "Vous serez notifié(e) dès qu'une nouvelle activité\nimportante sera disponible.",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 13, color: Colors.black54),
               ),
             ],
           ),
@@ -344,8 +340,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       final sectionItems = grouped[label]!;
       for (var i = 0; i < sectionItems.length; i++) {
         final notification = sectionItems[i];
-        final originalIndex = _notifications
-            .indexWhere((element) => element.id == notification.id);
+        final originalIndex = _notifications.indexWhere(
+          (element) => element.id == notification.id,
+        );
         children.add(_buildNotificationTile(notification, originalIndex));
         children.add(
           i == sectionItems.length - 1
@@ -359,7 +356,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildNotificationTile(
-      NotificationResponse notification, int originalIndex) {
+    NotificationResponse notification,
+    int originalIndex,
+  ) {
     final typeColor = _typeColor(notification.type);
     final isRead = notification.isRead;
 
@@ -398,8 +397,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     notification.title,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight:
-                          isRead ? FontWeight.w500 : FontWeight.w700,
+                      fontWeight: isRead ? FontWeight.w500 : FontWeight.w700,
                       color: customBlackColor,
                     ),
                   ),
@@ -441,94 +439,5 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildBottomNavigation() {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 10),
-          height: 90,
-          width: double.infinity,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 68,
-              width: 350,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                padding: EdgeInsets.all(10),
-                child: GNav(
-                  gap: 5,
-                  color: Colors.white,
-                  activeColor: Colors.white,
-                  tabBackgroundColor: customBlackColor,
-                  curve: Curves.easeInCubic,
-                  tabBorderRadius: 10,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
-                  iconSize: 28,
-                  selectedIndex: _bottomNavIndex,
-                  onTabChange: _handleBottomNavTap,
-                  tabs: [
-                    GButton(
-                      icon: _bottomNavIndex == 0
-                          ? RemixIcons.home_9_fill
-                          : RemixIcons.home_9_line,
-                      text: "Accueil",
-                      textStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white),
-                       
-                    ),
-                    GButton(
-                      icon: _bottomNavIndex == 1
-                          ? RemixIcons.line_chart_fill
-                          : RemixIcons.line_chart_line,
-                      text: "Statistiques",
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                    GButton(
-                      icon: _bottomNavIndex == 2
-                          ? RemixIcons.question_answer_fill
-                          : RemixIcons.question_answer_line,
-                      text: "Discussions",
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                    GButton(
-                      icon: _bottomNavIndex == 3
-                          ? RemixIcons.settings_5_fill
-                          : RemixIcons.settings_5_line,
-                      text: "Paramètres",
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _handleBottomNavTap(int index) {
-    setState(() {
-      _bottomNavIndex = index;
-    });
-    if (index == 0) {
-      Navigator.pop(context);
-    } else {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
-        (route) => false,
-      );
-    }
   }
 }
