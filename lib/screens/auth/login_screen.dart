@@ -80,16 +80,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Continuer sans se connecter",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                "Continuer sans se connecter",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            SizedBox(width: 25),
                             Container(
                               width: 40,
                               height: 40,

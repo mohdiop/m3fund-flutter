@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/responses/notification_response.dart';
@@ -219,7 +220,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 Text(
                   "Notifications",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: customBlackColor,
                   ),
@@ -252,10 +253,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
 
     if (_isLoading) {
-      return buildStatefulList(const [
-        SizedBox(height: 120),
-        Center(child: CircularProgressIndicator(color: primaryColor)),
-      ]);
+      return Center(
+        child: buildStatefulList(const [
+          SizedBox(height: 120),
+          Center(
+            child: SpinKitSpinningLines(
+              color: primaryColor,
+              size: 48,
+              lineWidth: 3,
+            ),
+          ),
+        ]),
+      );
     }
 
     if (_errorMessage != null) {

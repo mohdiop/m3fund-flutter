@@ -377,7 +377,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ),
                   ),
 
-                  // Les plus soutenus
+                  // Toutes les campagnes
                   Container(
                     alignment: Alignment.centerLeft,
                     width: double.infinity,
@@ -391,7 +391,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                             left: (MediaQuery.of(context).size.width - 350) / 2,
                           ),
                           child: Text(
-                            "Les plus soutenus",
+                            "Toutes les campagnes",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,

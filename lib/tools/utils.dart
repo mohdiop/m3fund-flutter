@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
@@ -729,4 +730,16 @@ List<PaymentResponse> sortPaymentsByDate(
   });
 
   return sortedList;
+}
+
+Future<XFile?> pickImageFromGallery() async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  return image;
+}
+
+Future<XFile?> pickFromCamera() async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+  return photo;
 }

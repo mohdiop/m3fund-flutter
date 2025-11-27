@@ -82,14 +82,22 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                             ),
                                           ),
                                         ),
-                                        Text(
-                                          widget
-                                              .giftResponse
-                                              .payment
-                                              .transactionId,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black,
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                            ),
+                                            child: Text(
+                                              widget
+                                                  .giftResponse
+                                                  .payment
+                                                  .transactionId,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -363,7 +371,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                           },
                           child: Text(
                             "Continuer",
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: 20),
                           ),
                         ),
                       ),

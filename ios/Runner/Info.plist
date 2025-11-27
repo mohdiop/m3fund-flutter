@@ -46,6 +46,12 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Cette application utilise votre position pour afficher votre localisation sur la carte.</string>
+	<string>Nous avons besoin d'accéder à votre position pour afficher votre localisation sur la carte.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Nous avons besoin d'accéder à votre caméra.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Nous avons besoin d'accéder à votre galerie.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Nous avons besoin d'accéder à votre galerie.</string>
 </dict>
 </plist>

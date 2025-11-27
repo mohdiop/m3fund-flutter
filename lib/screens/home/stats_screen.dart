@@ -133,7 +133,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     SizedBox(height: 100),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 20,
+                      spacing: 10,
                       children: [
                         InkWell(
                           onTap: () {
@@ -147,7 +147,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             );
                           },
                           child: Container(
-                            width: 150,
+                            width: 170,
                             height: 70,
                             decoration: BoxDecoration(
                               color: primaryColor,
@@ -194,7 +194,7 @@ class _StatsScreenState extends State<StatsScreen> {
                           ),
                         ),
                         Container(
-                          width: 150,
+                          width: 170,
                           height: 70,
                           decoration: BoxDecoration(
                             color: secondaryColor,
@@ -232,7 +232,7 @@ class _StatsScreenState extends State<StatsScreen> {
                         ),
                       ),
                       child: Container(
-                        width: 220,
+                        width: 250,
                         height: 70,
                         decoration: BoxDecoration(
                           color: customBlackColor,

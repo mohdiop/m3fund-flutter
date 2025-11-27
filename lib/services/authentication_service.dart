@@ -57,11 +57,53 @@ class AuthenticationService {
   }) async {
     final url = Uri.parse("$baseUrl/auth/register/contributors");
 
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(createContributorRequest.toMap()),
-    );
+    final request = http.MultipartRequest("POST", url);
+
+    request.fields["firstName"] = createContributorRequest.firstName;
+    request.fields["lastName"] = createContributorRequest.lastName;
+    request.fields["email"] = createContributorRequest.email;
+    request.fields["phone"] = createContributorRequest.phone;
+    request.fields["password"] = createContributorRequest.password;
+
+    for (final domain in createContributorRequest.projectDomainPrefs) {
+      request.fields["projectDomainPrefs"] =
+          CreateContributorRequest.mapProjectDomainToBackend(domain);
+    }
+
+    for (final type in createContributorRequest.campaignTypePrefs) {
+      request.fields['campaignTypePrefs'] =
+          CreateContributorRequest.mapCampaignTypeToBackend(type);
+    }
+
+    if (createContributorRequest.localization != null) {
+      request.fields["localization.country"] =
+          createContributorRequest.localization!.country;
+      request.fields["localization.town"] =
+          createContributorRequest.localization!.town;
+      request.fields["localization.region"] =
+          createContributorRequest.localization!.region;
+      request.fields["localization.street"] =
+          createContributorRequest.localization!.street;
+      request.fields["localization.longitude"] = createContributorRequest
+          .localization!
+          .longitude
+          .toString();
+      request.fields["localization.latitude"] = createContributorRequest
+          .localization!
+          .latitude
+          .toString();
+    }
+
+    if (createContributorRequest.profilePicture != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          "profilePicture",
+          createContributorRequest.profilePicture!.path,
+        ),
+      );
+    }
+
+    final response = await http.Response.fromStream(await request.send());
 
     if (response.statusCode == 201) {
       return ContributorResponse.fromJson(jsonDecode(response.body));

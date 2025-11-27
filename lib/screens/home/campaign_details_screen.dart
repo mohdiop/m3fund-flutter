@@ -1132,7 +1132,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                   }
                                 },
                                 child: Container(
-                                  width: 135,
+                                  width: 150,
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: secondaryColor,

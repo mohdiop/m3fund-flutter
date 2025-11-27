@@ -120,7 +120,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                   SizedBox(height: 20),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         "Choisissez votre montant",
@@ -216,6 +216,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       SizedBox(height: 10),
                       Column(
                         spacing: 10,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: _paymentMethods
                             .map(
                               (paymentMethod) => GestureDetector(
@@ -366,7 +367,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             )
                           : const Text(
                               "Procéder au paiement",
-                              style: TextStyle(fontSize: 24),
+                              style: TextStyle(fontSize: 20),
                             ),
                     ),
                   ),

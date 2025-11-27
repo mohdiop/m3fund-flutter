@@ -138,7 +138,10 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 190, bottom: 50),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height / 4.5,
+              bottom: 50,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 15,

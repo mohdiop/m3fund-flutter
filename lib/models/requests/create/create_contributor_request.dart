@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/requests/create/create_localization_request.dart';
 
@@ -5,21 +6,23 @@ class CreateContributorRequest {
   final String firstName;
   final String lastName;
   CreateLocalizationRequest? localization;
-  List<ProjectDomain>? projectDomainPrefs;
-  List<CampaignType>? campaignTypePrefs;
+  List<ProjectDomain> projectDomainPrefs;
+  List<CampaignType> campaignTypePrefs;
   final String email;
   final String phone;
   final String password;
+  XFile? profilePicture;
 
   CreateContributorRequest({
     required this.firstName,
     required this.lastName,
     this.localization,
-    this.projectDomainPrefs,
-    this.campaignTypePrefs,
+    required this.projectDomainPrefs,
+    required this.campaignTypePrefs,
     required this.email,
     required this.phone,
     required this.password,
+    this.profilePicture,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,10 +31,10 @@ class CreateContributorRequest {
       'lastName': lastName,
       'localization': localization?.toMap(),
       'projectDomainPrefs': projectDomainPrefs
-          ?.map((domain) => _mapProjectDomainToBackend(domain))
+          .map((domain) => mapProjectDomainToBackend(domain))
           .toList(),
       'campaignTypePrefs': campaignTypePrefs
-          ?.map((campaign) => _mapCampaignTypeToBackend(campaign))
+          .map((campaign) => mapCampaignTypeToBackend(campaign))
           .toList(),
       'email': email,
       'phone': phone,
@@ -39,7 +42,7 @@ class CreateContributorRequest {
     };
   }
 
-  static String _mapProjectDomainToBackend(ProjectDomain domain) {
+  static String mapProjectDomainToBackend(ProjectDomain domain) {
     switch (domain) {
       case ProjectDomain.agriculture:
         return 'AGRICULTURE';
@@ -66,7 +69,7 @@ class CreateContributorRequest {
     }
   }
 
-  static String _mapCampaignTypeToBackend(CampaignType campaign) {
+  static String mapCampaignTypeToBackend(CampaignType campaign) {
     switch (campaign) {
       case CampaignType.investment:
         return 'INVESTMENT';

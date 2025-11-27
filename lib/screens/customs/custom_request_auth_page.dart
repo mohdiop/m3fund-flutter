@@ -56,7 +56,7 @@ class _CustomRequestAuthPageState extends State<CustomRequestAuthPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      fixedSize: Size(150, 54),
+                      fixedSize: Size(170, 54),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -74,7 +74,7 @@ class _CustomRequestAuthPageState extends State<CustomRequestAuthPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
-                      fixedSize: Size(150, 54),
+                      fixedSize: Size(170, 54),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

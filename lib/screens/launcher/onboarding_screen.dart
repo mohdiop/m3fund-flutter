@@ -173,7 +173,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
         ),
         body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
           controller: _pageViewController,
           onPageChanged: (index) {
             setState(() {
@@ -186,7 +185,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: Alignment.center,
               padding: EdgeInsets.only(top: 20),
               child: Column(
-                spacing: 50,
+                spacing: 30,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Image.asset("assets/bdi.png", width: 260),
@@ -207,7 +206,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: Alignment.center,
               padding: EdgeInsets.only(top: 20),
               child: Column(
-                spacing: 50,
+                spacing: 30,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Image.asset("assets/bdi.png", width: 260),
@@ -442,7 +441,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   "Les paiements sont effectués via les solutions sécurisées intégrées à la plateforme.\n\n",
                             ),
                             TextSpan(
-                              text: "M3Fund prélève une commission fixe de 5% ",
+                              text:
+                                  "M3Fund prélève une commission fixe de 10% ",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             TextSpan(
@@ -514,7 +514,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               height: 120,
               width: double.infinity,
               child: Column(
-                spacing: 10,
+                spacing: 20,
                 children: [
                   Column(
                     children: [
@@ -542,7 +542,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
-                      fixedSize: Size(300, 62),
+                      fixedSize: Size(300, 54),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
