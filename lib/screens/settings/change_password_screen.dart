@@ -77,10 +77,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 centerTitle: true,
                 title: Text(
-                  "Changez votre émail",
+                  "Changez votre mot de passe",
                   style: const TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 leading: Padding(

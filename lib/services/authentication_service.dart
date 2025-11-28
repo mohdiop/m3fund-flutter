@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
@@ -101,10 +103,36 @@ class AuthenticationService {
     }
 
     if (createContributorRequest.profilePicture != null) {
+      final XFile file = createContributorRequest.profilePicture!;
+      final bytes = await file.readAsBytes();
+
+      // Déterminer le type MIME depuis l'extension
+      final ext = file.name.split('.').last.toLowerCase();
+      late final String mimeType;
+      switch (ext) {
+        case 'png':
+          mimeType = 'image/png';
+          break;
+        case 'jpg':
+        case 'jpeg':
+          mimeType = 'image/jpeg';
+          break;
+        case 'gif':
+          mimeType = 'image/gif';
+          break;
+        default:
+          mimeType = 'application/octet-stream'; // fallback
+      }
+
       request.files.add(
-        await http.MultipartFile.fromPath(
-          "profilePicture",
-          createContributorRequest.profilePicture!.path,
+        http.MultipartFile.fromBytes(
+          'profilePicture',
+          bytes,
+          filename: file.name,
+          contentType: MediaType(
+            mimeType.split('/')[0],
+            mimeType.split('/')[1],
+          ),
         ),
       );
     }

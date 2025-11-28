@@ -34,7 +34,7 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
                 elevation: 0,
                 toolbarHeight: 70,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 centerTitle: true,
                 title: Text(
                   "Mes paiements",

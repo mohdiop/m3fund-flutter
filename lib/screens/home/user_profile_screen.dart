@@ -37,6 +37,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final OSMService _osmService = OSMService();
   final _downloadService = DownloadService();
   Uint8List? _userProfile;
+  bool _loadingForProfile = false;
   bool _isEditModeActive = false;
   bool _isLoading = false;
   bool _isMapLoading = true;
@@ -50,6 +51,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _mapController.dispose();
     super.dispose();
   }
 
@@ -90,11 +94,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   _initUserProfilePicture() async {
     if (widget.user.profilePictureUrl != null) {
+      setState(() {
+        _loadingForProfile = true;
+      });
       final profile = await _downloadService.fetchDataBytes(
         widget.user.profilePictureUrl!,
       );
       setState(() {
         _userProfile = profile;
+        _loadingForProfile = false;
       });
     }
   }
@@ -642,7 +650,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 surfaceTintColor: Colors.transparent,
                 toolbarHeight: 50,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 leading: Padding(
                   padding: EdgeInsets.only(
                     left: (MediaQuery.of(context).size.width - 350) / 2,
@@ -722,7 +730,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     height: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(shape: BoxShape.rectangle),
                     child: _userProfile == null
-                        ? Image.asset("assets/noImage.png", fit: BoxFit.cover)
+                        ? _loadingForProfile
+                              ? SpinKitSpinningLines(
+                                  color: primaryColor,
+                                  size: 48,
+                                  lineWidth: 3,
+                                )
+                              : Image.asset("assets/noImage.png")
                         : Image.memory(_userProfile!, fit: BoxFit.cover),
                   ),
                   Positioned.fromRect(
@@ -977,7 +991,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     color: Colors.black.withValues(alpha: 0.6),
                   ),
                 ),
-                SizedBox(height: 200),
+                SizedBox(height: 20),
               ],
             ),
           ),

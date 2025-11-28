@@ -71,11 +71,12 @@ class _ChangeNumberScreenState extends State<ChangeNumberScreen> {
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 centerTitle: true,
                 title: Text(
                   "Changez votre numéro de téléphone",
                   style: const TextStyle(fontSize: 18, color: Colors.black),
+                  maxLines: 2,
                 ),
 
                 leading: Padding(

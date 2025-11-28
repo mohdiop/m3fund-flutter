@@ -32,7 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 surfaceTintColor: Colors.white,
                 toolbarHeight: 50,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 centerTitle: true,
                 title: Text(
                   "Compte",
