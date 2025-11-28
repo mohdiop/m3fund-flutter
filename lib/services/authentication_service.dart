@@ -65,11 +65,17 @@ class AuthenticationService {
     request.fields["phone"] = createContributorRequest.phone;
     request.fields["password"] = createContributorRequest.password;
 
+    if (createContributorRequest.projectDomainPrefs.isEmpty) {
+      request.fields['projectDomainPrefs'] = '';
+    }
     for (final domain in createContributorRequest.projectDomainPrefs) {
       request.fields["projectDomainPrefs"] =
           CreateContributorRequest.mapProjectDomainToBackend(domain);
     }
 
+    if (createContributorRequest.campaignTypePrefs.isEmpty) {
+      request.fields['campaignTypePrefs'] = '';
+    }
     for (final type in createContributorRequest.campaignTypePrefs) {
       request.fields['campaignTypePrefs'] =
           CreateContributorRequest.mapCampaignTypeToBackend(type);

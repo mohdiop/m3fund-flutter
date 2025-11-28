@@ -3,8 +3,8 @@ import 'package:flutter_material_design_icons/flutter_material_design_icons.dart
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
+import 'package:m3fund_flutter/screens/auth/request_position_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_pref_chooser.dart';
-import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
 import 'package:m3fund_flutter/tools/user_prefs_manager.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -194,8 +194,8 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => LocalizationScreen(
-                      contributorRequest: widget.contributorRequest,
+                    builder: (context) => RequestPositionScreen(
+                      contributor: widget.contributorRequest,
                     ),
                   ),
                 );
@@ -233,8 +233,8 @@ class _UserPrefsScreenState extends State<UserPrefsScreen> {
                   );
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => LocalizationScreen(
-                        contributorRequest: widget.contributorRequest,
+                      builder: (context) => RequestPositionScreen(
+                        contributor: widget.contributorRequest,
                       ),
                     ),
                   );

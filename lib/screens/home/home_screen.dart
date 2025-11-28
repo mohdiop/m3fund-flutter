@@ -272,8 +272,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       extendBodyBehindAppBar: true,
       body: CampaignsScreen(
         isAuthenticated: widget.isAuthenticated,
-        userPosition:
-            "${_user?.localization.street ?? _user?.localization.town ?? 'Quartier'}, ${_user?.localization.region ?? 'Ville'}, ${_user?.localization.country ?? 'Pays'}",
+        userPosition: _user?.localization == null ? null :
+            "${_user?.localization!.street ?? _user?.localization!.town ?? 'Quartier'}, ${_user?.localization!.region ?? 'Ville'}, ${_user?.localization!.country ?? 'Pays'}",
       ),
     );
   }

@@ -574,12 +574,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     setState(() {
       _user = widget.user;
       _currentPosition = LatLng(
-        _user!.localization.latitude,
-        _user!.localization.longitude,
+        _user!.localization != null ? _user!.localization!.latitude : 0,
+        _user!.localization != null ? _user!.localization!.longitude : 0,
       );
       _markerPosition = LatLng(
-        _user!.localization.latitude,
-        _user!.localization.longitude,
+        _user!.localization != null ? _user!.localization!.latitude : 0,
+        _user!.localization != null ? _user!.localization!.longitude : 0,
       );
     });
     _loadPositionFromOSM(_currentPosition!, (position) {
@@ -840,8 +840,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             _customProfileSubSection(
                               icon: RemixIcons.map_pin_fill,
                               title: "Position",
-                              value:
-                                  "${_user!.localization.street == "" ? _user!.localization.town : _user!.localization.street}, ${_user!.localization.region}, ${_user!.localization.country}",
+                              value: _user?.localization == null
+                                  ? "Poition non définie"
+                                  : "${_user!.localization!.street == "" ? _user!.localization!.town : _user!.localization!.street}, ${_user!.localization!.region}, ${_user!.localization!.country}",
                               isEditable: true,
                               onClick: _isEditModeActive
                                   ? () async {

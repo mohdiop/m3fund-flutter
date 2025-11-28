@@ -5,7 +5,7 @@ class ContributorResponse {
   final int id;
   final String firstName;
   final String lastName;
-  final LocalizationResponse localization;
+  final LocalizationResponse? localization;
   final List<ProjectDomain> projectDomainPrefs;
   final List<CampaignType> campaignTypePrefs;
   final String email;
@@ -31,7 +31,11 @@ class ContributorResponse {
       id: jsonBody['id'] as int,
       firstName: jsonBody['firstName'] ?? '',
       lastName: jsonBody['lastName'] ?? '',
-      localization: LocalizationResponse.fromJson(jsonBody['localization'] as Map<String, dynamic>),
+      localization: jsonBody['localization'] == null
+          ? null
+          : LocalizationResponse.fromJson(
+              jsonBody['localization'] as Map<String, dynamic>,
+            ),
       projectDomainPrefs: (jsonBody['projectDomainPrefs'] as List)
           .map((domain) => _projectDomainFromString(domain))
           .toList(),

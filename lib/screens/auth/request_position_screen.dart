@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/requests/authentication_request.dart';
+import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
+import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
+import 'package:m3fund_flutter/screens/auth/success_signin_screen.dart';
+import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
 
 class RequestPositionScreen extends StatefulWidget {
-  const RequestPositionScreen({super.key});
+  final CreateContributorRequest contributor;
+  const RequestPositionScreen({super.key, required this.contributor});
 
   @override
   State<RequestPositionScreen> createState() => _RequestPositionScreenState();
@@ -11,6 +18,8 @@ class RequestPositionScreen extends StatefulWidget {
 
 class _RequestPositionScreenState extends State<RequestPositionScreen> {
   final ScrollController _scrollController = ScrollController();
+  var _isLoading = false;
+  final _authenticationService = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +61,33 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Voulez-vous nous fournir votre photo position",
+                    "Voudriez-vous nous fournir votre position ?",
                     style: TextStyle(fontSize: 24),
                   ),
-                  SizedBox(height: 50),
-                  Image.asset("assets/position.png", width: 200, height: 200),
+                  Center(
+                    child: Column(
+                      spacing: 10,
+                      children: [
+                        Image.asset("assets/position.png", width: 230),
+                        Text(
+                          "Nous utilisons votre position afin de vous recommander des contenus dans votre zone.",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black.withValues(alpha: 0.6),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "Cela vise principalement à assurer la compatibilité des méthodes de paiements utilisés",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black.withValues(alpha: 0.6),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -78,8 +109,50 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text("Passer", style: TextStyle(fontSize: 20)),
-              onPressed: () {},
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      try {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await _authenticationService.register(
+                          createContributorRequest: widget.contributor,
+                        );
+                        await _authenticationService.login(
+                          authenticationRequest: AuthenticationRequest(
+                            username: widget.contributor.email,
+                            password: widget.contributor.password,
+                          ),
+                        );
+                        if (context.mounted) {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => SuccessSigninScreen(),
+                            ),
+                            (_) => false,
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              e.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.redAccent,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+              child: _isLoading
+                  ? SpinKitSpinningLines(color: primaryColor, size: 24)
+                  : Text("Non", style: TextStyle(fontSize: 20)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -90,8 +163,18 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text("Continuer", style: TextStyle(fontSize: 20)),
-              onPressed: () {},
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => LocalizationScreen(
+                            contributorRequest: widget.contributor,
+                          ),
+                        ),
+                      );
+                    },
+              child: Text("Oui", style: TextStyle(fontSize: 20)),
             ),
           ],
         ),

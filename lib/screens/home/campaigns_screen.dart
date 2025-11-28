@@ -12,7 +12,7 @@ import 'package:remixicon/remixicon.dart';
 
 class CampaignsScreen extends StatefulWidget {
   final bool isAuthenticated;
-  final String userPosition;
+  final String? userPosition;
   const CampaignsScreen({
     super.key,
     required this.isAuthenticated,
@@ -146,7 +146,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ),
 
                   // Nos récommendations
-                  if (widget.isAuthenticated)
+                  if (widget.isAuthenticated && widget.userPosition != null)
                     Container(
                       alignment: Alignment.centerLeft,
                       width: double.infinity,

@@ -8,7 +8,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
 import 'package:m3fund_flutter/models/requests/create/create_localization_request.dart';
-import 'package:m3fund_flutter/screens/home/main_screen.dart';
+import 'package:m3fund_flutter/screens/auth/success_signin_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:m3fund_flutter/services/osm_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
@@ -254,14 +254,12 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                                         ),
                                   );
                                   if (context.mounted) {
-                                    if (context.mounted) {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                          builder: (_) => const MainScreen(),
-                                        ),
-                                        (Route<dynamic> route) => false,
-                                      );
-                                    }
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (_) => SuccessSigninScreen(),
+                                      ),
+                                      (_) => false,
+                                    );
                                   }
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
