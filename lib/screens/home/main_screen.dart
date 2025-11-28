@@ -57,82 +57,85 @@ class _MainScreenState extends State<MainScreen> {
       child: Scaffold(
         body: IndexedStack(index: _selectedIndex, children: _pages),
         extendBody: true,
-        bottomNavigationBar: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              height: 95,
-              width: double.infinity,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: 68,
-                  width: 350,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: GNav(
-                      gap: 5,
-                      color: Colors.white,
-                      activeColor: Colors.white,
-                      tabBackgroundColor: customBlackColor,
-                      curve: Curves.easeInCubic,
-                      tabBorderRadius: 10,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
+        bottomNavigationBar: SafeArea(
+          bottom: false,
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                height: 95,
+                width: double.infinity,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: 68,
+                    width: 350,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      iconSize: 28,
-                      selectedIndex: _selectedIndex,
-                      onTabChange: (index) {
-                        setState(() => _selectedIndex = index);
-                      },
-                      tabs: [
-                        GButton(
-                          icon: _selectedIndex == 0
-                              ? RemixIcons.home_9_fill
-                              : RemixIcons.home_9_line,
-                          text: "Accueil",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
+                      padding: EdgeInsets.all(10),
+                      child: GNav(
+                        gap: 5,
+                        color: Colors.white,
+                        activeColor: Colors.white,
+                        tabBackgroundColor: customBlackColor,
+                        curve: Curves.easeInCubic,
+                        tabBorderRadius: 10,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
                         ),
-                        GButton(
-                          icon: _selectedIndex == 1
-                              ? RemixIcons.line_chart_fill
-                              : RemixIcons.line_chart_line,
-                          text: "Statistiques",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                        iconSize: 28,
+                        selectedIndex: _selectedIndex,
+                        onTabChange: (index) {
+                          setState(() => _selectedIndex = index);
+                        },
+                        tabs: [
+                          GButton(
+                            icon: _selectedIndex == 0
+                                ? RemixIcons.home_9_fill
+                                : RemixIcons.home_9_line,
+                            text: "Accueil",
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        GButton(
-                          icon: _selectedIndex == 2
-                              ? RemixIcons.question_answer_fill
-                              : RemixIcons.question_answer_line,
-                          text: "Discussions",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                          GButton(
+                            icon: _selectedIndex == 1
+                                ? RemixIcons.line_chart_fill
+                                : RemixIcons.line_chart_line,
+                            text: "Statistiques",
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        GButton(
-                          icon: _selectedIndex == 3
-                              ? RemixIcons.settings_5_fill
-                              : RemixIcons.settings_5_line,
-                          text: "Paramètres",
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                          GButton(
+                            icon: _selectedIndex == 2
+                                ? RemixIcons.question_answer_fill
+                                : RemixIcons.question_answer_line,
+                            text: "Discussions",
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ],
+                          GButton(
+                            icon: _selectedIndex == 3
+                                ? RemixIcons.settings_5_fill
+                                : RemixIcons.settings_5_line,
+                            text: "Paramètres",
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

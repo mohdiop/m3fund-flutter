@@ -13,38 +13,43 @@ class _SuccessSigninScreenState extends State<SuccessSigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          spacing: 20,
-          children: [
-            SizedBox(height: 20),
-            Text("Vous êtes inscrits", style: TextStyle(fontSize: 24)),
-            Center(child: Image.asset("assets/success.png", width: 250)),
-          ],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            spacing: 20,
+            children: [
+              SizedBox(height: 100),
+              Text("Vous êtes inscrits", style: TextStyle(fontSize: 24)),
+              Center(child: Image.asset("assets/success.png", width: 250)),
+            ],
+          ),
         ),
       ),
-      bottomSheet: Container(
-        padding: EdgeInsets.only(bottom: 20),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            foregroundColor: Colors.white,
-            fixedSize: Size(300, 54),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      bottomSheet: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Container(
+          decoration: BoxDecoration(color: Colors.white),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.white,
+              fixedSize: Size(300, 54),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            child: Text(
+              "Continuer vers l'accueil",
+              style: TextStyle(fontSize: 20),
+            ),
+            onPressed: () async {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => MainScreen()),
+                (_) => false,
+              );
+            },
           ),
-          child: Text(
-            "Continuer vers l'accueil",
-            style: TextStyle(fontSize: 20),
-          ),
-          onPressed: () async {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => MainScreen()),
-              (_) => false,
-            );
-          },
         ),
       ),
     );

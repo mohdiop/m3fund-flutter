@@ -127,56 +127,24 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          spacing: 15,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: f4Grey,
-                foregroundColor: Colors.black,
-                fixedSize: Size(160, 54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Text("Passer", style: TextStyle(fontSize: 20)),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => UserPrefsScreen(
-                      contributorRequest: widget.contributorRequest,
-                    ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            spacing: 15,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: f4Grey,
+                  foregroundColor: Colors.black,
+                  fixedSize: Size(160, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                );
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-                fixedSize: Size(160, 54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-              child: Text("Continuer", style: TextStyle(fontSize: 20)),
-              onPressed: () {
-                if (_profilePicture == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Pour continuer, veuillez définir votre photo de profil.",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: primaryColor,
-                      duration: Duration(seconds: 3),
-                    ),
-                  );
-                } else {
-                  widget.contributorRequest.profilePicture = _profilePicture;
+                child: Text("Passer", style: TextStyle(fontSize: 20)),
+                onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => UserPrefsScreen(
@@ -184,10 +152,44 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       ),
                     ),
                   );
-                }
-              },
-            ),
-          ],
+                },
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  fixedSize: Size(160, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text("Continuer", style: TextStyle(fontSize: 20)),
+                onPressed: () {
+                  if (_profilePicture == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Pour continuer, veuillez définir votre photo de profil.",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: primaryColor,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  } else {
+                    widget.contributorRequest.profilePicture = _profilePicture;
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => UserPrefsScreen(
+                          contributorRequest: widget.contributorRequest,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

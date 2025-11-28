@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_text_field.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
+import 'package:m3fund_flutter/services/download_service.dart';
 import 'package:m3fund_flutter/services/osm_service.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/utils.dart';
@@ -33,6 +35,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final UserService _userService = UserService();
   final ScrollController _scrollController = ScrollController();
   final OSMService _osmService = OSMService();
+  final _downloadService = DownloadService();
+  Uint8List? _userProfile;
   bool _isEditModeActive = false;
   bool _isLoading = false;
   bool _isMapLoading = true;
@@ -82,6 +86,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             "${position.street == "" ? position.town : position.street}, ${position.region}, ${position.country}";
       });
     });
+  }
+
+  _initUserProfilePicture() async {
+    if (widget.user.profilePictureUrl != null) {
+      final profile = await _downloadService.fetchDataBytes(
+        widget.user.profilePictureUrl!,
+      );
+      setState(() {
+        _userProfile = profile;
+      });
+    }
   }
 
   Widget _customProfileSubSection({
@@ -588,6 +603,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             "${position.street == "" ? position.town : position.street}, ${position.region}, ${position.country}";
       });
     });
+    _initUserProfilePicture();
     super.initState();
   }
 
@@ -705,7 +721,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(shape: BoxShape.rectangle),
-                    child: Image.asset("assets/woman.png", fit: BoxFit.cover),
+                    child: _userProfile == null
+                        ? Image.asset("assets/noImage.png", fit: BoxFit.cover)
+                        : Image.memory(_userProfile!, fit: BoxFit.cover),
                   ),
                   Positioned.fromRect(
                     rect: Rect.fromLTRB(

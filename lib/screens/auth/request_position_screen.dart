@@ -94,89 +94,91 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          spacing: 15,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: f4Grey,
-                foregroundColor: Colors.black,
-                fixedSize: Size(160, 54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            spacing: 15,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: f4Grey,
+                  foregroundColor: Colors.black,
+                  fixedSize: Size(160, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-              ),
-              onPressed: _isLoading
-                  ? null
-                  : () async {
-                      try {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        await _authenticationService.register(
-                          createContributorRequest: widget.contributor,
-                        );
-                        await _authenticationService.login(
-                          authenticationRequest: AuthenticationRequest(
-                            username: widget.contributor.email,
-                            password: widget.contributor.password,
-                          ),
-                        );
-                        if (context.mounted) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (_) => SuccessSigninScreen(),
-                            ),
-                            (_) => false,
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        try {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await _authenticationService.register(
+                            createContributorRequest: widget.contributor,
                           );
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              e.toString(),
-                              style: TextStyle(color: Colors.white),
+                          await _authenticationService.login(
+                            authenticationRequest: AuthenticationRequest(
+                              username: widget.contributor.email,
+                              password: widget.contributor.password,
                             ),
-                            backgroundColor: Colors.redAccent,
-                            duration: Duration(seconds: 3),
+                          );
+                          if (context.mounted) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => SuccessSigninScreen(),
+                              ),
+                              (_) => false,
+                            );
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.redAccent,
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                child: _isLoading
+                    ? SpinKitSpinningLines(color: primaryColor, size: 24)
+                    : Text("Non", style: TextStyle(fontSize: 20)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  fixedSize: Size(160, 54),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => LocalizationScreen(
+                              contributorRequest: widget.contributor,
+                            ),
                           ),
                         );
-                      } finally {
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      }
-                    },
-              child: _isLoading
-                  ? SpinKitSpinningLines(color: primaryColor, size: 24)
-                  : Text("Non", style: TextStyle(fontSize: 20)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-                fixedSize: Size(160, 54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                      },
+                child: Text("Oui", style: TextStyle(fontSize: 20)),
               ),
-              onPressed: _isLoading
-                  ? null
-                  : () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LocalizationScreen(
-                            contributorRequest: widget.contributor,
-                          ),
-                        ),
-                      );
-                    },
-              child: Text("Oui", style: TextStyle(fontSize: 20)),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

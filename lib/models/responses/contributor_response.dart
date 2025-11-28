@@ -12,6 +12,7 @@ class ContributorResponse {
   final String phone;
   final DateTime createdAt;
   final List<UserRole> roles;
+  final String? profilePictureUrl;
 
   ContributorResponse({
     required this.id,
@@ -24,6 +25,7 @@ class ContributorResponse {
     required this.phone,
     required this.createdAt,
     required this.roles,
+    this.profilePictureUrl,
   });
 
   factory ContributorResponse.fromJson(Map<String, dynamic> jsonBody) {
@@ -48,6 +50,7 @@ class ContributorResponse {
       roles: (jsonBody['roles'] as List)
           .map((roleString) => _roleFromString(roleString))
           .toList(),
+      profilePictureUrl: jsonBody['profilePictureUrl'],
     );
   }
 

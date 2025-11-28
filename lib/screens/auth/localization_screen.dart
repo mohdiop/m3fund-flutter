@@ -104,7 +104,7 @@ class _LocalizationScreenState extends State<LocalizationScreen> {
                 style: IconButton.styleFrom(backgroundColor: primaryColor),
                 icon: const Icon(
                   RemixIcons.user_location_line,
-                  size: 24,
+                  size: 26,
                   color: Colors.white,
                 ),
                 onPressed: () async {
