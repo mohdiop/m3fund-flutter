@@ -275,8 +275,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                           .gainedRewards
                                           .map(
                                             (gainedReward) => Container(
-                                              height: 150,
-                                              width: 160,
+                                              height: 200,
+                                              width: 200,
                                               padding: EdgeInsets.all(10),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,

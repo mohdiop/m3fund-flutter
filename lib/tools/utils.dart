@@ -534,6 +534,9 @@ showLogoutDialog(BuildContext context, Future<void> Function() logout) {
 }
 
 bool validateEmail(String email) {
+  if (email.isEmpty) {
+    return true;
+  }
   final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   return emailRegex.hasMatch(email);
 }

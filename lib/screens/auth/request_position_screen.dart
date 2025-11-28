@@ -122,7 +122,7 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
                           );
                           await _authenticationService.login(
                             authenticationRequest: AuthenticationRequest(
-                              username: widget.contributor.email,
+                              username: widget.contributor.phone,
                               password: widget.contributor.password,
                             ),
                           );

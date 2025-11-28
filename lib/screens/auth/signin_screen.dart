@@ -199,7 +199,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     SizedBox(height: 10),
                     CustomTextField(
                       icon: Icon(RemixIcons.mail_line),
-                      hintText: "Email (facultatif)",
+                      hintText: "Email",
                       isPassword: false,
                       controller: _emailController,
                       width: 300,
@@ -208,7 +208,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     CustomTextField(
                       icon: Icon(RemixIcons.lock_2_line),
                       hintText: "Mot de passe",
-                      isPassword: false,
+                      isPassword: true,
                       controller: _passwordController,
                       width: 300,
                     ),
@@ -216,7 +216,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     CustomTextField(
                       icon: Icon(RemixIcons.lock_2_line),
                       hintText: "Confirmer le mot de passe",
-                      isPassword: false,
+                      isPassword: true,
                       controller: _confirmPasswordController,
                       width: 300,
                     ),

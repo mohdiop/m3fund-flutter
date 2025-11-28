@@ -30,7 +30,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   final TextEditingController _amountController = TextEditingController();
-  final _paymentMethods = [
+  List<Map<String, String>> _paymentMethods = [
     {"name": "Orange Money", "asset": "assets/om.png"},
     {"name": "Moov Money", "asset": "assets/moov.png"},
     {"name": "Paypal", "asset": "assets/paypal.png"},
@@ -63,7 +63,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
+        preferredSize: Size.fromHeight(60),
         child: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
@@ -143,6 +143,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         height: 62,
                         width: 300,
                         child: TextField(
+                          onChanged: (value) {
+                            if (value.isEmpty) return;
+
+                            final amount = double.tryParse(value);
+                            if (amount == null) return;
+
+                            if (amount >= 500000.0) {
+                              setState(() {
+                                _paymentMethods = [
+                                  {
+                                    "name": "Carte bancaire",
+                                    "asset": "assets/bank.png",
+                                  },
+                                ];
+                                _selectMethod = 0;
+                              });
+                            } else {
+                              setState(() {
+                                _paymentMethods = [
+                                  {
+                                    "name": "Orange Money",
+                                    "asset": "assets/om.png",
+                                  },
+                                  {
+                                    "name": "Moov Money",
+                                    "asset": "assets/moov.png",
+                                  },
+                                  {
+                                    "name": "Paypal",
+                                    "asset": "assets/paypal.png",
+                                  },
+                                  {
+                                    "name": "Carte bancaire",
+                                    "asset": "assets/bank.png",
+                                  },
+                                ];
+                              });
+                            }
+                          },
                           controller: _amountController,
                           style: const TextStyle(fontSize: 12),
                           onTap: () {
@@ -203,6 +242,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             ),
                           ),
                           cursorColor: const Color(0xFF06A664),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: 350,
+                        child: RichText(
+                          text: TextSpan(
+                            text: "Remarque : ",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black.withValues(alpha: 0.6),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text:
+                                    "Les transactions au délà de 500 000 FCFA sont effectués par carte bancaire.",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black.withValues(alpha: 0.6),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),

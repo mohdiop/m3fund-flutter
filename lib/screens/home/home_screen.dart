@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         title: widget.isAuthenticated
             ? Text(
                 "${_greetingWordByTime()}, ${_user?.lastName ?? ''}",
-                style: const TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 14),
                 overflow: TextOverflow.ellipsis,
               )
             : null,
@@ -272,8 +272,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       extendBodyBehindAppBar: true,
       body: CampaignsScreen(
         isAuthenticated: widget.isAuthenticated,
-        userPosition: _user?.localization == null ? null :
-            "${_user?.localization!.street ?? _user?.localization!.town ?? 'Quartier'}, ${_user?.localization!.region ?? 'Ville'}, ${_user?.localization!.country ?? 'Pays'}",
+        userPosition: _user?.localization == null
+            ? null
+            : "${_user?.localization!.street ?? _user?.localization!.town ?? 'Quartier'}, ${_user?.localization!.region ?? 'Ville'}, ${_user?.localization!.country ?? 'Pays'}",
       ),
     );
   }

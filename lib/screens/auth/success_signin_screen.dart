@@ -25,6 +25,7 @@ class _SuccessSigninScreenState extends State<SuccessSigninScreen> {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       bottomSheet: Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Container(
