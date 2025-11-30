@@ -4,7 +4,7 @@ import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/requests/authentication_request.dart';
 import 'package:m3fund_flutter/models/requests/create/create_contributor_request.dart';
 import 'package:m3fund_flutter/screens/auth/localization_screen.dart';
-import 'package:m3fund_flutter/screens/auth/success_signin_screen.dart';
+import 'package:m3fund_flutter/screens/home/main_screen.dart';
 import 'package:m3fund_flutter/services/authentication_service.dart';
 import 'package:remixicon/remixicon.dart';
 
@@ -129,7 +129,7 @@ class _RequestPositionScreenState extends State<RequestPositionScreen> {
                           if (context.mounted) {
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                builder: (_) => SuccessSigninScreen(),
+                                builder: (_) => MainScreen(),
                               ),
                               (_) => false,
                             );

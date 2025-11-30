@@ -32,41 +32,61 @@ class _SettingsSceenState extends State<SettingsSceen> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          spacing: 15,
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (!widget.isAuthenticated) {
-                  showRequestConnectionDialog(context);
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => AccountScreen()),
-                  );
-                }
-              },
-              child: CustomSubMenu(
-                leftIcon: RemixIcons.shield_user_line,
-                rightIcon: RemixIcons.arrow_right_s_line,
-                menuTitle: "Compte",
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            spacing: 15,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (!widget.isAuthenticated) {
+                    showRequestConnectionDialog(context);
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AccountScreen()),
+                    );
+                  }
+                },
+                child: CustomSubMenu(
+                  leftIcon: RemixIcons.shield_user_line,
+                  rightIcon: RemixIcons.arrow_right_s_line,
+                  menuTitle: "Compte",
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: CustomSubMenu(
-                leftIcon: RemixIcons.global_line,
-                rightIcon: RemixIcons.arrow_right_s_line,
-                menuTitle: "Changer la langue",
+              GestureDetector(
+                onTap: () {},
+                child: CustomSubMenu(
+                  leftIcon: RemixIcons.global_line,
+                  rightIcon: RemixIcons.arrow_right_s_line,
+                  menuTitle: "Changer la langue",
+                ),
               ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height - 400),
-            Text(
-              "Version v1.0.0",
-              style: TextStyle(fontSize: 15, color: Colors.black),
-            ),
-          ],
+              GestureDetector(
+                onTap: () {},
+                child: CustomSubMenu(
+                  leftIcon: RemixIcons.information_2_line,
+                  rightIcon: RemixIcons.arrow_right_s_line,
+                  menuTitle: "À propos",
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: CustomSubMenu(
+                  leftIcon: RemixIcons.share_line,
+                  rightIcon: RemixIcons.arrow_right_s_line,
+                  menuTitle: "Partager l'application",
+                ),
+              ),
+              Text(
+                "Version de l'application v1.0.0",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black.withValues(alpha: 0.4),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

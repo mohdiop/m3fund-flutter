@@ -207,12 +207,18 @@ class _UserPaymentsScreenState extends State<UserPaymentsScreen> {
                                 ],
                               ),
                             ),
-                            Text(
-                              "${formatToFrAmount(payment.amount)} FCFA",
-                              style: TextStyle(
-                                fontSize: payment.amount >= 10000000 ? 10 : 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              width: 80,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "${formatToFrAmount(payment.amount)} FCFA",
+                                style: TextStyle(
+                                  fontSize: payment.amount >= 10000000
+                                      ? 10
+                                      : 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],

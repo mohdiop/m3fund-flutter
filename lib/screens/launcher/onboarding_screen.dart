@@ -18,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageViewController = PageController();
   int _currentPageIndex = 0;
   bool get isFirstPage => _currentPageIndex == 0;
-  bool get isLastPage => _currentPageIndex == 2;
+  bool get isLastPage => _currentPageIndex == 3;
   final ScrollController _scrollController = ScrollController();
   bool _isAtBottom = false;
 
@@ -53,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        extendBodyBehindAppBar: _currentPageIndex == 2,
+        extendBodyBehindAppBar: _currentPageIndex == 3,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: ClipRRect(
@@ -110,15 +110,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   // Return to previous page button
                                   IconButton(
                                     onPressed: () {
-                                      if (_currentPageIndex == 2) {
+                                      if (_currentPageIndex == 3) {
                                         _pageViewController.animateToPage(
-                                          1,
+                                          2,
                                           duration: Duration(milliseconds: 500),
                                           curve: Curves.easeInOut,
                                         );
                                       } else if (_currentPageIndex == 1) {
                                         _pageViewController.animateToPage(
                                           0,
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      } else if (_currentPageIndex == 2) {
+                                        _pageViewController.animateToPage(
+                                          1,
                                           duration: Duration(milliseconds: 500),
                                           curve: Curves.easeInOut,
                                         );
@@ -144,7 +150,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   actions: [
                     // Skip Icon Button
-                    if (_currentPageIndex != 2)
+                    if (_currentPageIndex != 3)
                       Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: IconButton(
@@ -154,7 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                           onPressed: () {
                             _pageViewController.animateToPage(
-                              2,
+                              3,
                               duration: Duration(milliseconds: 500),
                               curve: Curves.easeInOut,
                             );
@@ -180,46 +186,90 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             });
           },
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 3,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 20),
-              child: Column(
-                spacing: 30,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset("assets/bdi.png", width: 260),
-                  Image.asset("assets/onboarding1.png", width: 260),
-                  SizedBox(
-                    width: 300,
-                    child: Text(
-                      "Découvrez des projets innovants qui ont besoin de financement que ça soit par bénévolat, don ou investissement pour voir le jour.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 120),
+                child: Column(
+                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/logoName.png", width: 200),
+                    Image.asset(
+                      "assets/welcomeWoman.png",
+                      width: MediaQuery.of(context).size.width / 1.5,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 300,
+                      child: Text(
+                        "Bienvenue sur M3Fund, la référence des projets locaux.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height / 3,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 20),
-              child: Column(
-                spacing: 30,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset("assets/bdi.png", width: 260),
-                  Image.asset("assets/onboarding2.png", width: 260),
-                  SizedBox(
-                    width: 300,
-                    child: Text(
-                      "Faites des dons, des bénévolats et des investissements afin de permettre à ces projets de vivre ou de continuer à vivre. ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 120),
+                child: Column(
+                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/bdi.png", width: 260),
+                    Image.asset(
+                      "assets/onboarding1.png",
+                      width: MediaQuery.of(context).size.width / 1.5,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 300,
+                      child: Text(
+                        "Découvrez des projets innovants qui ont besoin de financement.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 120),
+                child: Column(
+                  spacing: 20,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/bdi.png", width: 260),
+                    Image.asset(
+                      "assets/onboarding2.png",
+                      width: MediaQuery.of(context).size.width / 1.6,
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: Text(
+                        "Faites des dons, des bénévolats et des investissements afin de permettre à ces projets de vivre ou de continuer à vivre. ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             ScrollbarTheme(
@@ -520,7 +570,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: [
                       SmoothPageIndicator(
                         controller: _pageViewController,
-                        count: 3,
+                        count: 4,
                         effect: WormEffect(
                           activeDotColor: secondaryColor,
                           dotColor: Colors.grey.shade300,
@@ -547,7 +597,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: (!_isAtBottom && _currentPageIndex == 2)
+                    onPressed: (!_isAtBottom && _currentPageIndex == 3)
                         ? null
                         : () async {
                             if (_currentPageIndex == 0) {
@@ -559,6 +609,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             } else if (_currentPageIndex == 1) {
                               _pageViewController.animateToPage(
                                 2,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } else if (_currentPageIndex == 2) {
+                              _pageViewController.animateToPage(
+                                3,
                                 duration: Duration(milliseconds: 500),
                                 curve: Curves.easeInOut,
                               );

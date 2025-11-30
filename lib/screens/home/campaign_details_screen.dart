@@ -22,7 +22,6 @@ import 'package:remixicon/remixicon.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:intl/intl.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 String formatToDateAndTimeFr(DateTime date) {
   final formatter = DateFormat('d MMMM yyyy à HH:mm', 'fr_FR');
@@ -194,13 +193,13 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                   surfaceTintColor: Colors.transparent,
                   toolbarHeight: 50,
                   leadingWidth:
-                      ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                      ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                   titleSpacing: 0,
                   title: Row(
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 10),
-                        width: 165,
+                        width: 40,
                         height: 40,
                         decoration: BoxDecoration(
                           color: primaryColor,
@@ -222,25 +221,13 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                         height: 32,
                                       ),
                               ),
-                              SizedBox(
-                                width: 120,
-                                child: Text(
-                                  widget.campaignResponse.owner.name,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
                             ],
                           ),
                         ),
                       ),
                       SizedBox(width: 10),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 6,
+                        width: MediaQuery.of(context).size.width / 2,
                         child: Text(
                           widget.campaignResponse.projectResponse.name,
                           overflow: TextOverflow.ellipsis,
@@ -701,7 +688,18 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                             );
                                           }
                                         case CampaignType.investment:
-                                          () {};
+                                          {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => PaymentScreen(
+                                                  contributionWord: "Investir dans",
+                                                  campaignResponse:
+                                                      widget.campaignResponse,
+                                                ),
+                                              ),
+                                            );
+                                          }
                                       }
                                     }
                                   },
@@ -746,126 +744,106 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                           ],
                         ),
                       )
-                    : VisibilityDetector(
-                        key: Key(""),
-                        onVisibilityChanged: (info) {
-                          final visible = info.visibleFraction;
-
-                          if (visible > 0.5) {
-                            if (!_controller.value.isPlaying) {
-                              _controller.play();
-                            } else {
-                              if (_controller.value.isPlaying) {
-                                _controller.pause();
-                              }
-                            }
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.black),
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                (MediaQuery.of(context).size.width - 350) / 2,
-                            vertical: 10,
-                          ),
-                          child: Stack(
-                            children: [
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => _controller.pause(),
-                                    child: AspectRatio(
-                                      aspectRatio:
-                                          _controller.value.aspectRatio,
-                                      child: VideoPlayer(_controller),
-                                    ),
+                    : Container(
+                        decoration: BoxDecoration(color: Colors.black),
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              (MediaQuery.of(context).size.width - 350) / 2,
+                          vertical: 10,
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _controller.pause(),
+                                  child: AspectRatio(
+                                    aspectRatio: _controller.value.aspectRatio,
+                                    child: VideoPlayer(_controller),
                                   ),
-                                  GestureDetector(
-                                    onHorizontalDragUpdate: (details) {
-                                      final box =
-                                          context.findRenderObject()
-                                              as RenderBox;
-                                      final local = box.globalToLocal(
-                                        details.globalPosition,
-                                      );
-                                      final relative =
-                                          local.dx / box.size.width;
-                                      final newPosition =
-                                          _controller.value.duration * relative;
-                                      _controller.seekTo(newPosition);
-                                      _controller.play();
-                                    },
-                                    onTapDown: (details) {
-                                      final box =
-                                          context.findRenderObject()
-                                              as RenderBox;
-                                      final local = box.globalToLocal(
-                                        details.globalPosition,
-                                      );
-                                      final relative =
-                                          local.dx / box.size.width;
-                                      final newPosition =
-                                          _controller.value.duration * relative;
-                                      _controller.seekTo(newPosition);
-                                      _controller.play();
-                                    },
-                                    child: Container(
-                                      height: 6,
-                                      margin: const EdgeInsets.only(top: 8),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: f4Grey,
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                      child: FractionallySizedBox(
-                                        alignment: Alignment.centerLeft,
-                                        widthFactor: _progress,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius: BorderRadius.circular(
-                                              3,
-                                            ),
+                                ),
+                                GestureDetector(
+                                  onHorizontalDragUpdate: (details) {
+                                    final box =
+                                        context.findRenderObject() as RenderBox;
+                                    final local = box.globalToLocal(
+                                      details.globalPosition,
+                                    );
+                                    final relative = local.dx / box.size.width;
+                                    final newPosition =
+                                        _controller.value.duration * relative;
+                                    _controller.seekTo(newPosition);
+                                    _controller.play();
+                                  },
+                                  onTapDown: (details) {
+                                    final box =
+                                        context.findRenderObject() as RenderBox;
+                                    final local = box.globalToLocal(
+                                      details.globalPosition,
+                                    );
+                                    final relative = local.dx / box.size.width;
+                                    final newPosition =
+                                        _controller.value.duration * relative;
+                                    _controller.seekTo(newPosition);
+                                    _controller.play();
+                                  },
+                                  child: Container(
+                                    height: 6,
+                                    margin: const EdgeInsets.only(top: 8),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: f4Grey,
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    child: FractionallySizedBox(
+                                      alignment: Alignment.centerLeft,
+                                      widthFactor: _progress,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius: BorderRadius.circular(
+                                            3,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              Positioned(
-                                bottom: 20,
-                                right: 10,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(
-                                    RemixIcons.fullscreen_line,
-                                    size: 24,
-                                    color: Colors.white,
-                                  ),
+                                ),
+                              ],
+                            ),
+                            Positioned(
+                              bottom: 20,
+                              right: 10,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Icon(
+                                  RemixIcons.fullscreen_line,
+                                  size: 24,
+                                  color: Colors.white,
                                 ),
                               ),
+                            ),
 
-                              Positioned(
-                                top: 0,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () => _controller.play(),
-                                  child: Icon(
-                                    _controller.value.isPlaying
-                                        ? null
-                                        : RemixIcons.play_large_fill,
-                                    size: 48,
-                                    color: Colors.white.withValues(alpha: 0.8),
-                                  ),
+                            Positioned(
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: () => _controller.play(),
+                                child: Icon(
+                                  _controller.value.isPlaying
+                                      ? null
+                                      : RemixIcons.play_large_fill,
+                                  size: 48,
+                                  color: Colors.white.withValues(alpha: 0.8),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
+
                 SizedBox(height: 20),
 
                 // URL launcher
@@ -977,6 +955,30 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                         .campaignResponse
                                         .projectResponse
                                         .name,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Porteur",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.campaignResponse.owner.name,
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,

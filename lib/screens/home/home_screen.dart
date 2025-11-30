@@ -101,24 +101,33 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       appBar: AppBar(
         leadingWidth: 110,
         toolbarHeight: 70,
-        centerTitle: true,
+        centerTitle: widget.isAuthenticated,
         title: widget.isAuthenticated
             ? Text(
                 "${_greetingWordByTime()}, ${_user?.lastName ?? ''}",
                 style: const TextStyle(fontSize: 14),
                 overflow: TextOverflow.ellipsis,
               )
-            : null,
+            : Padding(
+                padding: EdgeInsets.only(
+                  left: (MediaQuery.of(context).size.width - 350) / 2,
+                  top: 10,
+                  bottom: 10,
+                ),
+                child: Image.asset("assets/nbLogoName.png", height: 32),
+              ),
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: (MediaQuery.of(context).size.width - 350) / 2,
-            top: 10,
-            bottom: 10,
-          ),
-          child: Image.asset("assets/nbLogoName.png"),
-        ),
+        leading: widget.isAuthenticated
+            ? Padding(
+                padding: EdgeInsets.only(
+                  left: (MediaQuery.of(context).size.width - 350) / 2,
+                  top: 10,
+                  bottom: 10,
+                ),
+                child: Image.asset("assets/nbLogoName.png", height: 24),
+              )
+            : null,
         bottom: PreferredSize(
           preferredSize: Size(350, 44),
           child: ClipRRect(
@@ -188,86 +197,91 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: primaryColor,
-                maximumSize: Size(40, 40),
-              ),
-              icon: Stack(
-                children: [
-                  Icon(
-                    RemixIcons.notification_line,
-                    size: 24,
-                    color: Colors.white,
-                  ),
-                  if (_hasUnreadNotifications)
-                    Positioned(
-                      width: 10,
-                      height: 10,
-                      top: 0,
-                      left: 14,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          shape: BoxShape.circle,
+        actions: !widget.isAuthenticated
+            ? null
+            : [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      maximumSize: Size(40, 40),
+                    ),
+                    icon: Stack(
+                      children: [
+                        Icon(
+                          RemixIcons.notification_line,
+                          size: 24,
+                          color: Colors.white,
                         ),
+                        if (_hasUnreadNotifications)
+                          Positioned(
+                            width: 10,
+                            height: 10,
+                            top: 0,
+                            left: 14,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    onPressed: () {
+                      if (!widget.isAuthenticated) {
+                        showRequestConnectionDialog(context);
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationsScreen(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    if (!widget.isAuthenticated) {
+                      showRequestConnectionDialog(context);
+                    } else {
+                      if (_user == null) {
+                        await showCustomTopSnackBar(
+                          context,
+                          "Impossible de charger les données pour l'instant ...",
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => UserProfileScreen(user: _user!),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      right: (MediaQuery.of(context).size.width - 350) / 2,
+                    ),
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: customBlackColor, width: 3),
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assets/default.jpg",
+                        fit: BoxFit.cover,
                       ),
                     ),
-                ],
-              ),
-              onPressed: () {
-                if (!widget.isAuthenticated) {
-                  showRequestConnectionDialog(context);
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const NotificationsScreen(),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              if (!widget.isAuthenticated) {
-                showRequestConnectionDialog(context);
-              } else {
-                if (_user == null) {
-                  await showCustomTopSnackBar(
-                    context,
-                    "Impossible de charger les données pour l'instant ...",
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => UserProfileScreen(user: _user!),
-                    ),
-                  );
-                }
-              }
-            },
-            child: Container(
-              margin: EdgeInsets.only(
-                right: (MediaQuery.of(context).size.width - 350) / 2,
-              ),
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: customBlackColor, width: 3),
-              ),
-              child: ClipOval(
-                child: Image.asset("assets/default.jpg", fit: BoxFit.cover),
-              ),
-            ),
-          ),
-        ],
+                  ),
+                ),
+              ],
       ),
       extendBodyBehindAppBar: true,
       body: CampaignsScreen(

@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Image.asset("assets/logoName.png", width: 221)],
+            children: [Image.asset("assets/logoName.png", width: 250)],
           ),
         ),
       ),

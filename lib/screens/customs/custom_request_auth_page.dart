@@ -28,10 +28,11 @@ class _CustomRequestAuthPageState extends State<CustomRequestAuthPage> {
         ),
         leadingWidth: 300,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 100),
+      extendBody: false,
+      body: SafeArea(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 LineAwesomeIcons.user_slash_solid,

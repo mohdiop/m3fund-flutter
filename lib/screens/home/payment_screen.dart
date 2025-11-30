@@ -104,342 +104,352 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       extendBodyBehindAppBar: true,
       extendBody: true,
-      body: Stack(
-        children: [
-          ScrollConfiguration(
-            behavior: ScrollConfiguration.of(
-              context,
-            ).copyWith(scrollbars: false),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: 130),
-                  if (widget.campaignResponse.type == CampaignType.donation)
-                    CustomRewardsScreen(
-                      rewards: widget.campaignResponse.rewards,
-                    ),
-                  SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Choisissez votre montant",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
+      body: Center(
+        child: Stack(
+          children: [
+            ScrollConfiguration(
+              behavior: ScrollConfiguration.of(
+                context,
+              ).copyWith(scrollbars: false),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 130),
+                    if (widget.campaignResponse.type == CampaignType.donation)
+                      CustomRewardsScreen(
+                        rewards: widget.campaignResponse.rewards,
                       ),
-                      SizedBox(height: 10),
-                      if (_isBlankAmount)
+                    SizedBox(
+                      height: 20,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         Text(
-                          "Veuillez fournir un montant",
+                          "Choisissez votre montant",
                           style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
-                      if (_isBlankAmount) SizedBox(height: 10),
-                      SizedBox(
-                        height: 62,
-                        width: 300,
-                        child: TextField(
-                          onChanged: (value) {
-                            if (value.isEmpty) return;
-
-                            final amount = double.tryParse(value);
-                            if (amount == null) return;
-
-                            if (amount >= 500000.0) {
-                              setState(() {
-                                _paymentMethods = [
-                                  {
-                                    "name": "Carte bancaire",
-                                    "asset": "assets/bank.png",
-                                  },
-                                ];
-                                _selectMethod = 0;
-                              });
-                            } else {
-                              setState(() {
-                                _paymentMethods = [
-                                  {
-                                    "name": "Orange Money",
-                                    "asset": "assets/om.png",
-                                  },
-                                  {
-                                    "name": "Moov Money",
-                                    "asset": "assets/moov.png",
-                                  },
-                                  {
-                                    "name": "Paypal",
-                                    "asset": "assets/paypal.png",
-                                  },
-                                  {
-                                    "name": "Carte bancaire",
-                                    "asset": "assets/bank.png",
-                                  },
-                                ];
-                              });
-                            }
-                          },
-                          controller: _amountController,
-                          style: const TextStyle(fontSize: 12),
-                          onTap: () {
-                            setState(() {
-                              _isBlankAmount = false;
-                            });
-                          },
-                          keyboardType: TextInputType.numberWithOptions(
-                            decimal: false,
-                            signed: true,
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          decoration: InputDecoration(
-                            hintText: "Ex: 10000",
-                            hintStyle: TextStyle(
-                              color: _isBlankAmount
-                                  ? Colors.red.shade300
-                                  : Colors.grey,
+                        SizedBox(height: 10),
+                        if (_isBlankAmount)
+                          Text(
+                            "Veuillez fournir un montant",
+                            style: const TextStyle(
                               fontSize: 12,
+                              color: Colors.red,
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
+                          ),
+                        if (_isBlankAmount) SizedBox(height: 10),
+                        SizedBox(
+                          height: 62,
+                          width: 300,
+                          child: TextField(
+                            onChanged: (value) {
+                              if (value.isEmpty) return;
+
+                              final amount = double.tryParse(value);
+                              if (amount == null) return;
+
+                              if (amount >= 500000.0) {
+                                setState(() {
+                                  _paymentMethods = [
+                                    {
+                                      "name": "Carte bancaire",
+                                      "asset": "assets/bank.png",
+                                    },
+                                  ];
+                                  _selectMethod = 0;
+                                });
+                              } else {
+                                setState(() {
+                                  _paymentMethods = [
+                                    {
+                                      "name": "Orange Money",
+                                      "asset": "assets/om.png",
+                                    },
+                                    {
+                                      "name": "Moov Money",
+                                      "asset": "assets/moov.png",
+                                    },
+                                    {
+                                      "name": "Paypal",
+                                      "asset": "assets/paypal.png",
+                                    },
+                                    {
+                                      "name": "Carte bancaire",
+                                      "asset": "assets/bank.png",
+                                    },
+                                  ];
+                                });
+                              }
+                            },
+                            controller: _amountController,
+                            style: const TextStyle(fontSize: 12),
+                            onTap: () {
+                              setState(() {
+                                _isBlankAmount = false;
+                              });
+                            },
+                            keyboardType: TextInputType.numberWithOptions(
+                              decimal: false,
+                              signed: true,
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: InputDecoration(
+                              hintText: "Ex: 10000",
+                              hintStyle: TextStyle(
                                 color: _isBlankAmount
-                                    ? Colors.red
-                                    : customBlackColor,
-                                width: 2,
+                                    ? Colors.red.shade300
+                                    : Colors.grey,
+                                fontSize: 12,
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF06A664),
-                                width: 2,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 23,
-                            ),
-                            suffixIconConstraints: BoxConstraints(
-                              maxHeight: 50,
-                              maxWidth: 50,
-                            ),
-                            suffixIcon: Center(
-                              child: Text(
-                                "FCFA",
-                                style: TextStyle(
-                                  fontSize: 12,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
                                   color: _isBlankAmount
                                       ? Colors.red
-                                      : Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                      : customBlackColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF06A664),
+                                  width: 2,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 23,
+                              ),
+                              suffixIconConstraints: BoxConstraints(
+                                maxHeight: 50,
+                                maxWidth: 50,
+                              ),
+                              suffixIcon: Center(
+                                child: Text(
+                                  "FCFA",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: _isBlankAmount
+                                        ? Colors.red
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
+                            cursorColor: const Color(0xFF06A664),
                           ),
-                          cursorColor: const Color(0xFF06A664),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      SizedBox(
-                        width: 350,
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Remarque : ",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black.withValues(alpha: 0.6),
-                              fontWeight: FontWeight.bold,
-                            ),
-                            children: [
-                              TextSpan(
-                                text:
-                                    "Les transactions au délà de 500 000 FCFA sont effectués par carte bancaire.",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black.withValues(alpha: 0.6),
-                                  fontWeight: FontWeight.normal,
-                                ),
+                        SizedBox(height: 20),
+                        SizedBox(
+                          width: 350,
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "Remarque : ",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black.withValues(alpha: 0.6),
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
+                              children: [
+                                TextSpan(
+                                  text:
+                                      "Les transactions au délà de 500 000 FCFA sont effectués par carte bancaire.",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        "Choisissez votre méthode de paiement",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
+                        SizedBox(height: 20),
+                        Text(
+                          "Choisissez votre méthode de paiement",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Column(
-                        spacing: 10,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: _paymentMethods
-                            .map(
-                              (paymentMethod) => GestureDetector(
-                                onTap: () => setState(() {
-                                  _selectMethod = _paymentMethods.indexOf(
-                                    paymentMethod,
-                                  );
-                                }),
-                                child: Container(
-                                  height: 54,
-                                  width: 300,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: f4Grey,
-                                    border: BoxBorder.all(
-                                      color:
-                                          _paymentMethods.indexOf(
-                                                paymentMethod,
-                                              ) !=
-                                              _selectMethod
-                                          ? Colors.grey.shade300
-                                          : primaryColor,
-                                      width: 2,
+                        SizedBox(height: 10),
+                        Column(
+                          spacing: 10,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: _paymentMethods
+                              .map(
+                                (paymentMethod) => GestureDetector(
+                                  onTap: () => setState(() {
+                                    _selectMethod = _paymentMethods.indexOf(
+                                      paymentMethod,
+                                    );
+                                  }),
+                                  child: Container(
+                                    height: 54,
+                                    width: 300,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: f4Grey,
+                                      border: BoxBorder.all(
+                                        color:
+                                            _paymentMethods.indexOf(
+                                                  paymentMethod,
+                                                ) !=
+                                                _selectMethod
+                                            ? Colors.grey.shade300
+                                            : primaryColor,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Image.asset(
+                                          paymentMethod["asset"]!,
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                          child: Text(paymentMethod["name"]!),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color:
+                                                _paymentMethods.indexOf(
+                                                      paymentMethod,
+                                                    ) !=
+                                                    _selectMethod
+                                                ? Colors.white
+                                                : primaryColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Image.asset(
-                                        paymentMethod["asset"]!,
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                        child: Text(paymentMethod["name"]!),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              _paymentMethods.indexOf(
-                                                    paymentMethod,
-                                                  ) !=
-                                                  _selectMethod
-                                              ? Colors.white
-                                              : primaryColor,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                    ],
-                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 120),
-                ],
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 120),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(0),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                child: Container(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  height: 100,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _isLoading
-                            ? Colors.white
-                            : primaryColor,
-                        foregroundColor: Colors.white,
-                        fixedSize: const Size(300, 54),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(0),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                  child: Container(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    height: 100,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _isLoading
+                              ? Colors.white
+                              : primaryColor,
+                          foregroundColor: Colors.white,
+                          fixedSize: const Size(300, 54),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        if (_amountController.text.trim().isEmpty) {
-                          setState(() {
-                            _isBlankAmount = true;
-                          });
-                        } else {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          try {
-                            GiftResponse giftResponse = await _giftService
-                                .createGift(
-                                  campaignId: widget.campaignResponse.id,
-                                  gift: CreateGiftRequest(
-                                    payment: CreatePaymentRequest(
-                                      transactionId: _uuid.v4(),
-                                      type: _getPaymentType(_selectMethod),
-                                      state: PaymentState.success,
-                                      amount: double.parse(
-                                        _amountController.text.toString(),
+                        onPressed: () async {
+                          if (_amountController.text.trim().isEmpty) {
+                            setState(() {
+                              _isBlankAmount = true;
+                            });
+                          } else {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            if (widget.campaignResponse.type ==
+                                CampaignType.donation) {
+                              try {
+                                GiftResponse giftResponse = await _giftService
+                                    .createGift(
+                                      campaignId: widget.campaignResponse.id,
+                                      gift: CreateGiftRequest(
+                                        payment: CreatePaymentRequest(
+                                          transactionId: _uuid.v4(),
+                                          type: _getPaymentType(_selectMethod),
+                                          state: PaymentState.success,
+                                          amount: double.parse(
+                                            _amountController.text.toString(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                if (mounted) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PaymentSuccessScreen(
+                                        giftResponse: giftResponse,
                                       ),
                                     ),
-                                  ),
+                                    (route) => false,
+                                  );
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                }
+                              } catch (e) {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(e.toString())),
                                 );
-                            if (mounted) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PaymentSuccessScreen(
-                                    giftResponse: giftResponse,
-                                  ),
-                                ),
-                                (route) => false,
-                              );
-                              setState(() {
-                                _isLoading = false;
-                              });
+                              }
                             }
-                          } catch (e) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(e.toString())),
-                            );
                           }
-                        }
-                      },
-                      child: _isLoading
-                          ? Center(
-                              child: SpinKitSpinningLines(
-                                color: primaryColor,
-                                size: 32,
+                        },
+                        child: _isLoading
+                            ? Center(
+                                child: SpinKitSpinningLines(
+                                  color: primaryColor,
+                                  size: 32,
+                                ),
+                              )
+                            : const Text(
+                                "Procéder au paiement",
+                                style: TextStyle(fontSize: 20),
                               ),
-                            )
-                          : const Text(
-                              "Procéder au paiement",
-                              style: TextStyle(fontSize: 20),
-                            ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

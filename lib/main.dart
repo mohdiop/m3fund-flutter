@@ -8,15 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
-  );
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('fr_FR', null);
   final prefs = await SharedPreferences.getInstance();

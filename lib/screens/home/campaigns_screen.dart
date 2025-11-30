@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:m3fund_flutter/constants.dart';
+import 'package:m3fund_flutter/models/enums/enums.dart';
 import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/screens/auth/login_screen.dart';
 import 'package:m3fund_flutter/screens/customs/custom_campaign_card.dart';
@@ -26,15 +27,22 @@ class CampaignsScreen extends StatefulWidget {
 class _CampaignsScreenState extends State<CampaignsScreen> {
   bool _isLoading = false;
   List<CampaignResponse> _campaigns = [];
+  List<CampaignResponse> _campaignsFirstState = [];
   List<CampaignResponse> _recommendedCampaigns = [];
+  List<CampaignResponse> _recommendedCampaignsFirstState = [];
   List<CampaignResponse> _newCampaigns = [];
+  List<CampaignResponse> _newCampaignsFirstState = [];
   bool _errorOccuredWhenLoading = false;
   final ScrollController _firstScrollController = ScrollController();
   final ScrollController _secondScrollController = ScrollController();
   final ScrollController _thirdScrollController = ScrollController();
   final ScrollController _lastScrollController = ScrollController();
+  final ScrollController _sortScrollController = ScrollController();
 
   final CampaignService _campaignService = CampaignService();
+
+  int _currentDomain = -1;
+  int _currentCampaignType = -1;
 
   @override
   void initState() {
@@ -48,10 +56,13 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     });
     try {
       _campaigns = await _campaignService.getAllCampaigns();
+      _campaignsFirstState = _campaigns;
       _newCampaigns = await _campaignService.getNewCampaigns();
+      _newCampaignsFirstState = _newCampaigns;
       if (widget.isAuthenticated) {
         _recommendedCampaigns = await _campaignService
             .getRecommendedCampaigns();
+        _recommendedCampaignsFirstState = _recommendedCampaigns;
       }
     } catch (e) {
       showCustomTopSnackBar(context, e.toString(), color: Colors.redAccent);
@@ -61,6 +72,58 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
     }
     setState(() {
       _isLoading = false;
+    });
+  }
+
+  List<Map<ProjectDomain, String>> domains = [
+    {ProjectDomain.agriculture: "Agriculture"},
+    {ProjectDomain.breeding: "Élevage"},
+    {ProjectDomain.computerScience: "Informatique"},
+    {ProjectDomain.culture: "Culture"},
+    {ProjectDomain.education: "Éducation"},
+    {ProjectDomain.environment: "Environnement"},
+    {ProjectDomain.health: "Santé"},
+    {ProjectDomain.mine: "Mine"},
+    {ProjectDomain.shopping: "Commerce"},
+    {ProjectDomain.social: "Social"},
+    {ProjectDomain.solidarity: "Solidarité"},
+  ];
+
+  List<Map<CampaignType, String>> campaignTypes = [
+    {CampaignType.donation: "Don"},
+    {CampaignType.investment: "Investissement"},
+    {CampaignType.volunteering: "Bénévolat"},
+  ];
+
+  _filterByDomain(ProjectDomain domain) {
+    setState(() {
+      _campaigns = _campaignsFirstState
+          .where((campaign) => campaign.projectResponse.domain == domain)
+          .toList();
+      if (widget.isAuthenticated) {
+        _recommendedCampaigns = _recommendedCampaignsFirstState
+            .where((campaign) => campaign.projectResponse.domain == domain)
+            .toList();
+      }
+      _newCampaigns = _newCampaignsFirstState
+          .where((campaign) => campaign.projectResponse.domain == domain)
+          .toList();
+    });
+  }
+
+  _filterByType(CampaignType type) {
+    setState(() {
+      _campaigns = _campaignsFirstState
+          .where((campaign) => campaign.type == type)
+          .toList();
+      if (widget.isAuthenticated) {
+        _recommendedCampaigns = _recommendedCampaignsFirstState
+            .where((campaign) => campaign.type == type)
+            .toList();
+      }
+      _newCampaigns = _newCampaignsFirstState
+          .where((campaign) => campaign.type == type)
+          .toList();
     });
   }
 
@@ -89,7 +152,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      left: (MediaQuery.of(context).size.width - 350) / 2,
+                      left: (MediaQuery.of(context).size.width - 340) / 2,
                       top: 60,
                     ),
                     child: Text(
@@ -109,7 +172,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           );
                         },
                         child: Container(
-                          width: 350,
+                          width: 340,
                           height: 44,
                           decoration: BoxDecoration(
                             color: secondaryColor,
@@ -145,6 +208,220 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       ),
                     ),
 
+                  PreferredSize(
+                    preferredSize: Size(double.infinity, 32),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        controller: _sortScrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                (MediaQuery.of(context).size.width - 340) / 2,
+                          ),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _currentDomain = -1;
+                                    _campaigns = _campaignsFirstState;
+                                    if (widget.isAuthenticated) {
+                                      _recommendedCampaigns =
+                                          _recommendedCampaignsFirstState;
+                                    }
+                                    _newCampaigns = _newCampaignsFirstState;
+                                  });
+                                  if (_currentCampaignType != -1) {
+                                    _filterByType(
+                                      campaignTypes[_currentCampaignType]
+                                          .keys
+                                          .first,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: _currentDomain == -1
+                                        ? primaryColor
+                                        : f4Grey,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Tous les domaines",
+                                        style: TextStyle(
+                                          color: _currentDomain == -1
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              for (var domain in domains)
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _currentDomain = domains.indexOf(domain);
+                                    });
+                                    _filterByDomain(domain.keys.first);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          _currentDomain ==
+                                              domains.indexOf(domain)
+                                          ? primaryColor
+                                          : f4Grey,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      spacing: 10,
+                                      children: [
+                                        Text(
+                                          domain
+                                              .values
+                                              .first, // ← Récupère "Agriculture", "Élevage", etc.
+                                          style: TextStyle(
+                                            color:
+                                                _currentDomain ==
+                                                    domains.indexOf(domain)
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                        Icon(
+                                          getDomainIcon(domain.keys.first),
+                                          size: 18,
+                                          color:
+                                              _currentDomain ==
+                                                  domains.indexOf(domain)
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  PreferredSize(
+                    preferredSize: Size(double.infinity, 32),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        controller: _sortScrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                (MediaQuery.of(context).size.width - 340) / 2,
+                          ),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _currentCampaignType = -1;
+                                    _campaigns = _campaignsFirstState;
+                                    if (widget.isAuthenticated) {
+                                      _recommendedCampaigns =
+                                          _recommendedCampaignsFirstState;
+                                    }
+                                    _newCampaigns = _newCampaignsFirstState;
+                                  });
+                                  if (_currentDomain != -1) {
+                                    _filterByDomain(
+                                      domains[_currentDomain].keys.first,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 8),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: _currentCampaignType == -1
+                                        ? customBlackColor
+                                        : f4Grey,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Toutes les campagnes",
+                                        style: TextStyle(
+                                          color: _currentCampaignType == -1
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              for (var campaign in campaignTypes)
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _currentCampaignType = campaignTypes
+                                          .indexOf(campaign);
+                                    });
+                                    _filterByType(campaign.keys.first);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          _currentCampaignType ==
+                                              campaignTypes.indexOf(campaign)
+                                          ? customBlackColor
+                                          : f4Grey,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      spacing: 10,
+                                      children: [
+                                        Text(
+                                          campaign.values.first,
+                                          style: TextStyle(
+                                            color:
+                                                _currentCampaignType ==
+                                                    campaignTypes.indexOf(
+                                                      campaign,
+                                                    )
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   // Nos récommendations
                   if (widget.isAuthenticated && widget.userPosition != null)
                     Container(
@@ -158,7 +435,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                           Container(
                             margin: EdgeInsets.symmetric(
                               horizontal:
-                                  (MediaQuery.of(context).size.width - 350) / 2,
+                                  (MediaQuery.of(context).size.width - 340) / 2,
                             ),
                             child: Text(
                               "Nos recommandations vers ${widget.userPosition}📍",
@@ -192,7 +469,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                                     ((MediaQuery.of(
                                                               context,
                                                             ).size.width -
-                                                            350) /
+                                                            340) /
                                                         2) -
                                                     10,
                                               ),
@@ -275,7 +552,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       children: [
                         Container(
                           margin: EdgeInsets.only(
-                            left: (MediaQuery.of(context).size.width - 350) / 2,
+                            left: (MediaQuery.of(context).size.width - 340) / 2,
                           ),
                           child: Text(
                             "Les nouvelles campagnes",
@@ -309,7 +586,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                                   ((MediaQuery.of(
                                                             context,
                                                           ).size.width -
-                                                          350) /
+                                                          340) /
                                                       2) -
                                                   10,
                                             ),
@@ -388,7 +665,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                       children: [
                         Container(
                           margin: EdgeInsets.only(
-                            left: (MediaQuery.of(context).size.width - 350) / 2,
+                            left: (MediaQuery.of(context).size.width - 340) / 2,
                           ),
                           child: Text(
                             "Toutes les campagnes",
@@ -422,7 +699,7 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                                                   ((MediaQuery.of(
                                                             context,
                                                           ).size.width -
-                                                          350) /
+                                                          340) /
                                                       2) -
                                                   10,
                                             ),
