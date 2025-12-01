@@ -13,6 +13,7 @@ import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
 import 'package:m3fund_flutter/screens/home/investment_screen.dart';
 import 'package:m3fund_flutter/screens/home/payment_success_screen.dart';
 import 'package:m3fund_flutter/services/gift_service.dart';
+import 'package:m3fund_flutter/tools/utils.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:uuid/uuid.dart';
 
@@ -58,6 +59,34 @@ class _PaymentScreenState extends State<PaymentScreen> {
       default:
         return PaymentType.orangeMoney;
     }
+  }
+
+  @override
+  void initState() {
+    if (widget.campaignResponse.type == CampaignType.investment) {
+      setState(() {
+        _amountController.text = widget.campaignResponse.targetBudget
+            .toString();
+      });
+      if (widget.campaignResponse.targetBudget >= 500000.0) {
+        setState(() {
+          _paymentMethods = [
+            {"name": "Carte bancaire", "asset": "assets/bank.png"},
+          ];
+          _selectMethod = 0;
+        });
+      } else {
+        setState(() {
+          _paymentMethods = [
+            {"name": "Orange Money", "asset": "assets/om.png"},
+            {"name": "Moov Money", "asset": "assets/moov.png"},
+            {"name": "Paypal", "asset": "assets/paypal.png"},
+            {"name": "Carte bancaire", "asset": "assets/bank.png"},
+          ];
+        });
+      }
+    }
+    super.initState();
   }
 
   @override
@@ -116,7 +145,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 130),
+                    if (widget.campaignResponse.type == CampaignType.donation)
+                      SizedBox(height: 130),
                     if (widget.campaignResponse.type == CampaignType.donation)
                       CustomRewardsScreen(
                         rewards: widget.campaignResponse.rewards,
@@ -188,6 +218,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 });
                               }
                             },
+                            enabled:
+                                widget.campaignResponse.type !=
+                                CampaignType.investment,
                             controller: _amountController,
                             style: const TextStyle(fontSize: 12),
                             onTap: () {
@@ -413,6 +446,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                     MaterialPageRoute(
                                       builder: (_) => PaymentSuccessScreen(
                                         giftResponse: giftResponse,
+                                        payment: giftResponse.payment,
                                       ),
                                     ),
                                     (route) => false,
@@ -430,11 +464,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 );
                               }
                             } else {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              if (double.parse(
+                                    _amountController.text.toString(),
+                                  ) !=
+                                  widget.campaignResponse.targetBudget) {
+                                showCustomTopSnackBar(
+                                  context,
+                                  "Le montant est différent de celle requise",
+                                  color: Colors.redAccent,
+                                );
+                                return;
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => InvestmentScreen(
                                     campaign: widget.campaignResponse,
+                                    payment: CreatePaymentRequest(
+                                      transactionId: _uuid.v4(),
+                                      type: _getPaymentType(_selectMethod),
+                                      state: PaymentState.success,
+                                      amount: double.parse(
+                                        _amountController.text.toString(),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               );

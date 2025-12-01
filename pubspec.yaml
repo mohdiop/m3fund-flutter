@@ -66,6 +66,7 @@ dependencies:
   twemoji: ^0.4.3
   image_cropper: ^11.0.0
   http_parser: ^4.1.2
+  dotted_border: ^3.1.0
 
 flutter_launcher_icons:
   android: true

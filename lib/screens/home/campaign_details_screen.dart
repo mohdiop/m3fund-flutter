@@ -227,7 +227,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                       ),
                       SizedBox(width: 10),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 2,
+                        width: MediaQuery.of(context).size.width / 2.3,
                         child: Text(
                           widget.campaignResponse.projectResponse.name,
                           overflow: TextOverflow.ellipsis,
@@ -693,7 +693,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (_) => PaymentScreen(
-                                                  contributionWord: "Investir dans",
+                                                  contributionWord:
+                                                      "Investir dans",
                                                   campaignResponse:
                                                       widget.campaignResponse,
                                                 ),

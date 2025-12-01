@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/models/responses/gift_response.dart';
+import 'package:m3fund_flutter/models/responses/payment_response.dart';
 import 'package:m3fund_flutter/screens/home/campaign_details_screen.dart';
 import 'package:m3fund_flutter/screens/home/main_screen.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
-  final GiftResponse giftResponse;
-  const PaymentSuccessScreen({super.key, required this.giftResponse});
+  final GiftResponse? giftResponse;
+  final PaymentResponse payment;
+  const PaymentSuccessScreen({super.key, this.giftResponse, required this.payment});
 
   @override
   State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
@@ -88,9 +90,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                               left: 10,
                                             ),
                                             child: Text(
-                                              widget
-                                                  .giftResponse
-                                                  .payment
+                                              widget.payment
                                                   .transactionId,
                                               style: TextStyle(
                                                 fontSize: 12,
@@ -116,7 +116,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                           ),
                                         ),
                                         Text(
-                                          widget.giftResponse.payment.type.name
+                                          widget.payment.type.name
                                               .toUpperCase(),
                                           style: TextStyle(
                                             fontSize: 12,
@@ -140,7 +140,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                         ),
                                         Text(
                                           formatToDateAndTimeFr(
-                                            widget.giftResponse.payment.madeAt,
+                                            widget.payment.madeAt,
                                           ),
                                           style: TextStyle(
                                             fontSize: 12,
@@ -163,7 +163,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "${formatToFrAmount(widget.giftResponse.payment.amount)} FCFA",
+                                          "${formatToFrAmount(widget.payment.amount)} FCFA",
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.black,
@@ -210,7 +210,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                           ),
                                         ),
                                         Text(
-                                          '${formatToFrAmount(widget.giftResponse.payment.amount)} FCFA',
+                                          '${formatToFrAmount(widget.payment.amount)} FCFA',
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
@@ -226,7 +226,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                           ),
                         ),
                       ),
-                      if (widget.giftResponse.gainedRewards.isNotEmpty)
+                      if (widget.giftResponse != null && widget.giftResponse!.gainedRewards.isNotEmpty)
                         Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -271,7 +271,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                                     child: Row(
                                       spacing: 20,
                                       children: widget
-                                          .giftResponse
+                                          .giftResponse!
                                           .gainedRewards
                                           .map(
                                             (gainedReward) => Container(
