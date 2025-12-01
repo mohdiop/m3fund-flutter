@@ -10,6 +10,7 @@ import 'package:m3fund_flutter/models/requests/create/create_payment_request.dar
 import 'package:m3fund_flutter/models/responses/campaign_response.dart';
 import 'package:m3fund_flutter/models/responses/gift_response.dart';
 import 'package:m3fund_flutter/screens/customs/custom_rewards_screen.dart';
+import 'package:m3fund_flutter/screens/home/investment_screen.dart';
 import 'package:m3fund_flutter/screens/home/payment_success_screen.dart';
 import 'package:m3fund_flutter/services/gift_service.dart';
 import 'package:remixicon/remixicon.dart';
@@ -74,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 surfaceTintColor: Colors.transparent,
                 toolbarHeight: 50,
                 leadingWidth:
-                    ((MediaQuery.of(context).size.width - 350) / 2) + 43,
+                    ((MediaQuery.of(context).size.width - 350) / 2) + 40,
                 centerTitle: true,
                 title: Text(
                   "${widget.contributionWord} ${widget.campaignResponse.projectResponse.name}",
@@ -428,6 +429,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   SnackBar(content: Text(e.toString())),
                                 );
                               }
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => InvestmentScreen(
+                                    campaign: widget.campaignResponse,
+                                  ),
+                                ),
+                              );
                             }
                           }
                         },
