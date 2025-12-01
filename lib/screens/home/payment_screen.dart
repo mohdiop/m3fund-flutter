@@ -252,6 +252,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   width: 2,
                                 ),
                               ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: f4Grey, width: 2),
+                              ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
