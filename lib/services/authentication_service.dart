@@ -69,18 +69,22 @@ class AuthenticationService {
 
     if (createContributorRequest.projectDomainPrefs.isEmpty) {
       request.fields['projectDomainPrefs'] = '';
-    }
-    for (final domain in createContributorRequest.projectDomainPrefs) {
-      request.fields["projectDomainPrefs"] =
-          CreateContributorRequest.mapProjectDomainToBackend(domain);
+    } else {
+      request.fields['projectDomainPrefs'] = createContributorRequest
+          .projectDomainPrefs
+          .map((d) => CreateContributorRequest.mapProjectDomainToBackend(d))
+          .join(',');
     }
 
     if (createContributorRequest.campaignTypePrefs.isEmpty) {
       request.fields['campaignTypePrefs'] = '';
-    }
-    for (final type in createContributorRequest.campaignTypePrefs) {
-      request.fields['campaignTypePrefs'] =
-          CreateContributorRequest.mapCampaignTypeToBackend(type);
+    } else {
+      request.fields['campaignTypePrefs'] = createContributorRequest
+          .campaignTypePrefs
+          .map(
+            (type) => CreateContributorRequest.mapCampaignTypeToBackend(type),
+          )
+          .join(',');
     }
 
     if (createContributorRequest.localization != null) {

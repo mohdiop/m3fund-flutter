@@ -320,107 +320,107 @@ class _CampaignsScreenState extends State<CampaignsScreen> {
                     ),
                   ),
 
-                  PreferredSize(
-                    preferredSize: Size(double.infinity, 32),
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(
-                        context,
-                      ).copyWith(scrollbars: false),
-                      child: SingleChildScrollView(
-                        controller: _sortScrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                (MediaQuery.of(context).size.width - 340) / 2,
-                          ),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _currentCampaignType = -1;
-                                    _campaigns = _campaignsFirstState;
-                                    if (widget.isAuthenticated) {
-                                      _recommendedCampaigns =
-                                          _recommendedCampaignsFirstState;
-                                    }
-                                    _newCampaigns = _newCampaignsFirstState;
-                                  });
-                                  if (_currentDomain != -1) {
-                                    _filterByDomain(
-                                      domains[_currentDomain].keys.first,
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 8),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: _currentCampaignType == -1
-                                        ? customBlackColor
-                                        : f4Grey,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Toutes les campagnes",
-                                        style: TextStyle(
-                                          color: _currentCampaignType == -1
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              for (var campaign in campaignTypes)
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _currentCampaignType = campaignTypes
-                                          .indexOf(campaign);
-                                    });
-                                    _filterByType(campaign.keys.first);
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 8),
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          _currentCampaignType ==
-                                              campaignTypes.indexOf(campaign)
-                                          ? customBlackColor
-                                          : f4Grey,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Row(
-                                      spacing: 10,
-                                      children: [
-                                        Text(
-                                          campaign.values.first,
-                                          style: TextStyle(
-                                            color:
-                                                _currentCampaignType ==
-                                                    campaignTypes.indexOf(
-                                                      campaign,
-                                                    )
-                                                ? Colors.white
-                                                : Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // PreferredSize(
+                  //   preferredSize: Size(double.infinity, 32),
+                  //   child: ScrollConfiguration(
+                  //     behavior: ScrollConfiguration.of(
+                  //       context,
+                  //     ).copyWith(scrollbars: false),
+                  //     child: SingleChildScrollView(
+                  //       controller: _sortScrollController,
+                  //       scrollDirection: Axis.horizontal,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.symmetric(
+                  //           horizontal:
+                  //               (MediaQuery.of(context).size.width - 340) / 2,
+                  //         ),
+                  //         child: Row(
+                  //           children: [
+                  //             GestureDetector(
+                  //               onTap: () {
+                  //                 setState(() {
+                  //                   _currentCampaignType = -1;
+                  //                   _campaigns = _campaignsFirstState;
+                  //                   if (widget.isAuthenticated) {
+                  //                     _recommendedCampaigns =
+                  //                         _recommendedCampaignsFirstState;
+                  //                   }
+                  //                   _newCampaigns = _newCampaignsFirstState;
+                  //                 });
+                  //                 if (_currentDomain != -1) {
+                  //                   _filterByDomain(
+                  //                     domains[_currentDomain].keys.first,
+                  //                   );
+                  //                 }
+                  //               },
+                  //               child: Container(
+                  //                 margin: const EdgeInsets.only(right: 8),
+                  //                 padding: const EdgeInsets.all(10),
+                  //                 decoration: BoxDecoration(
+                  //                   color: _currentCampaignType == -1
+                  //                       ? customBlackColor
+                  //                       : f4Grey,
+                  //                   borderRadius: BorderRadius.circular(5),
+                  //                 ),
+                  //                 child: Row(
+                  //                   children: [
+                  //                     Text(
+                  //                       "Toutes les campagnes",
+                  //                       style: TextStyle(
+                  //                         color: _currentCampaignType == -1
+                  //                             ? Colors.white
+                  //                             : Colors.black,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             for (var campaign in campaignTypes)
+                  //               GestureDetector(
+                  //                 onTap: () {
+                  //                   setState(() {
+                  //                     _currentCampaignType = campaignTypes
+                  //                         .indexOf(campaign);
+                  //                   });
+                  //                   _filterByType(campaign.keys.first);
+                  //                 },
+                  //                 child: Container(
+                  //                   margin: const EdgeInsets.only(right: 8),
+                  //                   padding: const EdgeInsets.all(10),
+                  //                   decoration: BoxDecoration(
+                  //                     color:
+                  //                         _currentCampaignType ==
+                  //                             campaignTypes.indexOf(campaign)
+                  //                         ? customBlackColor
+                  //                         : f4Grey,
+                  //                     borderRadius: BorderRadius.circular(5),
+                  //                   ),
+                  //                   child: Row(
+                  //                     spacing: 10,
+                  //                     children: [
+                  //                       Text(
+                  //                         campaign.values.first,
+                  //                         style: TextStyle(
+                  //                           color:
+                  //                               _currentCampaignType ==
+                  //                                   campaignTypes.indexOf(
+                  //                                     campaign,
+                  //                                   )
+                  //                               ? Colors.white
+                  //                               : Colors.black,
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                   // Nos récommendations
                   if (widget.isAuthenticated && widget.userPosition != null)

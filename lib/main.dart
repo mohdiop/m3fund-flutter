@@ -16,6 +16,11 @@ Future<void> main() async {
   if (isAuthenticated == null) {
     await prefs.setBool("isAuthenticated", false);
   }
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+    overlays: [SystemUiOverlay.top],
+  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MaterialApp(
       theme: ThemeData(

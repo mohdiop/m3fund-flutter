@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:m3fund_flutter/constants.dart';
 import 'package:m3fund_flutter/main.dart';
 import 'package:m3fund_flutter/models/responses/contributor_response.dart';
 import 'package:m3fund_flutter/screens/home/campaigns_screen.dart';
 import 'package:m3fund_flutter/screens/home/notifications_screen.dart';
 import 'package:m3fund_flutter/screens/home/user_profile_screen.dart';
+import 'package:m3fund_flutter/services/download_service.dart';
 import 'package:m3fund_flutter/services/notification_service.dart';
 import 'package:m3fund_flutter/services/user_service.dart';
 import 'package:m3fund_flutter/tools/notification_read_storage.dart';
@@ -27,6 +31,33 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   final NotificationService _notificationService = NotificationService();
   final NotificationReadStorage _notificationReadStorage =
       NotificationReadStorage.instance;
+
+  bool _loadingForProfile = true;
+
+  final DownloadService _downloadService = DownloadService();
+
+  Uint8List? _userProfile;
+
+  _initUserProfilePicture() async {
+    if (_user!.profilePictureUrl != null) {
+      try {
+        final profile = await _downloadService.fetchDataBytes(
+          _user!.profilePictureUrl!,
+        );
+        setState(() {
+          if (profile != null) {
+            _userProfile = profile;
+          }
+        });
+      } catch (e) {
+        showCustomTopSnackBar(context, "Erreur lors du chargement du profil");
+      } finally {
+        setState(() {
+          _loadingForProfile = false;
+        });
+      }
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -75,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         _user = loadedUser;
         _hasUnreadNotifications = hasUnread;
       });
+      await _initUserProfilePicture();
     } catch (_) {
       if (!mounted) return;
       setState(() {
@@ -274,10 +306,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                       border: Border.all(color: customBlackColor, width: 3),
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        "assets/default.jpg",
-                        fit: BoxFit.cover,
-                      ),
+                      child: _userProfile == null
+                          ? _loadingForProfile
+                                ? SpinKitSpinningLines(
+                                    color: primaryColor,
+                                    size: 32,
+                                    lineWidth: 3,
+                                  )
+                                : Image.asset("assets/default.jpg")
+                          : Image.memory(_userProfile!, fit: BoxFit.cover),
                     ),
                   ),
                 ),

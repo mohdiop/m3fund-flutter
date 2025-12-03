@@ -90,6 +90,7 @@ class _CustomRewardsScreenState extends State<CustomRewardsScreen> {
                                           ),
                                           child: Image.asset(
                                             "assets/reward.png",
+                                            width: 100,
                                           ),
                                         ),
 
